@@ -6,6 +6,7 @@ import { MaterialsGrid } from "../components/MaterialsGrid";
 import { MaterialsTable } from "../components/MaterialsTable";
 import { BambuMaterialsTable } from "../components/BambuMaterialsTable";
 import { BambuMaterialsGrid } from "../components/BambuMaterialsGrid";
+import { SEO } from "../components/SEO/SEO";
 
 export const Route = createFileRoute("/materials")({
   component: MaterialsPage,
@@ -17,7 +18,14 @@ function MaterialsPage() {
   const [gridType, setGridType] = useState<"generic" | "bambu">("generic");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
+    <>
+      <SEO 
+        title="3D Printing Materials Guide | 3D Print Wiki"
+        description="Complete guide to 3D printing materials including PLA, ABS, PETG, TPU, and more. Compare properties, print settings, and choose the right material for your project."
+        keywords="3D printing materials, PLA, ABS, PETG, TPU, resin, filament properties, print settings, material comparison, Bambu Lab materials"
+        url="https://3dprintwiki.com/materials"
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
       <div
         className={`${viewMode === "table" ? "w-full px-2" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"}`}
       >
@@ -125,6 +133,7 @@ function MaterialsPage() {
 
         {/* Additional Info */}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

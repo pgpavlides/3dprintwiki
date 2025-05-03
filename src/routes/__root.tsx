@@ -2,6 +2,7 @@ import { Outlet, createRootRoute, Link, useLocation } from '@tanstack/react-rout
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { FontToggle } from '../components/FontToggle'
+import { SEO } from '../components/SEO/SEO'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -14,7 +15,9 @@ function RootComponent() {
   const showNavAndFooter = !isHomePage && !isCalculatorPage;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <>
+      <SEO />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Navigation - Only show if not on homepage or calculator page */}
       {showNavAndFooter && (
         <nav className="bg-white dark:bg-gray-800 shadow-sm transition-colors">
@@ -87,6 +90,7 @@ function RootComponent() {
       )}
 
       <TanStackRouterDevtools />
-    </div>
+      </div>
+    </>
   )
 }

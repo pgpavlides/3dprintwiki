@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatedBackground } from '../components/AnimatedBackground'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { FontToggle } from '../components/FontToggle'
+import { SEO } from '../components/SEO/SEO'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -84,7 +85,13 @@ function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen relative">
+    <>
+      <SEO 
+        title="3D Print Wiki - Home | Your Complete 3D Printing Resource"
+        description="Explore comprehensive 3D printing guides, material databases, cost calculators, and troubleshooting resources. Learn everything about FDM, SLA, and resin printing in one place."
+        keywords="3D printing guide, 3D print wiki, FDM printing, SLA printing, resin printing, 3D printer materials, 3D printing cost calculator, 3D printing troubleshooting"
+      />
+      <div className="min-h-screen relative">
       <div className="fixed inset-0">
         <AnimatedBackground />
       </div>
@@ -156,6 +163,7 @@ function HomePage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }

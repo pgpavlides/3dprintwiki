@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { AnimatedBackground } from '../components/AnimatedBackground'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { FontToggle } from '../components/FontToggle'
+import { SEO } from '../components/SEO/SEO'
 
 export const Route = createFileRoute('/calculator')({
   component: PrintCostCalculator,
@@ -49,7 +50,14 @@ function PrintCostCalculator() {
   const finalPrice = showAdvanced ? totalCost * (1 + markup / 100) : totalCost
 
   return (
-    <div className="min-h-screen relative">
+    <>
+      <SEO 
+        title="3D Print Cost Calculator | 3D Print Wiki"
+        description="Calculate the exact cost of your 3D prints. Include material costs, electricity, labor, failure rates, and profit margins. Free online 3D printing cost calculator."
+        keywords="3D print cost calculator, filament cost calculator, 3D printing price calculator, print cost estimation, FDM cost calculator, 3D print pricing tool"
+        url="https://3dprintwiki.com/calculator"
+      />
+      <div className="min-h-screen relative">
       <div className="fixed inset-0">
         <AnimatedBackground />
       </div>
@@ -383,6 +391,7 @@ function PrintCostCalculator() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
