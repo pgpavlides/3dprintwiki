@@ -148,8 +148,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaShieldAlt className="text-blue-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaShieldAlt className="text-blue-500 text-xl mb-1" />
                       <div>
                         Toughness<br />
                         <span className="text-xs text-gray-600">Impact Strength - XY</span>
@@ -178,8 +178,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaFistRaised className="text-red-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaFistRaised className="text-red-500 text-xl mb-1" />
                       <div>
                         Strength<br />
                         <span className="text-xs text-gray-600">Bending Strength - XY</span>
@@ -208,8 +208,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaRuler className="text-purple-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaRuler className="text-purple-500 text-xl mb-1" />
                       <div>
                         Stiffness<br />
                         <span className="text-xs text-gray-600">Bending Modulus - XY</span>
@@ -238,8 +238,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaLayerGroup className="text-green-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaLayerGroup className="text-green-500 text-xl mb-1" />
                       <div>
                         Layer Adhesion<br />
                         <span className="text-xs text-gray-600">Impact Strength - Z</span>
@@ -268,8 +268,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaThermometerHalf className="text-orange-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaThermometerHalf className="text-orange-500 text-xl mb-1" />
                       <div>
                         Heat Resistance<br />
                         <span className="text-xs text-gray-600">HDT, 0.45 MPa</span>
@@ -284,8 +284,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaTint className="text-blue-400" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaTint className="text-blue-400 text-xl mb-1" />
                       <div>
                         Water Absorption<br />
                         <span className="text-xs text-gray-600">25°C, 55% RH</span>
@@ -311,8 +311,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaFan className="text-amber-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaFan className="text-amber-600 text-xl mb-1" />
                       <div>Dry Out Before Use</div>
                     </div>
                   </td>
@@ -326,8 +326,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaClock className="text-gray-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaClock className="text-gray-600 text-xl mb-1" />
                       <div>Drying Condition</div>
                     </div>
                   </td>
@@ -339,8 +339,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaServer className="text-gray-700" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaServer className="text-gray-700 text-xl mb-1" />
                       <div>AMS Compatibility</div>
                     </div>
                   </td>
@@ -363,8 +363,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaPrint className="text-blue-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaPrint className="text-blue-600 text-xl mb-1" />
                       <div>Nozzle Size/Material</div>
                     </div>
                   </td>
@@ -376,8 +376,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaPalette className="text-indigo-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaPalette className="text-indigo-500 text-xl mb-1" />
                       <div>Build Plate & Bed Temp</div>
                     </div>
                   </td>
@@ -393,8 +393,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaTape className="text-yellow-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaTape className="text-yellow-500 text-xl mb-1" />
                       <div>Adhesion Methods</div>
                     </div>
                   </td>
@@ -406,8 +406,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaBox className="text-gray-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaBox className="text-gray-600 text-xl mb-1" />
                       <div>Print with Enclosure</div>
                     </div>
                   </td>
@@ -421,8 +421,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaTachometerAlt className="text-green-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaTachometerAlt className="text-green-600 text-xl mb-1" />
                       <div>Print Speed</div>
                     </div>
                   </td>
@@ -434,8 +434,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaTemperatureHigh className="text-red-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaTemperatureHigh className="text-red-600 text-xl mb-1" />
                       <div>Nozzle Temperature</div>
                     </div>
                   </td>
@@ -447,8 +447,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaWind className="text-blue-500" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaWind className="text-blue-500 text-xl mb-1" />
                       <div>Part Cooling Fan</div>
                     </div>
                   </td>
@@ -471,8 +471,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaIndustry className="text-purple-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaIndustry className="text-purple-600 text-xl mb-1" />
                       <div>Seal with Desiccant</div>
                     </div>
                   </td>
@@ -486,8 +486,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex items-center gap-2">
-                      <FaHourglassHalf className="text-orange-600" />
+                    <div className="flex flex-col items-center text-center">
+                      <FaHourglassHalf className="text-orange-600 text-xl mb-1" />
                       <div>Annealing</div>
                     </div>
                   </td>
