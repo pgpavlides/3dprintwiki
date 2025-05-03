@@ -59,7 +59,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
           <button
             onClick={() => toggleSection('properties')}
             className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'properties' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+              expandedSection === 'properties' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
             }`}
           >
             Properties
@@ -67,7 +67,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
           <button
             onClick={() => toggleSection('preprinting')}
             className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'preprinting' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+              expandedSection === 'preprinting' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
             }`}
           >
             Pre-printing
@@ -75,7 +75,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
           <button
             onClick={() => toggleSection('printer')}
             className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'printer' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+              expandedSection === 'printer' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
             }`}
           >
             Printer Settings
@@ -83,7 +83,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
           <button
             onClick={() => toggleSection('postprinting')}
             className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'postprinting' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+              expandedSection === 'postprinting' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
             }`}
           >
             Post-printing
@@ -119,15 +119,15 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden text-sm">
+        <table className="w-full border-collapse bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden text-sm">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="sticky left-0 bg-gray-100 p-2 text-left font-bold text-gray-700 border-b w-32">
+            <tr className="bg-gray-100 dark:bg-gray-700">
+              <th className="sticky left-0 bg-gray-100 dark:bg-gray-700 p-2 text-left font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-600 w-32">
                 Filament
               </th>
               {filteredMaterials.map(material => (
-                <th key={material.name} className="p-2 text-center border-b w-32">
-                  <div className="font-bold text-gray-900 text-xs">{material.name}</div>
+                <th key={material.name} className="p-2 text-center border-b dark:border-gray-600 w-32">
+                  <div className="font-bold text-gray-900 dark:text-white text-xs">{material.name}</div>
                   {!compareMode && (
                     <div className="mt-1 flex justify-center items-center">
                       <label className="custom-checkbox-container">
@@ -148,13 +148,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
             {/* Properties Section */}
             {(expandedSection === 'properties' || expandedSection === null) && (
               <>
-                <tr className="bg-blue-50">
-                  <td colSpan={filteredMaterials.length + 1} className="p-1 font-bold text-blue-900 text-xs">
+                <tr className="bg-blue-50 dark:bg-blue-900">
+                  <td colSpan={filteredMaterials.length + 1} className="p-1 font-bold text-blue-900 dark:text-blue-100 text-xs">
                     Properties
                   </td>
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('toughness')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -169,7 +169,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   {filteredMaterials.map(material => {
                     const toughnessValue = parseFloat(material.properties.toughness);
                     return (
-                      <td key={material.name} className="p-2 border-b w-32">
+                      <td key={material.name} className="p-2 border-b dark:border-gray-700 w-32">
                         <div className="w-full">
                           {!isNaN(toughnessValue) ? (
                             <ProgressBar
@@ -179,7 +179,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                               label={material.properties.toughness}
                             />
                           ) : (
-                            <div className="text-sm text-center">{material.properties.toughness}</div>
+                            <div className="text-sm text-center dark:text-gray-300">{material.properties.toughness}</div>
                           )}
                         </div>
                       </td>
@@ -299,7 +299,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
                       {material.properties.heatResistance}
                     </td>
                   ))}
@@ -318,7 +318,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
                       {material.properties.waterAbsorption}
                     </td>
                   ))}
@@ -329,8 +329,8 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
             {/* Pre-printing Section */}
             {(expandedSection === 'preprinting' || expandedSection === null) && (
               <>
-                <tr className="bg-green-50">
-                  <td colSpan={filteredMaterials.length + 1} className="p-1 font-bold text-green-900 text-xs">
+                <tr className="bg-green-50 dark:bg-green-900">
+                  <td colSpan={filteredMaterials.length + 1} className="p-1 font-bold text-green-900 dark:text-green-100 text-xs">
                     Pre-printing Preparation
                   </td>
                 </tr>
@@ -363,7 +363,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-xs border-b whitespace-pre-line">
+                    <td key={material.name} className="p-2 text-xs border-b dark:border-gray-700 whitespace-pre-line dark:text-gray-300">
                       {material.preprinting.dryingCondition}
                     </td>
                   ))}
@@ -379,7 +379,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center text-xs border-b">
+                    <td key={material.name} className="p-2 text-center text-xs border-b dark:border-gray-700 dark:text-gray-300">
                       {material.preprinting.amsCompatibility}
                     </td>
                   ))}

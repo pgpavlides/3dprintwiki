@@ -32,14 +32,14 @@ function MaterialsPage() {
     : materialData;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
       <div className={`${viewMode === 'table' ? 'w-full px-2' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             3D Printing Materials Guide
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Comprehensive guide to 3D printing materials: PLA, ABS, PETG, TPU, and more.
             Compare properties, print settings, and choose the right material for your project.
           </p>
@@ -53,7 +53,7 @@ function MaterialsPage() {
               className={`px-4 py-2 rounded-lg font-medium ${
                 viewMode === 'grid'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
               }`}
             >
               Grid View
@@ -66,7 +66,7 @@ function MaterialsPage() {
               className={`px-4 py-2 rounded-lg font-medium ${
                 viewMode === 'table'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
               }`}
             >
               Table View
@@ -118,33 +118,33 @@ function MaterialsPage() {
         )}
 
         {/* Additional Info */}
-        <div className="mt-16 p-8 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Choosing the Right Material</h2>
+        <div className="mt-16 p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Choosing the Right Material</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">For Beginners</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">For Beginners</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 PLA is recommended for beginners due to its ease of use, low printing temperature, 
                 and minimal warping. It doesn't require a heated bed and produces good quality prints.
               </p>
               
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">For Functional Parts</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">For Functional Parts</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 ABS, PETG, or Nylon are better choices for functional parts that need strength, 
                 durability, and heat resistance. These materials require more advanced printing skills.
               </p>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">For Flexible Objects</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">For Flexible Objects</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 TPU and other flexible filaments are perfect for creating objects that need to bend 
                 or compress, such as phone cases, gaskets, or wearable items.
               </p>
               
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">For Special Applications</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">For Special Applications</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Specialty materials like Carbon Fiber Filled for strength, Wood Filled for aesthetic 
                 appeal, or PVA for dissolvable supports offer unique properties for specific projects.
               </p>

@@ -32,18 +32,18 @@ export const PropertyInfoModal: React.FC<PropertyInfoModalProps> = ({
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
+      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <div className="text-2xl">
               {icon}
             </div>
-            <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h3>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
           >
             <FaTimes className="text-xl" />
           </button>
@@ -53,24 +53,24 @@ export const PropertyInfoModal: React.FC<PropertyInfoModalProps> = ({
         <div className="p-6">
           <div className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Description</h4>
-              <p className="text-gray-600">{content.description}</p>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Description</h4>
+              <p className="text-gray-600 dark:text-gray-300">{content.description}</p>
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Measurement</h4>
-              <p className="text-gray-600">{content.measurement}</p>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Measurement</h4>
+              <p className="text-gray-600 dark:text-gray-300">{content.measurement}</p>
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Why It's Important</h4>
-              <p className="text-gray-600">{content.importance}</p>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Why It's Important</h4>
+              <p className="text-gray-600 dark:text-gray-300">{content.importance}</p>
             </div>
             
             {content.tips && content.tips.length > 0 && (
               <div>
-                <h4 className="font-semibold text-gray-800 mb-2">Tips</h4>
-                <ul className="list-disc list-inside text-gray-600 space-y-1">
+                <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Tips</h4>
+                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-1">
                   {content.tips.map((tip, index) => (
                     <li key={index}>{tip}</li>
                   ))}
@@ -81,7 +81,7 @@ export const PropertyInfoModal: React.FC<PropertyInfoModalProps> = ({
         </div>
         
         {/* Footer */}
-        <div className="flex justify-end p-4 border-t border-gray-200">
+        <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"

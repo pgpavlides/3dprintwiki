@@ -44,9 +44,18 @@ code {
   transition: .4s;
 }
 
+.dark .custom-checkmark {
+  background-color: #4a5568;
+}
+
 .custom-checkmark:hover {
   box-shadow: inset 8px 8px 10px #b3b3b3,
             inset -8px -8px 10px #ffffff;
+}
+
+.dark .custom-checkmark:hover {
+  box-shadow: inset 8px 8px 10px #2d3748,
+            inset -8px -8px 10px #718096;
 }
 
 /* When the checkbox is checked, add a blue background */
