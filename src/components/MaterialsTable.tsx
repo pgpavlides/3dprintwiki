@@ -10,8 +10,6 @@ import {
   FaCog,
   FaFire,
   FaExclamationTriangle,
-  FaWater,
-  FaCloud,
   FaCube,
   FaCheckCircle,
   FaArrowsAltH,
