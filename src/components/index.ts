@@ -1,7 +1,10 @@
 export { MaterialCard } from './MaterialCard';
 export { MaterialsTable } from './MaterialsTable';
+export { MaterialsGrid } from './MaterialsGrid';
 export { ProgressBar } from './ProgressBar';
 export { BambuMaterialsTable } from './BambuMaterialsTable';
 export { BambuMaterialCard } from './BambuMaterialCard';
+export { BambuMaterialsGrid } from './BambuMaterialsGrid';
 export { ComponentCard } from './ComponentCard';
 export { ComponentsTable } from './ComponentsTable';
+export { ComponentsGrid } from './ComponentsGrid';

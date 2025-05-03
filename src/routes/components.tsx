@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { ComponentCard } from '../components/ComponentCard';
+import { ComponentsGrid } from '../components/ComponentsGrid';
 import { ComponentsTable } from '../components/ComponentsTable';
 import { componentData } from '../data/components';
 
@@ -88,14 +88,7 @@ function ComponentsPage() {
 
         {/* Content */}
         {viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredComponents.map(component => (
-              <ComponentCard
-                key={component.id}
-                component={component}
-              />
-            ))}
-          </div>
+          <ComponentsGrid components={filteredComponents} />
         ) : (
           <ComponentsTable components={filteredComponents} />
         )}

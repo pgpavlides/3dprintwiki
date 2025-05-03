@@ -10,19 +10,28 @@ function HomePage() {
       icon: '💰',
       title: 'Print Cost Calculator',
       description: 'Calculate the exact cost of your 3D prints based on material, electricity, and other factors',
-      path: '/calculator'
+      path: '/calculator',
+      gradient: 'from-emerald-500 to-teal-500',
+      iconBg: 'bg-emerald-500/10',
+      iconColor: 'text-emerald-500'
     },
     {
       icon: '🧬',
       title: 'Material Guide',
       description: 'Comprehensive guide to 3D printing materials: PLA, ABS, PETG, TPU, and more',
-      path: '/materials'
+      path: '/materials',
+      gradient: 'from-blue-500 to-cyan-500',
+      iconBg: 'bg-blue-500/10',
+      iconColor: 'text-blue-500'
     },
     {
       icon: '🔩',
       title: 'Component Guide',
       description: 'Essential components for 3D printing projects: threaded inserts, screws, bearings, and more',
-      path: '/components'
+      path: '/components',
+      gradient: 'from-indigo-500 to-purple-500',
+      iconBg: 'bg-indigo-500/10',
+      iconColor: 'text-indigo-500'
     }
   ]
 
@@ -40,28 +49,44 @@ function HomePage() {
         </div>
 
         {/* Grid Menu */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {menuItems.map((item, index) => (
-            <Link
-              key={index}
-              to={item.path}
-              className="block bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 p-6 group w-full max-w-sm"
-              activeProps={{
-                className: 'bg-blue-50 dark:bg-blue-900'
-              }}
-            >
-              <div className="flex flex-col items-center text-center">
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">
-                  {item.icon}
+            <div key={index} className="group relative w-full">
+              <Link
+                to={item.path}
+                className="block relative overflow-hidden rounded-2xl bg-white dark:bg-slate-950 shadow-lg dark:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:hover:shadow-blue-500/10"
+              >
+                {/* Background gradients */}
+                <div className={`absolute -left-16 -top-16 h-32 w-32 rounded-full bg-gradient-to-br ${item.gradient} opacity-20 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70`} />
+                <div className={`absolute -right-16 -bottom-16 h-32 w-32 rounded-full bg-gradient-to-br ${item.gradient} opacity-20 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70`} />
+
+                <div className="relative p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${item.iconBg}`}>
+                      <span className="text-3xl">{item.icon}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      {item.title}
+                    </h3>
+                  </div>
+                  
+                  <p className="text-gray-600 dark:text-slate-400 mb-6">
+                    {item.description}
+                  </p>
+                  
+                  <div className={`group/btn relative overflow-hidden rounded-xl bg-gradient-to-r ${item.gradient} p-px font-semibold text-white`}>
+                    <div className="relative rounded-xl bg-white dark:bg-slate-950 px-4 py-3 transition-all duration-300 group-hover/btn:bg-opacity-0 dark:group-hover/btn:bg-opacity-0">
+                      <span className="relative flex items-center justify-center gap-2">
+                        Explore Now
+                        <svg className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  {item.description}
-                </p>
-              </div>
-            </Link>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

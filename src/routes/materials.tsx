@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { materialData } from '../data/materials';
 import { bambuMaterialData } from '../data/bambuMaterials';
-import { MaterialCard } from '../components/MaterialCard';
+import { MaterialsGrid } from '../components/MaterialsGrid';
 import { MaterialsTable } from '../components/MaterialsTable';
 import { BambuMaterialsTable } from '../components/BambuMaterialsTable';
-import { BambuMaterialCard } from '../components/BambuMaterialCard';
+import { BambuMaterialsGrid } from '../components/BambuMaterialsGrid';
 
 export const Route = createFileRoute('/materials')({
   component: MaterialsPage,
@@ -15,6 +15,7 @@ function MaterialsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
   const [tableType, setTableType] = useState<'generic' | 'bambu'>('bambu');
+  const [gridType, setGridType] = useState<'generic' | 'bambu'>('generic');
 
   // Get unique characteristics for filtering
   const allCharacteristics = [...new Set(
@@ -73,14 +74,14 @@ function MaterialsPage() {
             </button>
           </div>
 
-          {viewMode === 'table' && (
+          {viewMode === 'table' ? (
             <div className="flex gap-2">
               <button
                 onClick={() => setTableType('generic')}
                 className={`px-4 py-2 rounded-lg font-medium ${
                   tableType === 'generic'
                     ? 'bg-green-500 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
                 }`}
               >
                 Generic Materials
@@ -90,7 +91,30 @@ function MaterialsPage() {
                 className={`px-4 py-2 rounded-lg font-medium ${
                   tableType === 'bambu'
                     ? 'bg-green-500 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                Bambu Materials
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <button
+                onClick={() => setGridType('generic')}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  gridType === 'generic'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                Generic Materials
+              </button>
+              <button
+                onClick={() => setGridType('bambu')}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  gridType === 'bambu'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
                 }`}
               >
                 Bambu Materials
@@ -101,14 +125,11 @@ function MaterialsPage() {
 
         {/* Content */}
         {viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bambuMaterialData.map(material => (
-              <BambuMaterialCard
-                key={material.name}
-                material={material}
-              />
-            ))}
-          </div>
+          gridType === 'generic' ? (
+            <MaterialsGrid materials={filteredMaterials} />
+          ) : (
+            <BambuMaterialsGrid materials={bambuMaterialData} />
+          )
         ) : (
           tableType === 'generic' ? (
             <MaterialsTable materials={filteredMaterials} />
