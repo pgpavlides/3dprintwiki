@@ -19,40 +19,10 @@ function HomePage() {
       path: '/materials'
     },
     {
-      icon: '⚙️',
-      title: 'Printer Settings',
-      description: 'Optimal settings for different printers and materials',
-      path: '/settings'
-    },
-    {
-      icon: '🔧',
-      title: 'Troubleshooting',
-      description: 'Solutions to common 3D printing problems and issues',
-      path: '/troubleshooting'
-    },
-    {
-      icon: '✏️',
-      title: 'Design Tips',
-      description: 'Best practices for designing 3D models for successful prints',
-      path: '/design'
-    },
-    {
-      icon: '🎨',
-      title: 'Post-Processing',
-      description: 'Techniques for finishing your 3D prints: sanding, painting, and more',
-      path: '/post-processing'
-    },
-    {
-      icon: '⭐',
-      title: 'Printer Reviews',
-      description: 'In-depth reviews and comparisons of popular 3D printers',
-      path: '/reviews'
-    },
-    {
-      icon: '👥',
-      title: 'Community Forum',
-      description: 'Connect with other 3D printing enthusiasts and experts',
-      path: '/forum'
+      icon: '🔩',
+      title: 'Component Guide',
+      description: 'Essential components for 3D printing projects: threaded inserts, screws, bearings, and more',
+      path: '/components'
     }
   ]
 
