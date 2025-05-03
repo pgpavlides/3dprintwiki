@@ -5,6 +5,7 @@ import { bambuMaterialData } from '../data/bambuMaterials';
 import { MaterialCard } from '../components/MaterialCard';
 import { MaterialsTable } from '../components/MaterialsTable';
 import { BambuMaterialsTable } from '../components/BambuMaterialsTable';
+import { BambuMaterialCard } from '../components/BambuMaterialCard';
 
 export const Route = createFileRoute('/materials')({
   component: MaterialsPage,
@@ -93,28 +94,13 @@ function MaterialsPage() {
               </button>
             </div>
           )}
-
-          {viewMode === 'grid' && (
-            <select
-              value={selectedFilter}
-              onChange={(e) => setSelectedFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Materials</option>
-              {allCharacteristics.map(characteristic => (
-                <option key={characteristic} value={characteristic}>
-                  {characteristic.replace(/([A-Z])/g, ' $1').trim()}
-                </option>
-              ))}
-            </select>
-          )}
         </div>
 
         {/* Content */}
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredMaterials.map(material => (
-              <MaterialCard
+            {bambuMaterialData.map(material => (
+              <BambuMaterialCard
                 key={material.name}
                 material={material}
               />
