@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { ShaderBackground } from '../components/ShaderBackground'
 import { ThemeToggle } from '../components/ThemeToggle'
@@ -10,18 +10,26 @@ export const Route = createFileRoute('/calculator')({
 function PrintCostCalculator() {
   // Basic inputs
   const [weight, setWeight] = useState<number>(0)
-  const [filamentCost, setFilamentCost] = useState<number>(20)
-  const [printTime, setPrintTime] = useState<number>(0)
-  const [powerConsumption, setPowerConsumption] = useState<number>(0.15)
-  const [electricityCost, setElectricityCost] = useState<number>(0.15)
+  const [filamentCost, setFilamentCost] = useState<number>(22.99)
+  const [printTimeHours, setPrintTimeHours] = useState<number>(0)
+  const [printTimeMinutes, setPrintTimeMinutes] = useState<number>(0)
+  const [powerConsumption, setPowerConsumption] = useState<number>(0.105)
+  const [electricityCost, setElectricityCost] = useState<number>(0.14620)
   
   // Advanced inputs
   const [showAdvanced, setShowAdvanced] = useState(false)
-  const [setupTime, setSetupTime] = useState<number>(0.25)
+  const [setupTimeHours, setSetupTimeHours] = useState<number>(0)
+  const [setupTimeMinutes, setSetupTimeMinutes] = useState<number>(15)
   const [hourlyRate, setHourlyRate] = useState<number>(15)
   const [failureRate, setFailureRate] = useState<number>(5)
   const [markup, setMarkup] = useState<number>(30)
-  const [postProcessingTime, setPostProcessingTime] = useState<number>(0)
+  const [postProcessingHours, setPostProcessingHours] = useState<number>(0)
+  const [postProcessingMinutes, setPostProcessingMinutes] = useState<number>(0)
+  
+  // Convert all times to hours
+  const printTime = printTimeHours + (printTimeMinutes / 60)
+  const setupTime = setupTimeHours + (setupTimeMinutes / 60)
+  const postProcessingTime = postProcessingHours + (postProcessingMinutes / 60)
   
   // Calculate material cost
   const materialCost = (weight * filamentCost) / 1000
@@ -29,15 +37,15 @@ function PrintCostCalculator() {
   // Calculate electricity cost
   const electricityCostTotal = printTime * powerConsumption * electricityCost
 
-  // Calculate labor cost
-  const laborCost = (setupTime + printTime + postProcessingTime) * hourlyRate
+  // Calculate labor cost (only for setup and post-processing, not print time)
+  const laborCost = showAdvanced ? (setupTime + postProcessingTime) * hourlyRate : 0
 
   // Calculate failure cost
-  const failureCost = (materialCost + electricityCostTotal) * (failureRate / 100)
+  const failureCost = showAdvanced ? (materialCost + electricityCostTotal) * (failureRate / 100) : 0
 
   // Calculate total cost
   const totalCost = materialCost + electricityCostTotal + laborCost + failureCost
-  const finalPrice = totalCost * (1 + markup / 100)
+  const finalPrice = showAdvanced ? totalCost * (1 + markup / 100) : totalCost
 
   return (
     <div className="min-h-screen relative">
@@ -45,6 +53,16 @@ function PrintCostCalculator() {
         <ShaderBackground />
       </div>
       <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm relative z-10">
+        {/* Home Button */}
+        <div className="absolute top-8 left-4">
+          <Link 
+            to="/" 
+            className="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-gray-800 dark:text-gray-200 font-medium"
+          >
+            ← Home
+          </Link>
+        </div>
+        
         {/* Theme Toggle */}
         <div className="absolute top-4 right-4">
           <ThemeToggle />
@@ -81,12 +99,13 @@ function PrintCostCalculator() {
                       onChange={(e) => setWeight(Number(e.target.value))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                       min="0"
+                      step="0.1"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Filament Cost ($ per kg)
+                      Filament Cost (€ per kg)
                     </label>
                     <input
                       type="number"
@@ -94,21 +113,40 @@ function PrintCostCalculator() {
                       onChange={(e) => setFilamentCost(Number(e.target.value))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                       min="0"
+                      step="0.01"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Print Time (hours)
+                      Print Time
                     </label>
-                    <input
-                      type="number"
-                      value={printTime}
-                      onChange={(e) => setPrintTime(Number(e.target.value))}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
-                      min="0"
-                      step="0.25"
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Hours</label>
+                        <input
+                          type="number"
+                          value={printTimeHours}
+                          onChange={(e) => setPrintTimeHours(Number(e.target.value))}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                          min="0"
+                          max="999"
+                          step="1"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Minutes</label>
+                        <input
+                          type="number"
+                          value={printTimeMinutes}
+                          onChange={(e) => setPrintTimeMinutes(Number(e.target.value))}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                          min="0"
+                          max="59"
+                          step="1"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -121,13 +159,13 @@ function PrintCostCalculator() {
                       onChange={(e) => setPowerConsumption(Number(e.target.value))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                       min="0"
-                      step="0.01"
+                      step="0.001"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Electricity Cost ($ per kWh)
+                      Electricity Cost (€ per kWh)
                     </label>
                     <input
                       type="number"
@@ -135,7 +173,7 @@ function PrintCostCalculator() {
                       onChange={(e) => setElectricityCost(Number(e.target.value))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                       min="0"
-                      step="0.01"
+                      step="0.00001"
                     />
                   </div>
                 </div>
@@ -145,52 +183,93 @@ function PrintCostCalculator() {
               <div className="bg-white dark:bg-slate-950 rounded-xl shadow-lg p-6">
                 <button
                   onClick={() => setShowAdvanced(!showAdvanced)}
-                  className="flex items-center justify-between w-full text-xl font-semibold text-gray-900 dark:text-white mb-4"
+                  className="flex items-center justify-between w-full"
                 >
-                  <span>Advanced Settings</span>
-                  <svg 
-                    className={`w-5 h-5 transform transition-transform ${showAdvanced ? 'rotate-180' : ''}`} 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Advanced Settings
+                  </h2>
+                  <div className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                    <svg 
+                      className={`w-6 h-6 text-gray-600 dark:text-gray-400 transition-transform duration-300 ${showAdvanced ? 'rotate-90' : ''}`}
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
                 </button>
                 
                 {showAdvanced && (
-                  <div className="space-y-4">
+                  <div className="space-y-4 mt-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Setup Time (hours)
+                        Setup Time
                       </label>
-                      <input
-                        type="number"
-                        value={setupTime}
-                        onChange={(e) => setSetupTime(Number(e.target.value))}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
-                        min="0"
-                        step="0.25"
-                      />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Hours</label>
+                          <input
+                            type="number"
+                            value={setupTimeHours}
+                            onChange={(e) => setSetupTimeHours(Number(e.target.value))}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            min="0"
+                            max="24"
+                            step="1"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Minutes</label>
+                          <input
+                            type="number"
+                            value={setupTimeMinutes}
+                            onChange={(e) => setSetupTimeMinutes(Number(e.target.value))}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            min="0"
+                            max="59"
+                            step="1"
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Post-Processing Time (hours)
+                        Post-Processing Time
                       </label>
-                      <input
-                        type="number"
-                        value={postProcessingTime}
-                        onChange={(e) => setPostProcessingTime(Number(e.target.value))}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
-                        min="0"
-                        step="0.25"
-                      />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Hours</label>
+                          <input
+                            type="number"
+                            value={postProcessingHours}
+                            onChange={(e) => setPostProcessingHours(Number(e.target.value))}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            min="0"
+                            max="48"
+                            step="1"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Minutes</label>
+                          <input
+                            type="number"
+                            value={postProcessingMinutes}
+                            onChange={(e) => setPostProcessingMinutes(Number(e.target.value))}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                            min="0"
+                            max="59"
+                            step="1"
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Hourly Labor Rate ($)
+                      Hourly Labor Rate (€)
                       </label>
                       <input
                         type="number"
@@ -241,16 +320,23 @@ function PrintCostCalculator() {
                 
                 <div className="space-y-4">
                   <div className="flex justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">Print Time:</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      {printTimeHours}h {printTimeMinutes}m
+                    </span>
+                  </div>
+                  
+                  <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Material Cost:</span>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      ${materialCost.toFixed(2)}
+                      €{materialCost.toFixed(2)}
                     </span>
                   </div>
                   
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Electricity Cost:</span>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      ${electricityCostTotal.toFixed(2)}
+                      €{electricityCostTotal.toFixed(2)}
                     </span>
                   </div>
                   
@@ -259,14 +345,14 @@ function PrintCostCalculator() {
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">Labor Cost:</span>
                         <span className="font-semibold text-gray-900 dark:text-white">
-                          ${laborCost.toFixed(2)}
+                          €{laborCost.toFixed(2)}
                         </span>
                       </div>
                       
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">Failure Risk Cost:</span>
                         <span className="font-semibold text-gray-900 dark:text-white">
-                          ${failureCost.toFixed(2)}
+                          €{failureCost.toFixed(2)}
                         </span>
                       </div>
                     </>
@@ -275,9 +361,9 @@ function PrintCostCalculator() {
                   <hr className="my-4 border-gray-200 dark:border-gray-700" />
                   
                   <div className="flex justify-between text-lg">
-                    <span className="font-semibold text-gray-900 dark:text-white">Total Cost:</span>
-                    <span className="font-bold text-gray-900 dark:text-white">
-                      ${totalCost.toFixed(2)}
+                    <span className="font-semibold text-green-600 dark:text-green-400">Total Cost:</span>
+                    <span className="font-bold text-green-600 dark:text-green-400">
+                      €{totalCost.toFixed(2)}
                     </span>
                   </div>
                   
@@ -285,25 +371,11 @@ function PrintCostCalculator() {
                     <div className="flex justify-between text-xl pt-4">
                       <span className="font-semibold text-green-600 dark:text-green-400">Final Price:</span>
                       <span className="font-bold text-green-600 dark:text-green-400">
-                        ${finalPrice.toFixed(2)}
+                        €{finalPrice.toFixed(2)}
                       </span>
                     </div>
                   )}
                 </div>
-              </div>
-
-              {/* Quick Tips */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
-                  💡 Quick Tips
-                </h3>
-                <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
-                  <li>• Typical FDM printer power consumption: 0.1-0.3 kW</li>
-                  <li>• Standard PLA filament cost: $15-30 per kg</li>
-                  <li>• Consider post-processing time for complex prints</li>
-                  <li>• Factor in failure rates for new or complex designs</li>
-                  <li>• Add markup to cover maintenance and business costs</li>
-                </ul>
               </div>
             </div>
           </div>

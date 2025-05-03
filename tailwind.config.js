@@ -8,7 +8,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'roboto': ['"Roboto"', 'sans-serif'],
+        'opendyslexic': ['OpenDyslexic', 'sans-serif'],
+        'roboto': ['Roboto', 'sans-serif'],
       },
     },
   },
