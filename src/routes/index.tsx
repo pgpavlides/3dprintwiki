@@ -1,39 +1,100 @@
-import { createFileRoute } from '@tanstack/react-router'
-import logo from '../logo.svg'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  component: App,
+  component: HomePage,
 })
 
-function App() {
+function HomePage() {
+  const menuItems = [
+    {
+      icon: '💰',
+      title: 'Print Cost Calculator',
+      description: 'Calculate the exact cost of your 3D prints based on material, electricity, and other factors',
+      path: '/calculator'
+    },
+    {
+      icon: '🧬',
+      title: 'Material Guide',
+      description: 'Comprehensive guide to 3D printing materials: PLA, ABS, PETG, TPU, and more',
+      path: '/materials'
+    },
+    {
+      icon: '⚙️',
+      title: 'Printer Settings',
+      description: 'Optimal settings for different printers and materials',
+      path: '/settings'
+    },
+    {
+      icon: '🔧',
+      title: 'Troubleshooting',
+      description: 'Solutions to common 3D printing problems and issues',
+      path: '/troubleshooting'
+    },
+    {
+      icon: '✏️',
+      title: 'Design Tips',
+      description: 'Best practices for designing 3D models for successful prints',
+      path: '/design'
+    },
+    {
+      icon: '🎨',
+      title: 'Post-Processing',
+      description: 'Techniques for finishing your 3D prints: sanding, painting, and more',
+      path: '/post-processing'
+    },
+    {
+      icon: '⭐',
+      title: 'Printer Reviews',
+      description: 'In-depth reviews and comparisons of popular 3D printers',
+      path: '/reviews'
+    },
+    {
+      icon: '👥',
+      title: 'Community Forum',
+      description: 'Connect with other 3D printing enthusiasts and experts',
+      path: '/forum'
+    }
+  ]
+
   return (
-    <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
-        <img
-          src={logo}
-          className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
-          alt="logo"
-        />
-        <p>
-          Edit <code>src/routes/index.tsx</code> and save to reload.
-        </p>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://tanstack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn TanStack
-        </a>
-      </header>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Welcome to 3D Print Wiki
+          </h1>
+          <p className="text-xl text-gray-600">
+            Your comprehensive resource for 3D printing information
+          </p>
+        </div>
+
+        {/* Grid Menu */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
+          {menuItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.path}
+              className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 p-6 group w-full max-w-sm"
+              activeProps={{
+                className: 'bg-blue-50'
+              }}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  {item.description}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,0 +1,290 @@
+import type { MaterialProperties } from '../types/materials';
+
+export const materialData: MaterialProperties[] = [
+  {
+    name: 'ABS',
+    description: 'ABS is a low-cost material, great for printing tough and durable parts that can withstand high temperatures.',
+    ultimateStrength: { value: '40', unit: 'MPa', barValue: 40, barMax: 85 },
+    stiffness: { value: 5, unit: '/ 10' },
+    durability: { value: 8, unit: '/ 10' },
+    maxServiceTemp: { value: '98', unit: '°C' },
+    thermalExpansion: { value: '90', unit: 'µm/m-°C' },
+    density: { value: '1.04', unit: 'g/cm³' },
+    price: { range: '10 - 40', currency: '$' },
+    printability: { value: 8, unit: '/ 10' },
+    extruderTemp: { range: '220 - 250', unit: '°C' },
+    bedTemp: { range: '95 - 110', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['Kapton Tape', 'ABS Slurry'],
+    otherRequirements: ['Heated Bed', 'Enclosure Recommended'],
+    characteristics: {
+      impactResistant: true,
+      heatResistant: true
+    }
+  },
+  {
+    name: 'Flexible',
+    description: 'Flexible filaments, commonly referred to as TPE or TPU, are known for their elasticity allowing the material to easily stretch and bend.',
+    ultimateStrength: { value: '26 - 43', unit: 'MPa', barValue: 34.5, barMax: 85 },
+    stiffness: { value: 1, unit: '/ 10' },
+    durability: { value: 9, unit: '/ 10' },
+    maxServiceTemp: { value: '60 - 74', unit: '°C' },
+    thermalExpansion: { value: '157', unit: 'µm/m-°C' },
+    density: { value: '1.19 - 1.23', unit: 'g/cm³' },
+    price: { range: '30 - 70', currency: '$' },
+    printability: { value: 6, unit: '/ 10' },
+    extruderTemp: { range: '225 - 245', unit: '°C' },
+    bedTemp: { range: '45 - 60', unit: '°C' },
+    heatedBed: 'Optional',
+    buildSurfaces: ['PEI', "Painter's Tape"],
+    otherRequirements: ['Part Cooling Fan'],
+    characteristics: {
+      flexible: true,
+      elastic: true,
+      soft: true,
+      fatigueResistant: true,
+      heatedBedNotRequired: true
+    }
+  },
+  {
+    name: 'PLA',
+    description: 'PLA is the go-to material for most users due to its ease-of-use, dimensional accuracy, and low cost.',
+    ultimateStrength: { value: '65', unit: 'MPa', barValue: 65, barMax: 85 },
+    stiffness: { value: 7.5, unit: '/ 10' },
+    durability: { value: 4, unit: '/ 10' },
+    maxServiceTemp: { value: '52', unit: '°C' },
+    thermalExpansion: { value: '68', unit: 'µm/m-°C' },
+    density: { value: '1.24', unit: 'g/cm³' },
+    price: { range: '10 - 40', currency: '$' },
+    printability: { value: 9, unit: '/ 10' },
+    extruderTemp: { range: '190 - 220', unit: '°C' },
+    bedTemp: { range: '45 - 60', unit: '°C' },
+    heatedBed: 'Optional',
+    buildSurfaces: ["Painter's Tape", 'Glue Stick', 'Glass Plate', 'PEI'],
+    otherRequirements: ['Part Cooling Fan'],
+    characteristics: {
+      heatedBedNotRequired: true
+    }
+  },
+  {
+    name: 'HIPS',
+    description: 'HIPS is a lightweight material most commonly used as a dissolvable support structure for ABS models.',
+    ultimateStrength: { value: '32', unit: 'MPa', barValue: 32, barMax: 85 },
+    stiffness: { value: 10, unit: '/ 10' },
+    durability: { value: 7, unit: '/ 10' },
+    maxServiceTemp: { value: '100', unit: '°C' },
+    thermalExpansion: { value: '80', unit: 'µm/m-°C' },
+    density: { value: '1.03 - 1.04', unit: 'g/cm³' },
+    price: { range: '24 - 32', currency: '$' },
+    printability: { value: 6, unit: '/ 10' },
+    extruderTemp: { range: '230 - 245', unit: '°C' },
+    bedTemp: { range: '100 - 115', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['Glass Plate', 'Glue Stick', 'Kapton Tape'],
+    otherRequirements: ['Heated Bed', 'Enclosure Recommended'],
+    characteristics: {
+      impactResistant: true,
+      dissolvable: true,
+      heatResistant: true
+    }
+  },
+  {
+    name: 'PETG',
+    description: 'PET and PETG filaments are known for their ease of printability, smooth surface finish, and water resistance.',
+    ultimateStrength: { value: '53', unit: 'MPa', barValue: 53, barMax: 85 },
+    stiffness: { value: 5, unit: '/ 10' },
+    durability: { value: 8, unit: '/ 10' },
+    maxServiceTemp: { value: '73', unit: '°C' },
+    thermalExpansion: { value: '60', unit: 'µm/m-°C' },
+    density: { value: '1.23', unit: 'g/cm³' },
+    price: { range: '20 - 60', currency: '$' },
+    printability: { value: 9, unit: '/ 10' },
+    extruderTemp: { range: '230 - 250', unit: '°C' },
+    bedTemp: { range: '75 - 90', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['Glue Stick', "Painter's Tape"],
+    otherRequirements: ['Heated Bed', 'Part Cooling Fan'],
+    characteristics: {
+      waterResistant: true,
+      chemicallyResistant: true,
+      fatigueResistant: true
+    }
+  },
+  {
+    name: 'Nylon',
+    description: 'Nylon is a tough and semi-flexible material that offers high impact and abrasion resistance. It is an ideal choice for printing durable parts.',
+    ultimateStrength: { value: '40 - 85', unit: 'MPa', barValue: 62.5, barMax: 85 },
+    stiffness: { value: 5, unit: '/ 10' },
+    durability: { value: 10, unit: '/ 10' },
+    maxServiceTemp: { value: '80 - 95', unit: '°C' },
+    thermalExpansion: { value: '95', unit: 'µm/m-°C' },
+    density: { value: '1.06 - 1.14', unit: 'g/cm³' },
+    price: { range: '25 - 65', currency: '$' },
+    printability: { value: 8, unit: '/ 10' },
+    extruderTemp: { range: '220 - 270', unit: '°C' },
+    bedTemp: { range: '70 - 90', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['Glue Stick', 'PEI'],
+    otherRequirements: ['Heated Bed', 'Enclosure Recommended', 'May Require All Metal Hotend'],
+    characteristics: {
+      flexible: true,
+      impactResistant: true,
+      heatResistant: true,
+      fatigueResistant: true
+    }
+  },
+  {
+    name: 'Carbon Fiber Filled',
+    description: 'Carbon fiber filaments contain short fibers that are infused into a PLA or ABS base material to help increase strength and stiffness.',
+    ultimateStrength: { value: '45 - 48', unit: 'MPa', barValue: 46.5, barMax: 85 },
+    stiffness: { value: 10, unit: '/ 10' },
+    durability: { value: 3, unit: '/ 10' },
+    maxServiceTemp: { value: '52', unit: '°C' },
+    thermalExpansion: { value: '57.5', unit: 'µm/m-°C' },
+    density: { value: '1.3', unit: 'g/cm³' },
+    price: { range: '30 - 80', currency: '$' },
+    printability: { value: 8, unit: '/ 10' },
+    extruderTemp: { range: '200 - 230', unit: '°C' },
+    bedTemp: { range: '45 - 60', unit: '°C' },
+    heatedBed: 'Optional',
+    buildSurfaces: ["Painter's Tape", 'Glue Stick', 'Glass Plate', 'PEI'],
+    otherRequirements: ['Part Cooling Fan'],
+    characteristics: {
+      composite: true,
+      heatedBedNotRequired: true
+    }
+  },
+  {
+    name: 'ASA',
+    description: 'ASA is a common alternative to ABS and is great for outdoor applications due to its high UV, temperature, and impact resistance.',
+    ultimateStrength: { value: '55', unit: 'MPa', barValue: 55, barMax: 85 },
+    stiffness: { value: 5, unit: '/ 10' },
+    durability: { value: 10, unit: '/ 10' },
+    maxServiceTemp: { value: '95', unit: '°C' },
+    thermalExpansion: { value: '98', unit: 'µm/m-°C' },
+    density: { value: '1.07', unit: 'g/cm³' },
+    price: { range: '38 - 40', currency: '$' },
+    printability: { value: 7, unit: '/ 10' },
+    extruderTemp: { range: '235 - 255', unit: '°C' },
+    bedTemp: { range: '90 - 110', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['Glue Stick', 'PEI'],
+    otherRequirements: ['Heated Bed'],
+    characteristics: {
+      impactResistant: true,
+      uvResistant: true,
+      heatResistant: true
+    }
+  },
+  {
+    name: 'Polycarbonate',
+    description: 'Polycarbonate is known for its strength and durability. It has very high heat and impact resistance making it an ideal choice for tough environments.',
+    ultimateStrength: { value: '72', unit: 'MPa', barValue: 72, barMax: 85 },
+    stiffness: { value: 6, unit: '/ 10' },
+    durability: { value: 10, unit: '/ 10' },
+    maxServiceTemp: { value: '121', unit: '°C' },
+    thermalExpansion: { value: '69', unit: 'µm/m-°C' },
+    density: { value: '1.2', unit: 'g/cm³' },
+    price: { range: '40 - 75', currency: '$' },
+    printability: { value: 6, unit: '/ 10' },
+    extruderTemp: { range: '260 - 310', unit: '°C' },
+    bedTemp: { range: '80 - 120', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['PEI', 'Commercial Adhesive', 'Glue Stick'],
+    otherRequirements: ['Heated Bed', 'Enclosure Recommended', 'All Metal Hotend'],
+    characteristics: {
+      impactResistant: true,
+      heatResistant: true,
+      fatigueResistant: true
+    }
+  },
+  {
+    name: 'Polypropylene',
+    description: 'Polypropylene is great for high-cycle, low strength applications due to its fatigue resistance, semi-flexible, and lightweight characteristics.',
+    ultimateStrength: { value: '32', unit: 'MPa', barValue: 32, barMax: 85 },
+    stiffness: { value: 4, unit: '/ 10' },
+    durability: { value: 9, unit: '/ 10' },
+    maxServiceTemp: { value: '100', unit: '°C' },
+    thermalExpansion: { value: '150', unit: 'µm/m-°C' },
+    density: { value: '0.9', unit: 'g/cm³' },
+    price: { range: '60 - 120', currency: '$' },
+    printability: { value: 4, unit: '/ 10' },
+    extruderTemp: { range: '220 - 250', unit: '°C' },
+    bedTemp: { range: '85 - 100', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['Packing Tape', 'Polypropylene Sheet'],
+    otherRequirements: ['Heated Bed', 'Enclosure Recommended', 'Part Cooling Fan'],
+    characteristics: {
+      flexible: true,
+      soft: true,
+      waterResistant: true,
+      heatResistant: true,
+      fatigueResistant: true
+    }
+  },
+  {
+    name: 'Metal Filled',
+    description: 'Metal filled filaments are made by mixing a fine metal powder into a base material, providing a unique metallic finish and added weight.',
+    ultimateStrength: { value: '20 - 30', unit: 'MPa', barValue: 25, barMax: 85 },
+    stiffness: { value: 10, unit: '/ 10' },
+    durability: { value: 4, unit: '/ 10' },
+    maxServiceTemp: { value: '52', unit: '°C' },
+    thermalExpansion: { value: '33.75', unit: 'µm/m-°C' },
+    density: { value: '2 - 4', unit: 'g/cm³' },
+    price: { range: '50 - 120', currency: '$' },
+    printability: { value: 7, unit: '/ 10' },
+    extruderTemp: { range: '190 - 220', unit: '°C' },
+    bedTemp: { range: '45 - 60', unit: '°C' },
+    heatedBed: 'Optional',
+    buildSurfaces: ["Painter's Tape", 'Glue Stick', 'PEI'],
+    otherRequirements: ['Wear Resistant or Stainless Steel Nozzle', 'Part Cooling Fan'],
+    characteristics: {
+      composite: true,
+      heatedBedNotRequired: true
+    }
+  },
+  {
+    name: 'Wood Filled',
+    description: 'Wood filaments combine a PLA base material with cork, wood dust, or other derivatives, giving the models a real wooden look and feel.',
+    ultimateStrength: { value: '46', unit: 'MPa', barValue: 46, barMax: 85 },
+    stiffness: { value: 8, unit: '/ 10' },
+    durability: { value: 3, unit: '/ 10' },
+    maxServiceTemp: { value: '52', unit: '°C' },
+    thermalExpansion: { value: '30.5', unit: 'µm/m-°C' },
+    density: { value: '1.15 - 1.25', unit: 'g/cm³' },
+    price: { range: '25 - 55', currency: '$' },
+    printability: { value: 8, unit: '/ 10' },
+    extruderTemp: { range: '190 - 220', unit: '°C' },
+    bedTemp: { range: '45 - 60', unit: '°C' },
+    heatedBed: 'Optional',
+    buildSurfaces: ["Painter's Tape", 'Glue Stick', 'PEI'],
+    otherRequirements: ['Part Cooling Fan'],
+    characteristics: {
+      composite: true,
+      heatedBedNotRequired: true
+    }
+  },
+  {
+    name: 'PVA',
+    description: 'PVA is commonly known for its ability to be dissolved in water and is often used as a support material for complex prints.',
+    ultimateStrength: { value: '78', unit: 'MPa', barValue: 78, barMax: 85 },
+    stiffness: { value: 3, unit: '/ 10' },
+    durability: { value: 7, unit: '/ 10' },
+    maxServiceTemp: { value: '75', unit: '°C' },
+    thermalExpansion: { value: '85', unit: 'µm/m-°C' },
+    density: { value: '1.23', unit: 'g/cm³' },
+    price: { range: '40 - 110', currency: '$' },
+    printability: { value: 5, unit: '/ 10' },
+    extruderTemp: { range: '185 - 200', unit: '°C' },
+    bedTemp: { range: '45 - 60', unit: '°C' },
+    heatedBed: 'Required',
+    buildSurfaces: ['PEI', "Painter's Tape"],
+    otherRequirements: ['Heated Bed', 'Part Cooling Fan'],
+    characteristics: {
+      flexible: true,
+      soft: true,
+      dissolvable: true,
+      fatigueResistant: true
+    }
+  }
+];
