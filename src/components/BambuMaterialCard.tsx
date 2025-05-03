@@ -59,11 +59,11 @@ export const BambuMaterialCard: React.FC<BambuMaterialCardProps> = ({ material }
               {material.properties.heatResistance} heat
             </span>
             <span className={`inline-flex items-center gap-1 rounded-lg px-3 py-1 text-sm ${
-              material.properties.precision === 'High' 
+              material.preprinting.amsCompatibility.includes('Yes') 
                 ? 'bg-blue-500/10 text-blue-500' 
                 : 'bg-yellow-500/10 text-yellow-500'
             }`}>
-              {material.properties.precision} precision
+              AMS {material.preprinting.amsCompatibility.includes('Yes') ? 'Compatible' : 'Issues'}
             </span>
           </div>
 
@@ -102,10 +102,8 @@ export const BambuMaterialCard: React.FC<BambuMaterialCardProps> = ({ material }
                 </svg>
               </div>
               <p className="text-sm leading-relaxed text-gray-600 dark:text-slate-400">
-                <span className="font-medium text-gray-700 dark:text-slate-300">Support:</span>{' '}
-                {material.printerSettings.supportRemoval} removal •
-                <span className="font-medium text-gray-700 dark:text-slate-300"> Surface:</span>{' '}
-                {material.properties.surfaceQuality} quality
+                <span className="font-medium text-gray-700 dark:text-slate-300">Build Plate:</span>{' '}
+                {material.printerSettings.buildPlate.join(' or ')}
               </p>
             </div>
           </div>
@@ -131,9 +129,9 @@ export const BambuMaterialCard: React.FC<BambuMaterialCardProps> = ({ material }
                   Seal After Print
                 </span>
               )}
-              {material.printerSettings.buildPlatePrep && (
+              {material.printerSettings.adhesionMethods.length > 0 && (
                 <span className="inline-flex items-center gap-1 rounded-lg bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-500">
-                  {material.printerSettings.buildPlatePrep}
+                  {material.printerSettings.adhesionMethods[0]}
                 </span>
               )}
             </div>

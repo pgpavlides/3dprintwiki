@@ -51,6 +51,10 @@
 
 @layer base {
   * {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .font-dyslexic * {
     font-family: 'OpenDyslexic', sans-serif !important;
   }
   

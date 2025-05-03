@@ -13,29 +13,8 @@ export const Route = createFileRoute("/materials")({
 
 function MaterialsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
-  const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [tableType, setTableType] = useState<"generic" | "bambu">("bambu");
   const [gridType, setGridType] = useState<"generic" | "bambu">("generic");
-
-  // Get unique characteristics for filtering
-  const allCharacteristics = [
-    ...new Set(
-      materialData.flatMap((material) =>
-        Object.entries(material.characteristics)
-          .filter(([_, value]) => value)
-          .map(([key]) => key)
-      )
-    ),
-  ];
-
-  const filteredMaterials = selectedFilter
-    ? materialData.filter(
-        (material) =>
-          material.characteristics[
-            selectedFilter as keyof typeof material.characteristics
-          ]
-      )
-    : materialData;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
@@ -134,12 +113,12 @@ function MaterialsPage() {
         {/* Content */}
         {viewMode === "grid" ? (
           gridType === "generic" ? (
-            <MaterialsGrid materials={filteredMaterials} />
+            <MaterialsGrid materials={materialData} />
           ) : (
             <BambuMaterialsGrid materials={bambuMaterialData} />
           )
         ) : tableType === "generic" ? (
-          <MaterialsTable materials={filteredMaterials} />
+          <MaterialsTable materials={materialData} />
         ) : (
           <BambuMaterialsTable materials={bambuMaterialData} />
         )}

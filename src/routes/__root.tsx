@@ -1,6 +1,7 @@
 import { Outlet, createRootRoute, Link, useLocation } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ThemeToggle } from '../components/ThemeToggle'
+import { FontToggle } from '../components/FontToggle'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -60,7 +61,8 @@ function RootComponent() {
                   </Link>
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center space-x-2">
+                <FontToggle />
                 <ThemeToggle />
               </div>
             </div>

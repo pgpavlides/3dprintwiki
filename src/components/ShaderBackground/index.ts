@@ -1,1 +1,2 @@
-export { ShaderBackground } from './ShaderBackground';
+// Deprecated - use AnimatedBackground instead
+// export { ShaderBackground } from './ShaderBackground';

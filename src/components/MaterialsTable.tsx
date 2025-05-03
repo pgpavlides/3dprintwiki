@@ -9,14 +9,14 @@ import {
   FaDollarSign,
   FaCog,
   FaFire,
+  FaExclamationTriangle,
   FaWater,
   FaCloud,
   FaCube,
   FaCheckCircle,
   FaArrowsAltH,
   FaLayerGroup,
-  FaWeight,
-  FaExclamationTriangle
+  FaWeight
 } from 'react-icons/fa';
 
 interface MaterialsTableProps {
@@ -34,12 +34,6 @@ export const MaterialsTable: React.FC<MaterialsTableProps> = ({ materials }) => 
         ? prev.filter(name => name !== materialName)
         : [...prev, materialName]
     );
-  };
-
-  const startComparison = () => {
-    if (selectedMaterials.length > 1) {
-      setComparisonMode(true);
-    }
   };
 
   const toggleSection = (section: string) => {

@@ -14,7 +14,6 @@ import {
   FaClock,
   FaServer,
   FaPrint,
-  FaGripLinesVertical,
   FaPalette,
   FaTape,
   FaBox,

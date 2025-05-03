@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ShaderBackground } from '../components/ShaderBackground'
+import { AnimatedBackground } from '../components/AnimatedBackground'
 import { ThemeToggle } from '../components/ThemeToggle'
+import { FontToggle } from '../components/FontToggle'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -85,11 +86,12 @@ function HomePage() {
   return (
     <div className="min-h-screen relative">
       <div className="fixed inset-0">
-        <ShaderBackground />
+        <AnimatedBackground />
       </div>
       <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm flex flex-col justify-center items-center transition-colors relative z-10">
-        {/* Theme Toggle in top right corner */}
-        <div className="absolute top-4 right-4">
+        {/* Theme Toggle and Font Toggle in top right corner */}
+        <div className="absolute top-4 right-4 flex items-center space-x-2">
+          <FontToggle />
           <ThemeToggle />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
