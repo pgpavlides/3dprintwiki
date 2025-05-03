@@ -26,7 +26,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <div className="w-full">
-      <div className="relative w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+      <div className="relative w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
         <div
           className={`absolute left-0 top-0 h-full ${colorClasses[color]} transition-all duration-300`}
           style={{ width: `${percentage}%` }}
@@ -36,14 +36,14 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             {[0, 1, 2, 3, 4].map((i) => (
               <div 
                 key={i} 
-                className="flex-1 border-r border-gray-300 last:border-r-0" 
+                className="flex-1 border-r border-gray-300 dark:border-gray-600 last:border-r-0" 
               />
             ))}
           </div>
         )}
       </div>
       {label && (
-        <div className="text-xs text-gray-600 mt-0.5 text-center">
+        <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5 text-center">
           {label}
         </div>
       )}

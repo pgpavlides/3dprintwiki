@@ -169,7 +169,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   </td>
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('toughness')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -184,7 +184,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   {filteredMaterials.map(material => {
                     const toughnessValue = parseFloat(material.properties.toughness);
                     return (
-                      <td key={material.name} className="p-2 border-b dark:border-gray-700 w-32">
+                      <td key={material.name} className="p-2 border-b dark:border-gray-700 w-32 dark:bg-gray-900">
                         <div className="w-full">
                           {!isNaN(toughnessValue) ? (
                             <ProgressBar
@@ -202,7 +202,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   })}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('strength')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -217,7 +217,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   {filteredMaterials.map(material => {
                     const strengthValue = parseFloat(material.properties.strength);
                     return (
-                      <td key={material.name} className="p-2 border-b w-32">
+                      <td key={material.name} className="p-2 border-b dark:border-gray-700 w-32 dark:bg-gray-900">
                         <div className="w-full">
                           {!isNaN(strengthValue) ? (
                             <ProgressBar
@@ -235,7 +235,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   })}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('stiffness')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -250,7 +250,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   {filteredMaterials.map(material => {
                     const stiffnessValue = parseFloat(material.properties.stiffness);
                     return (
-                      <td key={material.name} className="p-2 border-b w-32">
+                      <td key={material.name} className="p-2 border-b dark:border-gray-700 w-32 dark:bg-gray-900">
                         <div className="w-full">
                           {!isNaN(stiffnessValue) ? (
                             <ProgressBar
@@ -268,7 +268,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   })}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('layerAdhesion')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -283,7 +283,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   {filteredMaterials.map(material => {
                     const adhesionValue = parseFloat(material.properties.layerAdhesion);
                     return (
-                      <td key={material.name} className="p-2 border-b w-32">
+                      <td key={material.name} className="p-2 border-b dark:border-gray-700 w-32 dark:bg-gray-900">
                         <div className="w-full">
                           {!isNaN(adhesionValue) ? (
                             <ProgressBar
@@ -301,7 +301,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   })}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('heatResistance')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -314,13 +314,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.properties.heatResistance}
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('waterAbsorption')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -333,7 +333,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.properties.waterAbsorption}
                     </td>
                   ))}
@@ -350,7 +350,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   </td>
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('drying')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -360,7 +360,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
+                    <td key={material.name} className="p-2 text-center border-b text-xs dark:bg-gray-900 dark:border-gray-700">
                       <span className={material.preprinting.dryingRequired === 'Required' ? 'text-red-600 font-medium' : 'text-gray-600 dark:text-gray-400'}>
                         {material.preprinting.dryingRequired}
                       </span>
@@ -368,7 +368,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('dryingCondition')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -378,13 +378,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-xs border-b dark:border-gray-700 whitespace-pre-line dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-xs border-b dark:border-gray-700 whitespace-pre-line dark:text-gray-300 dark:bg-gray-900">
                       {material.preprinting.dryingCondition}
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('amsCompatibility')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -394,7 +394,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center text-xs border-b dark:border-gray-700 dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center text-xs border-b dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900">
                       {material.preprinting.amsCompatibility}
                     </td>
                   ))}
@@ -411,7 +411,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   </td>
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('nozzleSize')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -421,13 +421,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center text-xs border-b dark:border-gray-700 dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center text-xs border-b dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900">
                       {material.printerSettings.nozzleSizeMaterial}
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('buildPlate')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -437,7 +437,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-xs border-b dark:border-gray-700">
+                    <td key={material.name} className="p-2 text-xs border-b dark:border-gray-700 dark:bg-gray-900">
                       <ul className="list-none dark:text-gray-300">
                         {material.printerSettings.buildPlate.map((plate, index) => (
                           <li key={index} className="mb-1">{plate}</li>
@@ -447,7 +447,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('adhesionMethods')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -457,13 +457,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.printerSettings.adhesionMethods.join(', ')}
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('enclosure')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -473,7 +473,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
+                    <td key={material.name} className="p-2 text-center border-b text-xs dark:bg-gray-900 dark:border-gray-700">
                       <span className={material.printerSettings.enclosureRequired === 'Required' ? 'text-red-600 font-medium' : 'text-gray-600 dark:text-gray-400'}>
                         {material.printerSettings.enclosureRequired}
                       </span>
@@ -481,7 +481,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('printSpeed')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -491,13 +491,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.printerSettings.printSpeed}
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('nozzleTemp')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -507,13 +507,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.printerSettings.nozzleTemperature}
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('partCooling')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -523,7 +523,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.printerSettings.partCoolingFan}
                     </td>
                   ))}
@@ -540,7 +540,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   </td>
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('desiccant')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -550,7 +550,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
+                    <td key={material.name} className="p-2 text-center border-b text-xs dark:bg-gray-900 dark:border-gray-700">
                       <span className={material.postprinting.sealWithDesiccant === 'Required' ? 'text-red-600 font-medium' : 'text-gray-600 dark:text-gray-400'}>
                         {material.postprinting.sealWithDesiccant}
                       </span>
@@ -558,7 +558,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                   ))}
                 </tr>
                 <tr>
-                  <td className="sticky left-0 bg-white dark:bg-gray-800 p-2 font-medium border-b dark:border-gray-700 text-xs">
+                  <td className="sticky left-0 bg-white dark:bg-gray-900 p-2 font-medium border-b dark:border-gray-700 text-xs">
                     <button 
                       onClick={() => setActiveModal('annealing')}
                       className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
@@ -568,7 +568,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                     </button>
                   </td>
                   {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300">
+                    <td key={material.name} className="p-2 text-center border-b dark:border-gray-700 text-xs dark:text-gray-300 dark:bg-gray-900">
                       {material.postprinting.annealing}
                     </td>
                   ))}
