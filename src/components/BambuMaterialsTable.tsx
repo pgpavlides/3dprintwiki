@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import type { BambuMaterialProperties } from '../types/bambuMaterials';
 import { ProgressBar } from './ProgressBar';
+import { PropertyInfoModal } from './modals/PropertyInfoModal';
+import { propertyInfoData } from '../data/propertyInfo';
 import { 
   FaShieldAlt, 
   FaFistRaised, 
@@ -31,6 +33,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
   const [expandedSection, setExpandedSection] = useState<string | null>(null); // null shows all sections
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
   const [compareMode, setCompareMode] = useState(false);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
 
   const toggleMaterialSelection = (materialName: string) => {
     setSelectedMaterials(prev =>
@@ -126,12 +129,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 <th key={material.name} className="p-2 text-center border-b w-32">
                   <div className="font-bold text-gray-900 text-xs">{material.name}</div>
                   {!compareMode && (
-                    <input
-                      type="checkbox"
-                      checked={selectedMaterials.includes(material.name)}
-                      onChange={() => toggleMaterialSelection(material.name)}
-                      className="mt-1 h-3 w-3"
-                    />
+                    <div className="mt-1 flex justify-center items-center">
+                      <label className="custom-checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={selectedMaterials.includes(material.name)}
+                          onChange={() => toggleMaterialSelection(material.name)}
+                        />
+                        <div className="custom-checkmark"></div>
+                      </label>
+                    </div>
                   )}
                 </th>
               ))}
@@ -148,13 +155,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('toughness')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaShieldAlt className="text-blue-500 text-xl mb-1" />
                       <div>
                         Toughness<br />
                         <span className="text-xs text-gray-600">Impact Strength - XY</span>
                       </div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => {
                     const toughnessValue = parseFloat(material.properties.toughness);
@@ -178,13 +188,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('strength')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaFistRaised className="text-red-500 text-xl mb-1" />
                       <div>
                         Strength<br />
                         <span className="text-xs text-gray-600">Bending Strength - XY</span>
                       </div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => {
                     const strengthValue = parseFloat(material.properties.strength);
@@ -208,13 +221,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('stiffness')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaRuler className="text-purple-500 text-xl mb-1" />
                       <div>
                         Stiffness<br />
                         <span className="text-xs text-gray-600">Bending Modulus - XY</span>
                       </div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => {
                     const stiffnessValue = parseFloat(material.properties.stiffness);
@@ -238,13 +254,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('layerAdhesion')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaLayerGroup className="text-green-500 text-xl mb-1" />
                       <div>
                         Layer Adhesion<br />
                         <span className="text-xs text-gray-600">Impact Strength - Z</span>
                       </div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => {
                     const adhesionValue = parseFloat(material.properties.layerAdhesion);
@@ -268,13 +287,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('heatResistance')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaThermometerHalf className="text-orange-500 text-xl mb-1" />
                       <div>
                         Heat Resistance<br />
                         <span className="text-xs text-gray-600">HDT, 0.45 MPa</span>
                       </div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -284,13 +306,16 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('waterAbsorption')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaTint className="text-blue-400 text-xl mb-1" />
                       <div>
                         Water Absorption<br />
                         <span className="text-xs text-gray-600">25°C, 55% RH</span>
                       </div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -311,10 +336,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('drying')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaFan className="text-amber-600 text-xl mb-1" />
                       <div>Dry Out Before Use</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -326,10 +354,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('dryingCondition')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaClock className="text-gray-600 text-xl mb-1" />
                       <div>Drying Condition</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-xs border-b whitespace-pre-line">
@@ -339,10 +370,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('amsCompatibility')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaServer className="text-gray-700 text-xl mb-1" />
                       <div>AMS Compatibility</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center text-xs border-b">
@@ -363,10 +397,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('nozzleSize')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaPrint className="text-blue-600 text-xl mb-1" />
                       <div>Nozzle Size/Material</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center text-xs border-b">
@@ -376,10 +413,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('buildPlate')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaPalette className="text-indigo-500 text-xl mb-1" />
                       <div>Build Plate & Bed Temp</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-xs border-b">
@@ -393,10 +433,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('adhesionMethods')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaTape className="text-yellow-500 text-xl mb-1" />
                       <div>Adhesion Methods</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -406,10 +449,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('enclosure')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaBox className="text-gray-600 text-xl mb-1" />
                       <div>Print with Enclosure</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -421,10 +467,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('printSpeed')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaTachometerAlt className="text-green-600 text-xl mb-1" />
                       <div>Print Speed</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -434,10 +483,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('nozzleTemp')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaTemperatureHigh className="text-red-600 text-xl mb-1" />
                       <div>Nozzle Temperature</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -447,10 +499,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('partCooling')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaWind className="text-blue-500 text-xl mb-1" />
                       <div>Part Cooling Fan</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -471,10 +526,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('desiccant')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaIndustry className="text-purple-600 text-xl mb-1" />
                       <div>Seal with Desiccant</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -486,10 +544,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    <div className="flex flex-col items-center text-center">
+                    <button 
+                      onClick={() => setActiveModal('annealing')}
+                      className="flex flex-col items-center text-center w-full hover:opacity-75 transition-opacity"
+                    >
                       <FaHourglassHalf className="text-orange-600 text-xl mb-1" />
                       <div>Annealing</div>
-                    </div>
+                    </button>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -502,6 +563,65 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
           </tbody>
         </table>
       </div>
+      {/* Property Info Modal */}
+      {activeModal && propertyInfoData[activeModal] && (
+        <PropertyInfoModal
+          isOpen={!!activeModal}
+          onClose={() => setActiveModal(null)}
+          title={propertyInfoData[activeModal].title}
+          icon={getIconForProperty(activeModal)}
+          content={{
+            description: propertyInfoData[activeModal].description,
+            measurement: propertyInfoData[activeModal].measurement,
+            importance: propertyInfoData[activeModal].importance,
+            tips: propertyInfoData[activeModal].tips,
+          }}
+        />
+      )}
     </div>
   );
+};
+
+// Helper function to get the icon component for each property
+const getIconForProperty = (propertyId: string): React.ReactNode => {
+  switch (propertyId) {
+    case 'toughness':
+      return <FaShieldAlt className="text-blue-500" />;
+    case 'strength':
+      return <FaFistRaised className="text-red-500" />;
+    case 'stiffness':
+      return <FaRuler className="text-purple-500" />;
+    case 'layerAdhesion':
+      return <FaLayerGroup className="text-green-500" />;
+    case 'heatResistance':
+      return <FaThermometerHalf className="text-orange-500" />;
+    case 'waterAbsorption':
+      return <FaTint className="text-blue-400" />;
+    case 'drying':
+      return <FaFan className="text-amber-600" />;
+    case 'dryingCondition':
+      return <FaClock className="text-gray-600" />;
+    case 'amsCompatibility':
+      return <FaServer className="text-gray-700" />;
+    case 'nozzleSize':
+      return <FaPrint className="text-blue-600" />;
+    case 'buildPlate':
+      return <FaPalette className="text-indigo-500" />;
+    case 'adhesionMethods':
+      return <FaTape className="text-yellow-500" />;
+    case 'enclosure':
+      return <FaBox className="text-gray-600" />;
+    case 'printSpeed':
+      return <FaTachometerAlt className="text-green-600" />;
+    case 'nozzleTemp':
+      return <FaTemperatureHigh className="text-red-600" />;
+    case 'partCooling':
+      return <FaWind className="text-blue-500" />;
+    case 'desiccant':
+      return <FaIndustry className="text-purple-600" />;
+    case 'annealing':
+      return <FaHourglassHalf className="text-orange-600" />;
+    default:
+      return null;
+  }
 };
