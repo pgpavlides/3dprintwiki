@@ -53,68 +53,83 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
 
   return (
     <div className="w-full overflow-x-auto">
-      {/* Controls */}
-      <div className="mb-4 flex justify-between items-center">
-        <div className="flex gap-1 flex-wrap">
+      {/* Section Navigation */}
+      <div className="mb-6">
+        <div className="flex justify-center gap-3 mb-4">
           <button
             onClick={() => toggleSection('properties')}
-            className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'properties' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+            className={`flex flex-col items-center justify-center p-3 w-20 h-20 rounded-xl transition-all duration-200 ${
+              expandedSection === 'properties' 
+                ? 'bg-blue-500 text-white shadow-lg transform -translate-y-0.5' 
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500'
             }`}
           >
-            Properties
+            <FaShieldAlt className="text-xl mb-1" />
+            <span className="text-xs font-medium">Properties</span>
           </button>
           <button
             onClick={() => toggleSection('preprinting')}
-            className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'preprinting' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+            className={`flex flex-col items-center justify-center p-3 w-20 h-20 rounded-xl transition-all duration-200 ${
+              expandedSection === 'preprinting' 
+                ? 'bg-green-500 text-white shadow-lg transform -translate-y-0.5' 
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500'
             }`}
           >
-            Pre-printing
+            <FaFan className="text-xl mb-1" />
+            <span className="text-xs font-medium">Pre-print</span>
           </button>
           <button
             onClick={() => toggleSection('printer')}
-            className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'printer' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+            className={`flex flex-col items-center justify-center p-3 w-20 h-20 rounded-xl transition-all duration-200 ${
+              expandedSection === 'printer' 
+                ? 'bg-orange-500 text-white shadow-lg transform -translate-y-0.5' 
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500'
             }`}
           >
-            Printer Settings
+            <FaPrint className="text-xl mb-1" />
+            <span className="text-xs font-medium">Printer</span>
           </button>
           <button
             onClick={() => toggleSection('postprinting')}
-            className={`px-2 py-1 text-sm rounded-lg ${
-              expandedSection === 'postprinting' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+            className={`flex flex-col items-center justify-center p-3 w-20 h-20 rounded-xl transition-all duration-200 ${
+              expandedSection === 'postprinting' 
+                ? 'bg-purple-500 text-white shadow-lg transform -translate-y-0.5' 
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500'
             }`}
           >
-            Post-printing
+            <FaIndustry className="text-xl mb-1" />
+            <span className="text-xs font-medium">Post-print</span>
           </button>
         </div>
         
-        {!compareMode && (
-          <button
-            onClick={() => selectedMaterials.length > 1 && setCompareMode(true)}
-            disabled={selectedMaterials.length < 2}
-            className={`px-2 py-1 text-sm rounded-lg ${
-              selectedMaterials.length < 2
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-green-600 text-white hover:bg-green-700'
-            }`}
-          >
-            Compare ({selectedMaterials.length})
-          </button>
-        )}
-        
-        {compareMode && (
-          <button
-            onClick={() => {
-              setCompareMode(false);
-              setSelectedMaterials([]);
-            }}
-            className="px-2 py-1 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700"
-          >
-            Exit Comparison
-          </button>
-        )}
+        {/* Compare Controls */}
+        <div className="flex justify-end gap-3">
+          {!compareMode && (
+            <button
+              onClick={() => selectedMaterials.length > 1 && setCompareMode(true)}
+              disabled={selectedMaterials.length < 2}
+              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                selectedMaterials.length < 2
+                  ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              Compare ({selectedMaterials.length})
+            </button>
+          )}
+          
+          {compareMode && (
+            <button
+              onClick={() => {
+                setCompareMode(false);
+                setSelectedMaterials([]);
+              }}
+              className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+            >
+              Exit Comparison
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Table */}

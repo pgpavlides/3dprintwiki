@@ -220,18 +220,6 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({ material, onCompare,
                 </span>
               </div>
             </button>
-            {onCompare && (
-              <button
-                onClick={() => onCompare(material)}
-                className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 font-semibold text-white transition-colors ${
-                  isSelected 
-                    ? 'bg-blue-500 hover:bg-blue-600' 
-                    : 'bg-gray-100 dark:bg-slate-900 hover:bg-gray-200 dark:hover:bg-slate-800 text-gray-900 dark:text-white'
-                }`}
-              >
-                {isSelected ? 'Remove' : 'Compare'}
-              </button>
-            )}
           </div>
         </div>
       </div>
