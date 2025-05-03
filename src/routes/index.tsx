@@ -139,9 +139,9 @@ function HomePage() {
                     
                     <div className={`group/btn relative overflow-hidden rounded-lg bg-gradient-to-r ${item.gradient} p-px font-semibold text-white mt-auto`}>
                       <div className="relative rounded-lg bg-white dark:bg-slate-950 px-3 py-2 text-sm transition-all duration-300 group-hover/btn:bg-opacity-0 dark:group-hover/btn:bg-opacity-0">
-                        <span className="relative flex items-center justify-center gap-2">
+                        <span className="relative flex items-center justify-center gap-2 bg-gradient-to-r bg-clip-text text-transparent group-hover/btn:text-white ${item.gradient}">
                           Explore Now
-                          <svg className="h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="h-3 w-3 text-gray-900 dark:text-white group-hover/btn:text-white transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                           </svg>
                         </span>

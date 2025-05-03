@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as MaterialsImport } from './routes/materials'
 import { Route as ComponentsImport } from './routes/components'
+import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -26,6 +27,12 @@ const MaterialsRoute = MaterialsImport.update({
 const ComponentsRoute = ComponentsImport.update({
   id: '/components',
   path: '/components',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CalculatorRoute = CalculatorImport.update({
+  id: '/calculator',
+  path: '/calculator',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,6 +51,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/calculator': {
+      id: '/calculator'
+      path: '/calculator'
+      fullPath: '/calculator'
+      preLoaderRoute: typeof CalculatorImport
       parentRoute: typeof rootRoute
     }
     '/components': {
@@ -67,12 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calculator': typeof CalculatorRoute
   '/components': typeof ComponentsRoute
   '/materials': typeof MaterialsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calculator': typeof CalculatorRoute
   '/components': typeof ComponentsRoute
   '/materials': typeof MaterialsRoute
 }
@@ -80,27 +96,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/calculator': typeof CalculatorRoute
   '/components': typeof ComponentsRoute
   '/materials': typeof MaterialsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/components' | '/materials'
+  fullPaths: '/' | '/calculator' | '/components' | '/materials'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/components' | '/materials'
-  id: '__root__' | '/' | '/components' | '/materials'
+  to: '/' | '/calculator' | '/components' | '/materials'
+  id: '__root__' | '/' | '/calculator' | '/components' | '/materials'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CalculatorRoute: typeof CalculatorRoute
   ComponentsRoute: typeof ComponentsRoute
   MaterialsRoute: typeof MaterialsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CalculatorRoute: CalculatorRoute,
   ComponentsRoute: ComponentsRoute,
   MaterialsRoute: MaterialsRoute,
 }
@@ -116,12 +135,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/calculator",
         "/components",
         "/materials"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/calculator": {
+      "filePath": "calculator.tsx"
     },
     "/components": {
       "filePath": "components.tsx"

@@ -20,9 +20,16 @@ function RootComponent() {
               <div className="flex">
                 <Link 
                   to="/" 
-                  className="flex items-center px-2 py-2 text-gray-900 dark:text-white font-bold text-xl"
+                  className="flex items-center space-x-3 px-2 py-2"
                 >
-                  3D Print Wiki
+                  <img 
+                    src="/logo/logo.svg" 
+                    alt="3D Print Wiki Logo" 
+                    className="h-10 w-10"
+                  />
+                  <span className="text-gray-900 dark:text-white font-bold text-xl">
+                    3D Print Wiki
+                  </span>
                 </Link>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   <Link
