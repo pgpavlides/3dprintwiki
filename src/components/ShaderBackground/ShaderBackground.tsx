@@ -1,51 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const vertexShader = `
 attribute vec2 a_position;
 void main() {
-    gl_Position = vec4(a_position, 0, 1);
+    gl_Position = vec4(a_position, 0.0, 1.0);
 }
 `;
 
-// Your original shader
 const fragmentShader = `
-precision highp float;
-
-uniform float iTime;
-uniform vec2 iResolution;
-
-void mainImage( out vec4 o, vec2 u )
-{
-    vec2 v = iResolution.xy;
-         u = .2*(u+u-v)/v.y;    
-         
-    vec4 z = o = vec4(1,2,3,0);
-     
-    float i = 0.0;
-    for (float a = .5, t = iTime; 
-         ++i < 19.; 
-         o += (1. + cos(z+t)) 
-            / length((1.+i*dot(v,v)) 
-                   * sin(1.5*u/(.5-dot(u,u)) - 9.*u.yx + t))
-         )  
-        v = cos(++t - 7.*u*pow(a += .03, i)) - 5.*u,                 
-        u += tanh(40. * dot(u *= mat2(cos(i + .02*t - vec4(0,11,33,0)))
-                           ,u)
-                      * cos(1e2*u.yx + t)) / 2e2
-           + .2 * a * u
-           + cos(4./exp(dot(o,o)/1e2) + t) / 3e2;
-              
-     o = 25.6 / (min(o, 13.) + 164. / o) 
-       - dot(u, u) / 250.;
-}
-
-void main() {
-    mainImage(gl_FragColor, gl_FragCoord.xy);
-}
-`;
-
-// Fallback shader in case the complex one fails
-const fallbackFragmentShader = `
 precision mediump float;
 
 uniform float iTime;
@@ -53,98 +15,103 @@ uniform vec2 iResolution;
 
 void main() {
     vec2 uv = gl_FragCoord.xy / iResolution.xy;
-    vec3 col = 0.5 + 0.5 * cos(iTime + uv.xyx + vec3(0, 2, 4));
-    gl_FragColor = vec4(col, 1.0);
+    vec2 p = (uv - 0.5) * 2.0;
+    
+    // Background color
+    vec3 color = vec3(0.08, 0.125, 0.168);
+    
+    // Simple animated triangle
+    float angle = iTime * 0.5;
+    vec2 a = vec2(cos(angle), sin(angle)) * 0.5;
+    vec2 b = vec2(cos(angle + 2.094), sin(angle + 2.094)) * 0.5;
+    vec2 c = vec2(cos(angle + 4.189), sin(angle + 4.189)) * 0.5;
+    
+    // Add motion to vertices
+    a += vec2(sin(iTime * 2.0) * 0.1, cos(iTime * 1.5) * 0.1);
+    b += vec2(cos(iTime * 1.8) * 0.1, sin(iTime * 2.1) * 0.1);
+    c += vec2(sin(iTime * 1.6) * 0.1, cos(iTime * 2.3) * 0.1);
+    
+    // Simple triangle test using barycentric coordinates
+    vec2 v0 = c - a;
+    vec2 v1 = b - a;
+    vec2 v2 = p - a;
+    
+    float d00 = dot(v0, v0);
+    float d01 = dot(v0, v1);
+    float d02 = dot(v0, v2);
+    float d11 = dot(v1, v1);
+    float d12 = dot(v1, v2);
+    
+    float invDenom = 1.0 / (d00 * d11 - d01 * d01);
+    float u = (d11 * d02 - d01 * d12) * invDenom;
+    float v = (d00 * d12 - d01 * d02) * invDenom;
+    
+    // Check if point is inside triangle
+    if (u >= 0.0 && v >= 0.0 && u + v <= 1.0) {
+        color += vec3(0.2, 0.3, 0.4);
+    }
+    
+    // Add some noise
+    color += fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) * 0.02;
+    
+    gl_FragColor = vec4(color, 1.0);
 }
 `;
 
 export const ShaderBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
-  const startTimeRef = useRef<number>(Date.now());
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Try to get WebGL context with various options
-    let gl = canvas.getContext('webgl2');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     if (!gl) {
-      gl = canvas.getContext('webgl');
-    }
-    if (!gl) {
-      gl = canvas.getContext('experimental-webgl');
-    }
-    
-    if (!gl) {
-      setError('WebGL not supported');
+      console.error('WebGL not supported');
       return;
     }
 
-    let currentFragmentShader = fragmentShader;
-    let retryWithFallback = false;
+    // Create and compile vertex shader
+    const vShader = gl.createShader(gl.VERTEX_SHADER);
+    if (!vShader) return;
+    
+    gl.shaderSource(vShader, vertexShader);
+    gl.compileShader(vShader);
+    
+    if (!gl.getShaderParameter(vShader, gl.COMPILE_STATUS)) {
+      console.error('Vertex shader error:', gl.getShaderInfoLog(vShader));
+      return;
+    }
 
-    const createShaderProgram = () => {
-      // Create shaders
-      const vertShader = gl!.createShader(gl!.VERTEX_SHADER);
-      const fragShader = gl!.createShader(gl!.FRAGMENT_SHADER);
+    // Create and compile fragment shader
+    const fShader = gl.createShader(gl.FRAGMENT_SHADER);
+    if (!fShader) return;
+    
+    gl.shaderSource(fShader, fragmentShader);
+    gl.compileShader(fShader);
+    
+    if (!gl.getShaderParameter(fShader, gl.COMPILE_STATUS)) {
+      console.error('Fragment shader error:', gl.getShaderInfoLog(fShader));
+      return;
+    }
 
-      if (!vertShader || !fragShader) {
-        setError('Failed to create shaders');
-        return null;
-      }
-
-      gl!.shaderSource(vertShader, vertexShader);
-      gl!.compileShader(vertShader);
-
-      if (!gl!.getShaderParameter(vertShader, gl!.COMPILE_STATUS)) {
-        setError('Vertex shader compilation error: ' + gl!.getShaderInfoLog(vertShader));
-        return null;
-      }
-
-      gl!.shaderSource(fragShader, currentFragmentShader);
-      gl!.compileShader(fragShader);
-
-      if (!gl!.getShaderParameter(fragShader, gl!.COMPILE_STATUS)) {
-        console.warn('Fragment shader compilation error:', gl!.getShaderInfoLog(fragShader));
-        if (!retryWithFallback) {
-          retryWithFallback = true;
-          currentFragmentShader = fallbackFragmentShader;
-          gl!.deleteShader(vertShader);
-          gl!.deleteShader(fragShader);
-          return createShaderProgram(); // Retry with fallback shader
-        }
-        return null;
-      }
-
-      // Create program
-      const program = gl!.createProgram();
-      if (!program) {
-        setError('Failed to create program');
-        return null;
-      }
-
-      gl!.attachShader(program, vertShader);
-      gl!.attachShader(program, fragShader);
-      gl!.linkProgram(program);
-
-      if (!gl!.getProgramParameter(program, gl!.LINK_STATUS)) {
-        setError('Program linking error: ' + gl!.getProgramInfoLog(program));
-        return null;
-      }
-
-      return { program, vertShader, fragShader };
-    };
-
-    const shaderProgram = createShaderProgram();
-    if (!shaderProgram) return;
-
-    const { program, vertShader, fragShader } = shaderProgram;
-
+    // Create program
+    const program = gl.createProgram();
+    if (!program) return;
+    
+    gl.attachShader(program, vShader);
+    gl.attachShader(program, fShader);
+    gl.linkProgram(program);
+    
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Program link error:', gl.getProgramInfoLog(program));
+      return;
+    }
+    
     gl.useProgram(program);
 
-    // Create vertices for a full-screen quad
+    // Create vertex buffer
     const vertices = new Float32Array([
       -1, -1,
        1, -1,
@@ -153,11 +120,11 @@ export const ShaderBackground: React.FC = () => {
        1, -1,
        1,  1,
     ]);
-
+    
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
+    
     const positionLocation = gl.getAttribLocation(program, 'a_position');
     gl.enableVertexAttribArray(positionLocation);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -166,76 +133,52 @@ export const ShaderBackground: React.FC = () => {
     const timeLocation = gl.getUniformLocation(program, 'iTime');
     const resolutionLocation = gl.getUniformLocation(program, 'iResolution');
 
-    // Handle resize
-    const resize = () => {
+    let startTime = Date.now();
+    
+    const render = () => {
+      const currentTime = (Date.now() - startTime) / 1000;
+      
+      // Update canvas size
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
-        gl!.viewport(0, 0, width, height);
+        gl.viewport(0, 0, width, height);
       }
-    };
-
-    // Initial resize
-    resize();
-
-    // Render loop
-    const render = () => {
-      if (!gl) return;
-
-      resize();
       
-      const time = (Date.now() - startTimeRef.current) / 1000;
+      // Set uniforms
+      gl.uniform1f(timeLocation, currentTime);
+      gl.uniform2f(resolutionLocation, width, height);
       
-      gl.uniform1f(timeLocation, time);
-      gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-      
+      // Draw
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       
       animationRef.current = requestAnimationFrame(render);
     };
-
-    // Start render loop
+    
     render();
 
-    // Handle window resize
-    window.addEventListener('resize', resize);
-
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', resize);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      if (gl) {
-        gl.deleteProgram(program);
-        gl.deleteShader(vertShader);
-        gl.deleteShader(fragShader);
-        gl.deleteBuffer(buffer);
-      }
+      gl.deleteProgram(program);
+      gl.deleteShader(vShader);
+      gl.deleteShader(fShader);
     };
   }, []);
-
-  if (error) {
-    return (
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900" style={{ zIndex: -1 }}>
-        {/* Fallback gradient background */}
-      </div>
-    );
-  }
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full"
-      style={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
         zIndex: -1,
       }}
     />
