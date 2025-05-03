@@ -1,5 +1,27 @@
 import React, { useState } from 'react';
 import type { BambuMaterialProperties } from '../types/bambuMaterials';
+import { ProgressBar } from './ProgressBar';
+import { 
+  FaShieldAlt, 
+  FaFistRaised, 
+  FaRuler, 
+  FaLayerGroup, 
+  FaThermometerHalf, 
+  FaTint,
+  FaFan,
+  FaClock,
+  FaServer,
+  FaPrint,
+  FaGripLinesVertical,
+  FaPalette,
+  FaTape,
+  FaBox,
+  FaTachometerAlt,
+  FaTemperatureHigh,
+  FaWind,
+  FaIndustry,
+  FaHourglassHalf
+} from 'react-icons/fa';
 
 interface BambuMaterialsTableProps {
   materials: BambuMaterialProperties[];
@@ -101,7 +123,7 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 Filament
               </th>
               {filteredMaterials.map(material => (
-                <th key={material.name} className="p-2 text-center border-b min-w-[80px] max-w-[120px]">
+                <th key={material.name} className="p-2 text-center border-b w-32">
                   <div className="font-bold text-gray-900 text-xs">{material.name}</div>
                   {!compareMode && (
                     <input
@@ -126,52 +148,133 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Toughness<br />
-                    <span className="text-xs text-gray-600">Impact Strength - XY</span>
+                    <div className="flex items-center gap-2">
+                      <FaShieldAlt className="text-blue-500" />
+                      <div>
+                        Toughness<br />
+                        <span className="text-xs text-gray-600">Impact Strength - XY</span>
+                      </div>
+                    </div>
                   </td>
-                  {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
-                      {material.properties.toughness}
-                    </td>
-                  ))}
+                  {filteredMaterials.map(material => {
+                    const toughnessValue = parseFloat(material.properties.toughness);
+                    return (
+                      <td key={material.name} className="p-2 border-b w-32">
+                        <div className="w-full">
+                          {!isNaN(toughnessValue) ? (
+                            <ProgressBar
+                              value={toughnessValue}
+                              max={150} // Based on typical range of 0-150 kJ/m²
+                              color="blue"
+                              label={material.properties.toughness}
+                            />
+                          ) : (
+                            <div className="text-sm text-center">{material.properties.toughness}</div>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Strength<br />
-                    <span className="text-xs text-gray-600">Bending Strength - XY</span>
+                    <div className="flex items-center gap-2">
+                      <FaFistRaised className="text-red-500" />
+                      <div>
+                        Strength<br />
+                        <span className="text-xs text-gray-600">Bending Strength - XY</span>
+                      </div>
+                    </div>
                   </td>
-                  {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
-                      {material.properties.strength}
-                    </td>
-                  ))}
+                  {filteredMaterials.map(material => {
+                    const strengthValue = parseFloat(material.properties.strength);
+                    return (
+                      <td key={material.name} className="p-2 border-b w-32">
+                        <div className="w-full">
+                          {!isNaN(strengthValue) ? (
+                            <ProgressBar
+                              value={strengthValue}
+                              max={250} // Based on typical range up to 250 MPa
+                              color="red"
+                              label={material.properties.strength}
+                            />
+                          ) : (
+                            <div className="text-sm text-center">{material.properties.strength}</div>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Stiffness<br />
-                    <span className="text-xs text-gray-600">Bending Modulus - XY</span>
+                    <div className="flex items-center gap-2">
+                      <FaRuler className="text-purple-500" />
+                      <div>
+                        Stiffness<br />
+                        <span className="text-xs text-gray-600">Bending Modulus - XY</span>
+                      </div>
+                    </div>
                   </td>
-                  {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
-                      {material.properties.stiffness}
-                    </td>
-                  ))}
+                  {filteredMaterials.map(material => {
+                    const stiffnessValue = parseFloat(material.properties.stiffness);
+                    return (
+                      <td key={material.name} className="p-2 border-b w-32">
+                        <div className="w-full">
+                          {!isNaN(stiffnessValue) ? (
+                            <ProgressBar
+                              value={stiffnessValue}
+                              max={10000} // Based on typical range up to 10000 MPa
+                              color="purple"
+                              label={material.properties.stiffness}
+                            />
+                          ) : (
+                            <div className="text-sm text-center">{material.properties.stiffness}</div>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Layer Adhesion<br />
-                    <span className="text-xs text-gray-600">Impact Strength - Z</span>
+                    <div className="flex items-center gap-2">
+                      <FaLayerGroup className="text-green-500" />
+                      <div>
+                        Layer Adhesion<br />
+                        <span className="text-xs text-gray-600">Impact Strength - Z</span>
+                      </div>
+                    </div>
                   </td>
-                  {filteredMaterials.map(material => (
-                    <td key={material.name} className="p-2 text-center border-b text-xs">
-                      {material.properties.layerAdhesion}
-                    </td>
-                  ))}
+                  {filteredMaterials.map(material => {
+                    const adhesionValue = parseFloat(material.properties.layerAdhesion);
+                    return (
+                      <td key={material.name} className="p-2 border-b w-32">
+                        <div className="w-full">
+                          {!isNaN(adhesionValue) ? (
+                            <ProgressBar
+                              value={adhesionValue}
+                              max={100} // Based on typical range up to 100 kJ/m²
+                              color="green"
+                              label={material.properties.layerAdhesion}
+                            />
+                          ) : (
+                            <div className="text-sm text-center">{material.properties.layerAdhesion}</div>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Heat Resistance<br />
-                    <span className="text-xs text-gray-600">HDT, 0.45 MPa</span>
+                    <div className="flex items-center gap-2">
+                      <FaThermometerHalf className="text-orange-500" />
+                      <div>
+                        Heat Resistance<br />
+                        <span className="text-xs text-gray-600">HDT, 0.45 MPa</span>
+                      </div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -181,8 +284,13 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Water Absorption<br />
-                    <span className="text-xs text-gray-600">25°C, 55% RH</span>
+                    <div className="flex items-center gap-2">
+                      <FaTint className="text-blue-400" />
+                      <div>
+                        Water Absorption<br />
+                        <span className="text-xs text-gray-600">25°C, 55% RH</span>
+                      </div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -203,7 +311,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Dry Out Before Use
+                    <div className="flex items-center gap-2">
+                      <FaFan className="text-amber-600" />
+                      <div>Dry Out Before Use</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -215,7 +326,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Drying Condition
+                    <div className="flex items-center gap-2">
+                      <FaClock className="text-gray-600" />
+                      <div>Drying Condition</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-xs border-b whitespace-pre-line">
@@ -225,7 +339,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    AMS Compatibility
+                    <div className="flex items-center gap-2">
+                      <FaServer className="text-gray-700" />
+                      <div>AMS Compatibility</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center text-xs border-b">
@@ -246,7 +363,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Nozzle Size/Material
+                    <div className="flex items-center gap-2">
+                      <FaPrint className="text-blue-600" />
+                      <div>Nozzle Size/Material</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center text-xs border-b">
@@ -256,7 +376,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Build Plate & Bed Temp
+                    <div className="flex items-center gap-2">
+                      <FaPalette className="text-indigo-500" />
+                      <div>Build Plate & Bed Temp</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-xs border-b">
@@ -270,7 +393,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Adhesion Methods
+                    <div className="flex items-center gap-2">
+                      <FaTape className="text-yellow-500" />
+                      <div>Adhesion Methods</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -280,7 +406,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Print with Enclosure
+                    <div className="flex items-center gap-2">
+                      <FaBox className="text-gray-600" />
+                      <div>Print with Enclosure</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -292,7 +421,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Print Speed
+                    <div className="flex items-center gap-2">
+                      <FaTachometerAlt className="text-green-600" />
+                      <div>Print Speed</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -302,7 +434,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Nozzle Temperature
+                    <div className="flex items-center gap-2">
+                      <FaTemperatureHigh className="text-red-600" />
+                      <div>Nozzle Temperature</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -312,7 +447,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Part Cooling Fan
+                    <div className="flex items-center gap-2">
+                      <FaWind className="text-blue-500" />
+                      <div>Part Cooling Fan</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -333,7 +471,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Seal with Desiccant
+                    <div className="flex items-center gap-2">
+                      <FaIndustry className="text-purple-600" />
+                      <div>Seal with Desiccant</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">
@@ -345,7 +486,10 @@ export const BambuMaterialsTable: React.FC<BambuMaterialsTableProps> = ({ materi
                 </tr>
                 <tr>
                   <td className="sticky left-0 bg-white p-2 font-medium border-b text-xs">
-                    Annealing
+                    <div className="flex items-center gap-2">
+                      <FaHourglassHalf className="text-orange-600" />
+                      <div>Annealing</div>
+                    </div>
                   </td>
                   {filteredMaterials.map(material => (
                     <td key={material.name} className="p-2 text-center border-b text-xs">

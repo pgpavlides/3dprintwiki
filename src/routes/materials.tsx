@@ -14,7 +14,7 @@ export const Route = createFileRoute('/materials')({
 function MaterialsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [selectedFilter, setSelectedFilter] = useState<string>('');
-  const [tableType, setTableType] = useState<'generic' | 'bambu'>('generic');
+  const [tableType, setTableType] = useState<'generic' | 'bambu'>('bambu');
 
   // Get unique characteristics for filtering
   const allCharacteristics = [...new Set(
@@ -59,7 +59,10 @@ function MaterialsPage() {
               Grid View
             </button>
             <button
-              onClick={() => setViewMode('table')}
+              onClick={() => {
+                setViewMode('table');
+                setTableType('bambu');
+              }}
               className={`px-4 py-2 rounded-lg font-medium ${
                 viewMode === 'table'
                   ? 'bg-blue-500 text-white'
