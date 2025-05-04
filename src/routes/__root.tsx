@@ -3,6 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { FontToggle } from '../components/FontToggle'
 import { SEO } from '../components/SEO/SEO'
+import { LenisWrapper, scrollTo } from '../components/LenisWrapper'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -13,43 +14,49 @@ function RootComponent() {
   const isHomePage = location.pathname === '/';
 
   return (
-    <>
+    <LenisWrapper>
       <SEO />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors relative">
         {/* Absolute positioned navigation elements */}
         {!isHomePage && (
           <>
-            {/* Back button - top left */}
-            <button
-              onClick={() => window.history.back()}
-              className="fixed top-4 left-4 p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg z-50"
-              title="Go back"
-            >
-              <svg
-                className="w-6 h-6 text-gray-600 dark:text-gray-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {/* Back button and Logo - top left */}
+            <div className="fixed top-4 left-4 flex items-center space-x-3 z-50">
+              <button
+                onClick={() => {
+                  if (window.history.length > 1) {
+                    window.history.back();
+                  } else {
+                    // If no history, scroll to top with Lenis
+                    scrollTo(0, { duration: 1.2 });
+                  }
+                }}
+                className="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg border border-gray-200 dark:border-gray-700"
+                title="Go back"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-
-            {/* Logo - top center */}
-            <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+                <svg
+                  className="w-6 h-6 text-gray-600 dark:text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              
               <Link
                 to="/"
-                className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-800 transition-all duration-200"
+                className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200 dark:border-gray-700"
               >
                 <img
                   src="/logo/logo.svg"
                   alt="3D Print Wiki Logo"
-                  className="h-8 w-8"
+                  className="h-6 w-6"
                 />
                 <span className="text-gray-900 dark:text-white font-bold text-lg">
                   3D Print Wiki
@@ -59,7 +66,7 @@ function RootComponent() {
 
             {/* Font and Theme toggles - top right */}
             <div className="fixed top-4 right-4 flex items-center space-x-2 z-50">
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-lg p-1 flex items-center space-x-1">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-lg p-1 flex items-center space-x-1 border border-gray-200 dark:border-gray-700">
                 <FontToggle />
                 <ThemeToggle />
               </div>
@@ -96,6 +103,6 @@ function RootComponent() {
           <img src="/svg/buymeacoffee.svg" alt="Buy Me a Coffee" className="w-6 h-6" />
         </a>
       </div>
-    </>
+    </LenisWrapper>
   )
 }

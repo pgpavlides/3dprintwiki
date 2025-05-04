@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -11,13 +11,23 @@ import { hardwareCategories, getAllSubcategories } from '../data/hardware/hardwa
 
 interface HardwareTableProps {
   hardware: Hardware[];
+  selectedCategory?: string;
+  selectedSubcategory?: string;
+  searchTerm?: string;
+  onCategoryChange?: (category: string) => void;
+  onSubcategoryChange?: (subcategory: string) => void;
+  onSearchChange?: (search: string) => void;
 }
 
-export function HardwareTable({ hardware }: HardwareTableProps) {
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
-  const [selectedRecommended, setSelectedRecommended] = useState<boolean | null>(null);
+export function HardwareTable({ 
+  hardware,
+  selectedCategory,
+  selectedSubcategory,
+  searchTerm,
+  onCategoryChange,
+  onSubcategoryChange,
+  onSearchChange 
+}: HardwareTableProps) {
 
   // Get all subcategories
   const allSubcategories = getAllSubcategories();
@@ -145,133 +155,17 @@ export function HardwareTable({ hardware }: HardwareTableProps) {
     },
   ], [allSubcategories]);
 
-  // Memoize filtered data to prevent unnecessary recalculations
-  const filteredData = useMemo(() => {
-    return hardware.filter((item) => {
-      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
-      const matchesSubcategory = selectedSubcategories.length === 0 || selectedSubcategories.includes(item.subcategory);
-      const matchesRecommended = selectedRecommended === null || item.recommended === selectedRecommended;
-      
-      if (!matchesCategory || !matchesSubcategory || !matchesRecommended) return false;
-      
-      // Only check search if other filters pass
-      if (globalFilter === "") return true;
-      
-      const searchLower = globalFilter.toLowerCase();
-      return (
-        item.name.toLowerCase().includes(searchLower) ||
-        item.description.toLowerCase().includes(searchLower) ||
-        item.category.toLowerCase().includes(searchLower) ||
-        item.subcategory.toLowerCase().includes(searchLower) ||
-        item.uses.some(use => use.toLowerCase().includes(searchLower)) ||
-        (item.specifications?.some(spec => spec.toLowerCase().includes(searchLower)) || false)
-      );
-    });
-  }, [hardware, selectedCategories, selectedSubcategories, selectedRecommended, globalFilter]);
+  // Already filtered data comes from parent
 
   const table = useReactTable({
-    data: filteredData,
+    data: hardware,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
-  // Get subcategories for selected categories
-  const availableSubcategories = selectedCategories.length > 0
-    ? allSubcategories.filter(sub => selectedCategories.includes(sub.parentCategory))
-    : allSubcategories;
-
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <div className="w-full">
-          <input
-            type="text"
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search hardware..."
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-          />
-        </div>
-
-        <div className="flex flex-wrap gap-4">
-          {/* Category filter */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Categories</h3>
-            <div className="flex flex-wrap gap-2">
-              {hardwareCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => {
-                    setSelectedCategories(prev =>
-                      prev.includes(category.id)
-                        ? prev.filter(c => c !== category.id)
-                        : [...prev, category.id]
-                    );
-                    // Clear subcategories when category selection changes
-                    if (!selectedCategories.includes(category.id)) {
-                      setSelectedSubcategories(prev => 
-                        prev.filter(sc => !category.subcategories.find(s => s.id === sc))
-                      );
-                    }
-                  }}
-                  className={`px-3 py-1 rounded-full text-sm ${
-                    selectedCategories.includes(category.id)
-                      ? 'bg-indigo-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Subcategory filter - only show if categories are selected */}
-          {availableSubcategories.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subcategories</h3>
-              <div className="flex flex-wrap gap-2">
-                {availableSubcategories.map((subcategory) => (
-                  <button
-                    key={subcategory.id}
-                    onClick={() => {
-                      setSelectedSubcategories(prev =>
-                        prev.includes(subcategory.id)
-                          ? prev.filter(s => s !== subcategory.id)
-                          : [...prev, subcategory.id]
-                      );
-                    }}
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      selectedSubcategories.includes(subcategory.id)
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    {subcategory.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Essential filter */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Filter</h3>
-            <button
-              onClick={() => setSelectedRecommended(selectedRecommended === true ? null : true)}
-              className={`px-3 py-1 rounded-full text-sm ${
-                selectedRecommended === true
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-              }`}
-            >
-              Essential Only
-            </button>
-          </div>
-        </div>
-      </div>
-
       <div className="overflow-x-auto rounded-lg shadow-md">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-800">
@@ -325,7 +219,7 @@ export function HardwareTable({ hardware }: HardwareTableProps) {
         </table>
       </div>
       
-      {filteredData.length === 0 && (
+      {hardware.length === 0 && (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           No hardware items found matching your criteria.
         </div>
