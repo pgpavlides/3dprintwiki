@@ -2,9 +2,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { SEO } from '../components/SEO/SEO'
 import { HardwareTable } from '../components/HardwareTable'
-import { hardwareData, type Hardware, getHardwareByCategory, getHardwareBySubcategory } from '../data/hardware/hardwareData'
+import { hardwareData } from '../data/hardware/hardwareData'
 import { hardwareCategories, getAllSubcategories } from '../data/hardware/hardwareCategories'
-import { metricScrewDimensions, hexKeySizes, screwStrengthGrades, screwMaterialInfo } from '../data/hardware/screwDimensions'
+import { metricScrewDimensions, screwStrengthGrades, screwMaterialInfo } from '../data/hardware/screwDimensions'
 import { 
   FaScrewdriver
 } from 'react-icons/fa'
@@ -518,12 +518,6 @@ function HardwarePage() {
             ) : (
               <HardwareTable 
                 hardware={filteredHardware} 
-                selectedCategory={selectedCategory}
-                selectedSubcategory={selectedSubcategory}
-                searchTerm={searchTerm}
-                onCategoryChange={handleCategoryChange}
-                onSubcategoryChange={setSelectedSubcategory}
-                onSearchChange={setSearchTerm}
               />
             )}
 

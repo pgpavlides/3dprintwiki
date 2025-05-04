@@ -21,12 +21,6 @@ interface HardwareTableProps {
 
 export function HardwareTable({ 
   hardware,
-  selectedCategory,
-  selectedSubcategory,
-  searchTerm,
-  onCategoryChange,
-  onSubcategoryChange,
-  onSearchChange 
 }: HardwareTableProps) {
 
   // Get all subcategories
