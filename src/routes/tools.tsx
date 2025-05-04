@@ -228,11 +228,19 @@ export const toolsData: Tool[] = [
   },
   {
     id: 'foam-sander',
-    name: 'Foam Sanding Blocks',
-    description: 'Various grit sanding blocks for smoothing printed surfaces',
+    name: 'Sanding Strips',
+    description: 'Various grit sanding strips for smoothing printed surfaces',
     uses: ['Surface finishing', 'Remove layer lines', 'Smooth prints', 'Progressive sanding'],
     category: 'post-processing',
     image: '/tool_images/sanding_paper.webp'
+  },
+  {
+    id: 'foot-sander',
+    name: 'Electronic Foot Sander',
+    description: 'Electric sanding tool with various grits for efficient surface finishing',
+    uses: ['Quick sanding', 'Surface smoothing', 'Heavy material removal', 'Large area finishing'],
+    category: 'post-processing',
+    image: '/tool_images/electronic_foot_grinder.webp'
   },
   {
     id: 'drill-press',

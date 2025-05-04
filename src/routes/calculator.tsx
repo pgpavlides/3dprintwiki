@@ -1,8 +1,6 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { AnimatedBackground } from '../components/AnimatedBackground'
-import { ThemeToggle } from '../components/ThemeToggle'
-import { FontToggle } from '../components/FontToggle'
 import { SEO } from '../components/SEO/SEO'
 
 export const Route = createFileRoute('/calculator')({
@@ -62,22 +60,6 @@ function PrintCostCalculator() {
         <AnimatedBackground />
       </div>
       <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm relative z-10">
-        {/* Home Button */}
-        <div className="absolute top-8 left-4">
-          <Link 
-            to="/" 
-            className="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-gray-800 dark:text-gray-200 font-medium"
-          >
-            ← Home
-          </Link>
-        </div>
-        
-        {/* Theme Toggle and Font Toggle */}
-        <div className="absolute top-4 right-4 flex items-center space-x-2">
-          <FontToggle />
-          <ThemeToggle />
-        </div>
-        
         {/* Main Content */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Header */}
