@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   flexRender,
   type ColumnDef,
@@ -18,7 +17,8 @@ export function HardwareTable({ hardware }: HardwareTableProps) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedRecommended, setSelectedRecommended] = useState<boolean | null>(null);
 
-  const columns: ColumnDef<Hardware>[] = [
+  // Memoize columns to prevent recreation on each render
+  const columns = useMemo<ColumnDef<Hardware>[]>(() => [
     {
       accessorKey: "image",
       header: "Image",
@@ -31,6 +31,7 @@ export function HardwareTable({ hardware }: HardwareTableProps) {
               className="max-w-full max-h-full object-contain"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
+                target.onerror = null; // Prevent infinite loop
                 target.style.display = 'none';
               }}
             />
@@ -122,24 +123,35 @@ export function HardwareTable({ hardware }: HardwareTableProps) {
         </div>
       ),
     },
-  ];
+  ], []);
 
-  const filteredData = hardware.filter((item) => {
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
-    const matchesRecommended = selectedRecommended === null || item.recommended === selectedRecommended;
-    return matchesCategory && matchesRecommended;
-  });
+  // Memoize filtered data to prevent unnecessary recalculations
+  const filteredData = useMemo(() => {
+    return hardware.filter((item) => {
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.category);
+      const matchesRecommended = selectedRecommended === null || item.recommended === selectedRecommended;
+      
+      if (!matchesCategory || !matchesRecommended) return false;
+      
+      // Only check search if other filters pass
+      if (globalFilter === "") return true;
+      
+      const searchLower = globalFilter.toLowerCase();
+      return (
+        item.name.toLowerCase().includes(searchLower) ||
+        item.description.toLowerCase().includes(searchLower) ||
+        item.category.toLowerCase().includes(searchLower) ||
+        item.uses.some(use => use.toLowerCase().includes(searchLower)) ||
+        (item.specifications?.some(spec => spec.toLowerCase().includes(searchLower)) || false)
+      );
+    });
+  }, [hardware, selectedCategories, selectedRecommended, globalFilter]);
 
   const table = useReactTable({
     data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    state: {
-      globalFilter,
-    },
-    onGlobalFilterChange: setGlobalFilter,
   });
 
   return (
@@ -148,7 +160,7 @@ export function HardwareTable({ hardware }: HardwareTableProps) {
         <div className="w-full md:w-96">
           <input
             type="text"
-            value={globalFilter ?? ""}
+            value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
             placeholder="Search hardware..."
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
