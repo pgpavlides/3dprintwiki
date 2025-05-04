@@ -4,14 +4,24 @@ import { ThemeToggle } from '../components/ThemeToggle'
 import { FontToggle } from '../components/FontToggle'
 import { SEO } from '../components/SEO/SEO'
 import { LenisWrapper, scrollTo } from '../components/LenisWrapper'
+import { NavigationProvider, useNavigation } from '../contexts/NavigationContext'
 
 export const Route = createRootRoute({
-  component: RootComponent,
+  component: RootLayout,
 })
+
+function RootLayout() {
+  return (
+    <NavigationProvider>
+      <RootComponent />
+    </NavigationProvider>
+  );
+}
 
 function RootComponent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const { customBackHandler } = useNavigation();
 
   return (
     <LenisWrapper>
@@ -24,7 +34,9 @@ function RootComponent() {
             <div className="fixed top-4 left-4 flex items-center space-x-3 z-50">
               <button
                 onClick={() => {
-                  if (window.history.length > 1) {
+                  if (customBackHandler) {
+                    customBackHandler();
+                  } else if (window.history.length > 1) {
                     window.history.back();
                   } else {
                     // If no history, scroll to top with Lenis

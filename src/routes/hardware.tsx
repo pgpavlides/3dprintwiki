@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SEO } from '../components/SEO/SEO'
 import { HardwareTable } from '../components/HardwareTable'
 import { hardwareData, type Hardware, getHardwareByCategory, getHardwareBySubcategory } from '../data/hardware/hardwareData'
@@ -8,6 +8,7 @@ import { metricScrewDimensions, hexKeySizes, screwStrengthGrades, screwMaterialI
 import { 
   FaScrewdriver
 } from 'react-icons/fa'
+import { useNavigation } from '../contexts/NavigationContext'
 
 export const Route = createFileRoute('/hardware')({
   component: HardwarePage,
@@ -19,6 +20,31 @@ function HardwarePage() {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const { setCustomBackHandler } = useNavigation();
+
+  // Set up custom back handler
+  useEffect(() => {
+    const handleCustomBack = () => {
+      if (selectedSubcategory !== 'all') {
+        // If in subcategory view, go back to category view
+        setSelectedSubcategory('all');
+      } else if (selectedCategory !== 'all') {
+        // If in category view, go back to all categories
+        setSelectedCategory('all');
+        setSearchTerm('');
+      } else {
+        // Otherwise, use browser back
+        window.history.back();
+      }
+    };
+
+    setCustomBackHandler(() => handleCustomBack);
+
+    // Clean up on unmount
+    return () => {
+      setCustomBackHandler(null);
+    };
+  }, [selectedCategory, selectedSubcategory, setCustomBackHandler]);
 
   // Icon mapping for subcategories
   const subcategoryIcons: { [key: string]: any } = {
