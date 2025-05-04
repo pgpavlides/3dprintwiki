@@ -12,12 +12,14 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ToolsImport } from './routes/tools'
+import { Route as SetupElectronicsImport } from './routes/setup-electronics'
 import { Route as SetupImport } from './routes/setup'
 import { Route as PostprocessingImport } from './routes/postprocessing'
 import { Route as MaterialsImport } from './routes/materials'
 import { Route as HardwareImport } from './routes/hardware'
 import { Route as ElectronicsImport } from './routes/electronics'
 import { Route as DesignImport } from './routes/design'
+import { Route as ContributorsImport } from './routes/contributors'
 import { Route as ComponentsImport } from './routes/components'
 import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
@@ -27,6 +29,12 @@ import { Route as IndexImport } from './routes/index'
 const ToolsRoute = ToolsImport.update({
   id: '/tools',
   path: '/tools',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SetupElectronicsRoute = SetupElectronicsImport.update({
+  id: '/setup-electronics',
+  path: '/setup-electronics',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -63,6 +71,12 @@ const ElectronicsRoute = ElectronicsImport.update({
 const DesignRoute = DesignImport.update({
   id: '/design',
   path: '/design',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ContributorsRoute = ContributorsImport.update({
+  id: '/contributors',
+  path: '/contributors',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -109,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsImport
       parentRoute: typeof rootRoute
     }
+    '/contributors': {
+      id: '/contributors'
+      path: '/contributors'
+      fullPath: '/contributors'
+      preLoaderRoute: typeof ContributorsImport
+      parentRoute: typeof rootRoute
+    }
     '/design': {
       id: '/design'
       path: '/design'
@@ -151,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SetupImport
       parentRoute: typeof rootRoute
     }
+    '/setup-electronics': {
+      id: '/setup-electronics'
+      path: '/setup-electronics'
+      fullPath: '/setup-electronics'
+      preLoaderRoute: typeof SetupElectronicsImport
+      parentRoute: typeof rootRoute
+    }
     '/tools': {
       id: '/tools'
       path: '/tools'
@@ -167,12 +195,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/components': typeof ComponentsRoute
+  '/contributors': typeof ContributorsRoute
   '/design': typeof DesignRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
   '/materials': typeof MaterialsRoute
   '/postprocessing': typeof PostprocessingRoute
   '/setup': typeof SetupRoute
+  '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
 }
 
@@ -180,12 +210,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/components': typeof ComponentsRoute
+  '/contributors': typeof ContributorsRoute
   '/design': typeof DesignRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
   '/materials': typeof MaterialsRoute
   '/postprocessing': typeof PostprocessingRoute
   '/setup': typeof SetupRoute
+  '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
 }
 
@@ -194,12 +226,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/components': typeof ComponentsRoute
+  '/contributors': typeof ContributorsRoute
   '/design': typeof DesignRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
   '/materials': typeof MaterialsRoute
   '/postprocessing': typeof PostprocessingRoute
   '/setup': typeof SetupRoute
+  '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
 }
 
@@ -209,36 +243,42 @@ export interface FileRouteTypes {
     | '/'
     | '/calculator'
     | '/components'
+    | '/contributors'
     | '/design'
     | '/electronics'
     | '/hardware'
     | '/materials'
     | '/postprocessing'
     | '/setup'
+    | '/setup-electronics'
     | '/tools'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/calculator'
     | '/components'
+    | '/contributors'
     | '/design'
     | '/electronics'
     | '/hardware'
     | '/materials'
     | '/postprocessing'
     | '/setup'
+    | '/setup-electronics'
     | '/tools'
   id:
     | '__root__'
     | '/'
     | '/calculator'
     | '/components'
+    | '/contributors'
     | '/design'
     | '/electronics'
     | '/hardware'
     | '/materials'
     | '/postprocessing'
     | '/setup'
+    | '/setup-electronics'
     | '/tools'
   fileRoutesById: FileRoutesById
 }
@@ -247,12 +287,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalculatorRoute: typeof CalculatorRoute
   ComponentsRoute: typeof ComponentsRoute
+  ContributorsRoute: typeof ContributorsRoute
   DesignRoute: typeof DesignRoute
   ElectronicsRoute: typeof ElectronicsRoute
   HardwareRoute: typeof HardwareRoute
   MaterialsRoute: typeof MaterialsRoute
   PostprocessingRoute: typeof PostprocessingRoute
   SetupRoute: typeof SetupRoute
+  SetupElectronicsRoute: typeof SetupElectronicsRoute
   ToolsRoute: typeof ToolsRoute
 }
 
@@ -260,12 +302,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalculatorRoute: CalculatorRoute,
   ComponentsRoute: ComponentsRoute,
+  ContributorsRoute: ContributorsRoute,
   DesignRoute: DesignRoute,
   ElectronicsRoute: ElectronicsRoute,
   HardwareRoute: HardwareRoute,
   MaterialsRoute: MaterialsRoute,
   PostprocessingRoute: PostprocessingRoute,
   SetupRoute: SetupRoute,
+  SetupElectronicsRoute: SetupElectronicsRoute,
   ToolsRoute: ToolsRoute,
 }
 
@@ -282,12 +326,14 @@ export const routeTree = rootRoute
         "/",
         "/calculator",
         "/components",
+        "/contributors",
         "/design",
         "/electronics",
         "/hardware",
         "/materials",
         "/postprocessing",
         "/setup",
+        "/setup-electronics",
         "/tools"
       ]
     },
@@ -299,6 +345,9 @@ export const routeTree = rootRoute
     },
     "/components": {
       "filePath": "components.tsx"
+    },
+    "/contributors": {
+      "filePath": "contributors.tsx"
     },
     "/design": {
       "filePath": "design.tsx"
@@ -317,6 +366,9 @@ export const routeTree = rootRoute
     },
     "/setup": {
       "filePath": "setup.tsx"
+    },
+    "/setup-electronics": {
+      "filePath": "setup-electronics.tsx"
     },
     "/tools": {
       "filePath": "tools.tsx"

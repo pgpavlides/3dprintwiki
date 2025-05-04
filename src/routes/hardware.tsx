@@ -72,6 +72,54 @@ function HardwarePage() {
     'storage': FaScrewdriver
   }
 
+  // Category cards data
+  const categoryCards = hardwareCategories.map(category => {
+    const categoryIcons: { [key: string]: string } = {
+      'fasteners': '🔩',
+      'motion-components': '⚙️',
+      'electronics': '🔌',
+      'springs-rubber': '🔄',
+      'pneumatics-hydraulics': '💨',
+      'structural': '🏗️',
+      'tools-accessories': '🔧',
+      'filament-handling': '🧵'
+    };
+
+    const categoryGradients: { [key: string]: string } = {
+      'fasteners': 'from-blue-500 to-blue-600',
+      'motion-components': 'from-orange-500 to-orange-600',
+      'electronics': 'from-purple-500 to-purple-600',
+      'springs-rubber': 'from-green-500 to-green-600',
+      'pneumatics-hydraulics': 'from-cyan-500 to-cyan-600',
+      'structural': 'from-gray-500 to-gray-600',
+      'tools-accessories': 'from-red-500 to-red-600',
+      'filament-handling': 'from-indigo-500 to-indigo-600'
+    };
+
+    const categoryIconBgs: { [key: string]: string } = {
+      'fasteners': 'bg-blue-500/10',
+      'motion-components': 'bg-orange-500/10',
+      'electronics': 'bg-purple-500/10',
+      'springs-rubber': 'bg-green-500/10',
+      'pneumatics-hydraulics': 'bg-cyan-500/10',
+      'structural': 'bg-gray-500/10',
+      'tools-accessories': 'bg-red-500/10',
+      'filament-handling': 'bg-indigo-500/10'
+    };
+
+    const itemCount = hardwareData.filter(item => item.category === category.id).length;
+
+    return {
+      id: category.id,
+      icon: categoryIcons[category.id] || '📦',
+      title: category.name,
+      description: category.description,
+      gradient: categoryGradients[category.id] || 'from-gray-500 to-gray-600',
+      iconBg: categoryIconBgs[category.id] || 'bg-gray-500/10',
+      itemCount: itemCount
+    };
+  });
+
   // Get subcategory data with counts
   const getSubcategoryData = (subcategoryId: string) => {
     const itemCount = hardwareData.filter(item => item.subcategory === subcategoryId).length
@@ -231,46 +279,46 @@ function HardwarePage() {
             </div>
           )}
 
-          {/* Category Overview - Show when no specific category selected */}
+          {/* Category Overview - Updated with new card style */}
           {viewMode === 'grid' && selectedCategory === 'all' && searchTerm === '' && (
             <div className="mb-8">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                 Hardware Categories
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {hardwareCategories.map(category => {
-                  const categoryIcons: { [key: string]: string } = {
-                    'fasteners': '🔩',
-                    'motion-components': '⚙️',
-                    'electronics': '🔌',
-                    'springs-rubber': '🔄',
-                    'pneumatics-hydraulics': '💨',
-                    'structural': '🏗️',
-                    'tools-accessories': '🔧',
-                    'filament-handling': '🧵'
-                  };
-
-                  return (
-                    <div 
-                      key={category.id}
-                      className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 cursor-pointer hover:shadow-lg transition-shadow flex flex-col justify-between"
-                      onClick={() => handleCategoryChange(category.id)}
-                    >
-                      <div>
-                        <div className="text-2xl mb-1">{categoryIcons[category.id] || '📦'}</div>
-                        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
-                          {category.name}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {categoryCards.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => handleCategoryChange(category.id)}
+                    className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-left flex flex-col h-full"
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="flex items-center gap-4 mb-3">
+                        <div className={`flex-shrink-0 h-12 w-12 flex items-center justify-center rounded-xl ${category.iconBg}`}>
+                          <span className="text-2xl">{category.icon}</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white flex-1">
+                          {category.title}
                         </h3>
-                        <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">
-                          {category.description}
-                        </p>
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {category.subcategories.length} subcategories
+                      <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 min-h-[3rem]">
+                        {category.description}
+                      </p>
+                      <div className="flex items-center justify-between mt-auto">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          {category.itemCount} items
+                        </span>
+                        <div className="flex items-center text-sm font-medium text-blue-600 dark:text-blue-400">
+                          View Items
+                          <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-                  );
-                })}
+                  </button>
+                ))}
               </div>
             </div>
           )}

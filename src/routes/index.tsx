@@ -47,11 +47,11 @@ function HomePage() {
       iconColor: 'text-orange-500'
     },
     {
-      icon: '🖨️',
-      title: 'Setup, Calibration & Maintenance',
-      description: 'Printer setup, calibration guides, troubleshooting, and maintenance schedules',
-      path: '/setup',
-      gradient: 'from-purple-500 to-pink-500',
+      icon: '⚙️',
+      title: 'Setup, Electronics & Upgrades',
+      description: 'Complete guides for printer setup, calibration, maintenance, electronics, firmware configuration, and upgrade paths',
+      path: '/setup-electronics',
+      gradient: 'from-purple-500 to-indigo-500',
       iconBg: 'bg-purple-500/10',
       iconColor: 'text-purple-500'
     },
@@ -65,11 +65,11 @@ function HomePage() {
       iconColor: 'text-pink-500'
     },
     {
-      icon: '⚡',
-      title: 'Electronics & Upgrades',
-      description: 'Firmware guides, motherboard upgrades, sensor installations, and wiring diagrams',
-      path: '/electronics',
-      gradient: 'from-yellow-500 to-amber-500',
+      icon: '🌟',
+      title: 'Resources',
+      description: 'Featured 3D printing YouTubers, content creators, and valuable community resources',
+      path: '/contributors',
+      gradient: 'from-yellow-500 to-orange-500',
       iconBg: 'bg-yellow-500/10',
       iconColor: 'text-yellow-500'
     },
