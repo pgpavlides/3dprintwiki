@@ -12,6 +12,31 @@
   font-display: swap;
 }
 
+/* Floating social buttons animation */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 0.3s ease-out forwards;
+}
+
+/* Subtle hover effect for SVG icons */
+.social-icon svg {
+  transition: transform 0.2s ease;
+}
+
+.social-icon:hover svg {
+  transform: scale(1.1);
+}
+
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('/fonts/OpenDyslexic-Bold.woff2') format('woff2'),
@@ -229,4 +254,29 @@
   100% {
     transform: scale(1);
   }
+}
+
+/* Floating social buttons animation */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 0.3s ease-out forwards;
+}
+
+/* Subtle hover effect for SVG icons */
+.social-icon svg {
+  transition: transform 0.2s ease;
+}
+
+.social-icon:hover svg {
+  transform: scale(1.1);
 }

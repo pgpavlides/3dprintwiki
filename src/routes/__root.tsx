@@ -91,6 +91,30 @@ function RootComponent() {
 
       <TanStackRouterDevtools />
       </div>
+      
+      {/* Floating social links */}
+      <div className="fixed bottom-4 right-4 flex flex-col gap-3 z-50">
+        <a
+          href="https://github.com/pgpavlides"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="social-icon bg-gray-800 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 animate-fade-in-right"
+          style={{ animationDelay: '0.1s' }}
+          title="GitHub"
+        >
+          <img src="/svg/github.svg" alt="GitHub" className="w-6 h-6" />
+        </a>
+        <a
+          href="https://buymeacoffee.com/broccolidev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="social-icon bg-[#FFDD00] hover:bg-[#FFEE00] p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 animate-fade-in-right"
+          style={{ animationDelay: '0.2s' }}
+          title="Buy Me a Coffee"
+        >
+          <img src="/svg/buymeacoffee.svg" alt="Buy Me a Coffee" className="w-6 h-6" />
+        </a>
+      </div>
     </>
   )
 }
