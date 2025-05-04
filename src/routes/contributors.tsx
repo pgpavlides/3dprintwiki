@@ -34,19 +34,10 @@ function ContributorsPage() {
       iconColor: 'text-red-500'
     },
     {
-      icon: '📚',
-      title: '3D Resources',
-      description: 'Comprehensive guides, documentation, and knowledge bases',
-      id: '3d-resources',
-      gradient: 'from-blue-500 to-blue-600',
-      iconBg: 'bg-blue-500/10',
-      iconColor: 'text-blue-500'
-    },
-    {
       icon: '📦',
-      title: 'Model Repositories',
+      title: '3D Resources',
       description: 'Platforms for downloading and sharing 3D models',
-      id: 'model-repositories',
+      id: '3d-resources',
       gradient: 'from-green-500 to-green-600',
       iconBg: 'bg-green-500/10',
       iconColor: 'text-green-500'
@@ -158,54 +149,68 @@ function ContributorsPage() {
     }
   ]
 
-  const resources3D = [
-    {
-      name: "Prusa Knowledge Base",
-      description: "Comprehensive documentation and troubleshooting guides",
-      url: "https://help.prusa3d.com/"
-    },
-    {
-      name: "RepRap.org",
-      description: "The original open-source 3D printing community wiki",
-      url: "https://reprap.org/"
-    },
-    {
-      name: "All3DP",
-      description: "3D printing news, guides, and buyer's guides",
-      url: "https://all3dp.com/"
-    },
-    {
-      name: "Teaching Tech Calibration",
-      description: "Interactive 3D printer calibration guides",
-      url: "https://teachingtechyt.github.io/calibration.html"
-    },
-    {
-      name: "Ellis' Print Tuning Guide",
-      description: "Advanced Klipper/Voron print tuning documentation",
-      url: "https://ellis3dp.com/Print-Tuning-Guide/"
-    }
-  ]
+
 
   const modelRepositories = [
+    {
+      name: "Thingiverse",
+      description: "One of the largest repositories for 3D printable models and designs",
+      url: "https://www.thingiverse.com/"
+    },
+    {
+      name: "CGTrader",
+      description: "Marketplace for 3D models including free and paid content",
+      url: "https://www.cgtrader.com/"
+    },
+    {
+      name: "MyMiniFactory",
+      description: "Curated platform for high-quality 3D printable designs",
+      url: "https://www.myminifactory.com/"
+    },
+    {
+      name: "Pinshape",
+      description: "Community-driven platform for sharing 3D printable designs",
+      url: "https://pinshape.com/"
+    },
+    {
+      name: "Cults 3D",
+      description: "Digital marketplace for 3D printer files and creative designs",
+      url: "https://cults3d.com/en"
+    },
+    {
+      name: "YouMagine",
+      description: "Open source platform for sharing 3D designs",
+      url: "https://youmagine.com/"
+    },
+    {
+      name: "Yeggi",
+      description: "Search engine for 3D printable models across multiple platforms",
+      url: "https://www.yeggi.com/"
+    },
+    {
+      name: "Threeding",
+      description: "Marketplace for premium 3D printable models",
+      url: "https://www.threeding.com/"
+    },
+    {
+      name: "Thangs",
+      description: "Geometric search engine and repository for 3D models",
+      url: "https://thangs.com/?sort=trending"
+    },
     {
       name: "Printables",
       description: "3D model sharing platform by Prusa Research",
       url: "https://www.printables.com/"
     },
     {
-      name: "Thingiverse",
-      description: "One of the largest 3D model repositories",
-      url: "https://www.thingiverse.com/"
+      name: "STLflix",
+      description: "Subscription-based platform for premium STL files",
+      url: "https://platform.stlflix.com/"
     },
     {
-      name: "MyMiniFactory",
-      description: "Curated 3D printable models",
-      url: "https://www.myminifactory.com/"
-    },
-    {
-      name: "Cults3D",
-      description: "Marketplace for 3D printing models",
-      url: "https://cults3d.com/"
+      name: "MakerWorld",
+      description: "3D model repository by Bambu Lab for sharing and discovering designs",
+      url: "https://makerworld.com/"
     }
   ]
 
@@ -283,32 +288,6 @@ function ContributorsPage() {
           </div>
         )
       case '3d-resources':
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {resources3D.map((resource) => (
-              <div key={resource.name} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {resource.name}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                  {resource.description}
-                </p>
-                <a 
-                  href={resource.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
-                >
-                  Visit Site
-                  <svg className="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-              </div>
-            ))}
-          </div>
-        )
-      case 'model-repositories':
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {modelRepositories.map((repo) => (
@@ -394,7 +373,7 @@ function ContributorsPage() {
   return (
     <>
       <SEO 
-        title="3D Printing Contributors & Resources | 3D Print Wiki"
+        title="3D Printing Resources | 3D Print Wiki"
         description="Discover top 3D printing YouTubers, content creators, and valuable resources. Find expert guides, reviews, and educational content from the 3D printing community."
         keywords="3D printing YouTubers, 3D printing resources, maker community, 3D printing guides, content creators"
         url="https://3dprintwiki.com/contributors"
@@ -403,7 +382,7 @@ function ContributorsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Contributors & Resources
+              Resources
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Comprehensive collection of 3D printing resources, communities, and content creators.
