@@ -362,8 +362,21 @@ function HardwarePage() {
                 {filteredHardware.map((item) => (
                   <div 
                     key={item.id} 
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
                   >
+                    {item.image && (
+                      <div className="relative h-48 w-full bg-gray-100 dark:bg-gray-700">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-full w-full object-contain p-4"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-4">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
