@@ -704,8 +704,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '4:15',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:00',
+    youtubeId: 'JMBMHSca_j0?t=525', // Time: 00:08:45
     description: 'Use random colors in Blender to better visualize and distinguish different objects and elements.',
     keywords: ['blender', 'random colors', 'visualization', 'interface', 'organization', 'workflow'],
     dateAdded: '2025-02-16'
@@ -1083,8 +1083,8 @@ export const videoData: Video[] = [
     category: 'Modeling',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '15:20',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '2:17',
+    youtubeId: 'JMBMHSca_j0?t=6567', // Time: 01:49:27
     description: 'Learn efficient techniques for creating realistic cable and wire models in Blender.',
     keywords: ['blender', 'cables', 'wires', 'modeling', 'hard surface', 'tutorial'],
     dateAdded: '2025-03-28'
@@ -1096,8 +1096,8 @@ export const videoData: Video[] = [
     category: 'Workflow',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '8:45',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '4:19',
+    youtubeId: 'JMBMHSca_j0?t=6704', // Time: 01:51:44
     description: 'Create virtual sticky notes in your Blender scene to organize your workflow and annotate your models.',
     keywords: ['blender', 'sticky notes', 'organization', 'workflow', 'annotation', 'productivity'],
     dateAdded: '2025-03-29'
@@ -1332,8 +1332,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:15',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:04',
+    youtubeId: 'JMBMHSca_j0?t=307', // Time: 00:05:07
     description: 'Learn how to use Blender\'s Mod Pie Menu for faster access to common tools and functions.',
     keywords: ['blender', 'pie menu', 'interface', 'workflow', 'shortcut', 'ui'],
     dateAdded: '2025-04-18'
@@ -1345,8 +1345,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:00',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:23',
+    youtubeId: 'JMBMHSca_j0?t=371', // Time: 00:06:11
     description: 'Access viewport shading options quickly using Blender\'s pie menu system.',
     keywords: ['blender', 'viewport', 'shading', 'pie menu', 'interface', 'visualization'],
     dateAdded: '2025-04-18'
@@ -1358,8 +1358,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '1:45',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:18',
+    youtubeId: 'JMBMHSca_j0?t=394', // Time: 00:06:34
     description: 'Quickly toggle X-ray mode in Blender for better visibility through objects.',
     keywords: ['blender', 'x-ray', 'shortcut', 'visibility', 'viewport', 'interface'],
     dateAdded: '2025-04-18'
@@ -1371,8 +1371,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:30',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:52',
+    youtubeId: 'JMBMHSca_j0?t=412', // Time: 00:06:52
     description: 'Use MatCaps in Blender to better visualize surface details and model quality.',
     keywords: ['blender', 'matcaps', 'materials', 'visualization', 'inspection', 'viewport'],
     dateAdded: '2025-04-18'
@@ -1384,8 +1384,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:20',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:01',
+    youtubeId: 'JMBMHSca_j0?t=464', // Time: 00:07:44
     description: 'Enhance model detail visibility using cavity shading in Blender\'s viewport.',
     keywords: ['blender', 'cavity', 'shading', 'viewport', 'details', 'visualization'],
     dateAdded: '2025-04-18'
@@ -1397,8 +1397,8 @@ export const videoData: Video[] = [
     category: 'User Interface',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:30',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:49',
+    youtubeId: 'JMBMHSca_j0?t=953', // Time: 00:15:53
     description: 'Maximize your modeling efficiency using Blender\'s quad view layout system.',
     keywords: ['blender', 'quad view', 'viewport', 'layout', 'multiple views', 'workflow'],
     dateAdded: '2025-04-18'
@@ -1412,8 +1412,8 @@ export const videoData: Video[] = [
     category: 'Selection',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '1:45',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:19',
+    youtubeId: 'JMBMHSca_j0?t=1482', // Time: 00:24:42
     description: 'Efficiently expand or contract your selection in Blender using Select More/Less commands.',
     keywords: ['blender', 'selection', 'select more', 'select less', 'modeling', 'workflow'],
     dateAdded: '2025-04-18'
@@ -1425,8 +1425,8 @@ export const videoData: Video[] = [
     category: 'Selection',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:00',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:46',
+    youtubeId: 'JMBMHSca_j0?t=1501', // Time: 00:25:01
     description: 'Quickly select connected geometry in Blender using the Select Linked command.',
     keywords: ['blender', 'selection', 'linked', 'connected', 'modeling', 'workflow'],
     dateAdded: '2025-04-18'
@@ -1438,8 +1438,8 @@ export const videoData: Video[] = [
     category: 'Selection',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '1:45',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:25',
+    youtubeId: 'JMBMHSca_j0?t=1600', // Time: 00:26:40
     description: 'Create alternating selection patterns with Checker Deselect for advanced modeling techniques.',
     keywords: ['blender', 'checker deselect', 'selection', 'pattern', 'modeling', 'technique'],
     dateAdded: '2025-04-18'
@@ -1453,8 +1453,8 @@ export const videoData: Video[] = [
     category: 'Modeling',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '2:15',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:52',
+    youtubeId: 'JMBMHSca_j0?t=1762', // Time: 00:29:22
     description: 'Edit multiple objects simultaneously in Blender for efficient modeling workflow.',
     keywords: ['blender', 'multiple objects', 'edit mode', 'simultaneous', 'modeling', 'technique'],
     dateAdded: '2025-04-19'
@@ -1466,8 +1466,8 @@ export const videoData: Video[] = [
     category: 'Modeling',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '2:30',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:32',
+    youtubeId: 'JMBMHSca_j0?t=1814', // Time: 00:30:14
     description: 'Create edge connections between vertices using the Connect Vertex Path tool in Blender.',
     keywords: ['blender', 'connect', 'vertex', 'path', 'edge', 'topology'],
     dateAdded: '2025-04-19'
@@ -1479,8 +1479,8 @@ export const videoData: Video[] = [
     category: 'Modeling',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '2:15',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:10',
+    youtubeId: 'JMBMHSca_j0?t=1846', // Time: 00:30:46
     description: 'Precisely reposition vertices and edges along existing geometry with the slide tools.',
     keywords: ['blender', 'edge slide', 'vertex slide', 'modeling', 'technique', 'precision'],
     dateAdded: '2025-04-19'
@@ -1492,8 +1492,8 @@ export const videoData: Video[] = [
     category: 'Modeling',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '2:45',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:34',
+    youtubeId: 'JMBMHSca_j0?t=2376', // Time: 00:39:36
     description: 'Perform boolean operations directly in edit mode for more control over the result.',
     keywords: ['blender', 'boolean', 'edit mode', 'modeling', 'technique', 'operation'],
     dateAdded: '2025-04-19'
@@ -1505,8 +1505,8 @@ export const videoData: Video[] = [
     category: 'Modeling',
     software: 'Blender',
     skillLevel: 'Advanced',
-    duration: '3:00',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:37',
+    youtubeId: 'JMBMHSca_j0?t=2473', // Time: 00:41:13
     description: 'Use the Knife Project tool to cut complex shapes into your models in Blender.',
     keywords: ['blender', 'knife project', 'cutting', 'modeling', 'advanced', 'technique'],
     dateAdded: '2025-04-19'
@@ -1641,8 +1641,8 @@ export const videoData: Video[] = [
     category: 'Organization',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:15',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:03',
+    youtubeId: 'JMBMHSca_j0?t=6121', // Time: 01:42:01
     description: 'Efficiently rename single or multiple objects at once in Blender for better organization.',
     keywords: ['blender', 'rename', 'batch', 'organization', 'workflow', 'efficiency'],
     dateAdded: '2025-04-22'
@@ -1654,8 +1654,8 @@ export const videoData: Video[] = [
     category: 'Organization',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:30',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:44',
+    youtubeId: 'JMBMHSca_j0?t=6184', // Time: 01:43:04
     description: 'Master Blender\'s collection system for better scene organization and management.',
     keywords: ['blender', 'collections', 'organization', 'management', 'scene', 'workflow'],
     dateAdded: '2025-04-22'
@@ -1667,8 +1667,8 @@ export const videoData: Video[] = [
     category: 'Organization',
     software: 'Blender',
     skillLevel: 'Intermediate',
-    duration: '3:15',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '1:27',
+    youtubeId: 'JMBMHSca_j0?t=6273', // Time: 01:44:33
     description: 'Use collection instances to create multiple copies of object groups that update simultaneously.',
     keywords: ['blender', 'collection', 'instance', 'duplicate', 'linked', 'organization'],
     dateAdded: '2025-04-22'
@@ -1680,8 +1680,8 @@ export const videoData: Video[] = [
     category: 'Organization',
     software: 'Blender',
     skillLevel: 'Beginner',
-    duration: '2:00',
-    youtubeId: 'JMBMHSca_j0',
+    duration: '0:58',
+    youtubeId: 'JMBMHSca_j0?t=6567', // Time: 01:49:27
     description: 'Learn efficient parenting techniques using Blender\'s outliner for better object hierarchy.',
     keywords: ['blender', 'parent', 'outliner', 'hierarchy', 'organization', 'workflow'],
     dateAdded: '2025-04-22'
