@@ -13,7 +13,12 @@ export interface Video {
   dateAdded: string; // ISO format: YYYY-MM-DD
 }
 
-// Helper function to use a placeholder image for all thumbnails
+// Helper function to use YouTube thumbnails
+const getYouTubeThumbnail = (videoId: string) => {
+  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+};
+
+// Placeholder for videos without YouTube IDs yet
 const placeholderImage = '/video_thumbnails/placeholder.svg';
 
 // Updated video data with placeholder images for all entries
