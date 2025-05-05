@@ -56,13 +56,13 @@ function HomePage() {
       iconColor: 'text-purple-500'
     },
     {
-      icon: '🎨',
-      title: 'Post-Processing',
-      description: 'Sanding, painting, vapor smoothing, support removal, and surface finishing techniques',
-      path: '/postprocessing',
-      gradient: 'from-pink-500 to-rose-500',
-      iconBg: 'bg-pink-500/10',
-      iconColor: 'text-pink-500'
+      icon: '📆',
+      title: 'Calendar',
+      description: 'Important dates and holidays to help you plan your 3D printing projects and special occasion prints',
+      path: '/calendar',
+      gradient: 'from-rose-500 to-pink-500',
+      iconBg: 'bg-rose-500/10',
+      iconColor: 'text-rose-500'
     },
     {
       icon: '🌟',
@@ -74,10 +74,10 @@ function HomePage() {
       iconColor: 'text-yellow-500'
     },
     {
-      icon: '📐',
-      title: 'Design & Modeling',
-      description: 'CAD software guides, design tips, model optimization, and file preparation',
-      path: '/design',
+      icon: '🎨',
+      title: 'Design, Modeling & Post-Processing',
+      description: 'CAD software guides, design tips, model optimization, file preparation, and finishing techniques',
+      path: '/design-and-postprocessing',
       gradient: 'from-sky-500 to-blue-500',
       iconBg: 'bg-sky-500/10',
       iconColor: 'text-sky-500'

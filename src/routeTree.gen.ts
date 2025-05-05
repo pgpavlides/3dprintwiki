@@ -14,15 +14,17 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ToolsImport } from './routes/tools'
 import { Route as SetupElectronicsImport } from './routes/setup-electronics'
 import { Route as SetupImport } from './routes/setup'
-import { Route as PostprocessingImport } from './routes/postprocessing'
 import { Route as MaterialsImport } from './routes/materials'
 import { Route as HardwareImport } from './routes/hardware'
 import { Route as ElectronicsImport } from './routes/electronics'
-import { Route as DesignImport } from './routes/design'
+import { Route as DesignAndPostprocessingImport } from './routes/design-and-postprocessing'
 import { Route as ContributorsImport } from './routes/contributors'
 import { Route as ComponentsImport } from './routes/components'
+import { Route as CalendarImport } from './routes/calendar'
 import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
+import { Route as DeletedcomponentsPostprocessingImport } from './routes/deleted_components/postprocessing'
+import { Route as DeletedcomponentsDesignImport } from './routes/deleted_components/design'
 
 // Create/Update Routes
 
@@ -44,12 +46,6 @@ const SetupRoute = SetupImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const PostprocessingRoute = PostprocessingImport.update({
-  id: '/postprocessing',
-  path: '/postprocessing',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const MaterialsRoute = MaterialsImport.update({
   id: '/materials',
   path: '/materials',
@@ -68,9 +64,9 @@ const ElectronicsRoute = ElectronicsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DesignRoute = DesignImport.update({
-  id: '/design',
-  path: '/design',
+const DesignAndPostprocessingRoute = DesignAndPostprocessingImport.update({
+  id: '/design-and-postprocessing',
+  path: '/design-and-postprocessing',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -86,6 +82,12 @@ const ComponentsRoute = ComponentsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const CalendarRoute = CalendarImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CalculatorRoute = CalculatorImport.update({
   id: '/calculator',
   path: '/calculator',
@@ -95,6 +97,19 @@ const CalculatorRoute = CalculatorImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DeletedcomponentsPostprocessingRoute =
+  DeletedcomponentsPostprocessingImport.update({
+    id: '/deleted_components/postprocessing',
+    path: '/deleted_components/postprocessing',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const DeletedcomponentsDesignRoute = DeletedcomponentsDesignImport.update({
+  id: '/deleted_components/design',
+  path: '/deleted_components/design',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -116,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalculatorImport
       parentRoute: typeof rootRoute
     }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarImport
+      parentRoute: typeof rootRoute
+    }
     '/components': {
       id: '/components'
       path: '/components'
@@ -130,11 +152,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContributorsImport
       parentRoute: typeof rootRoute
     }
-    '/design': {
-      id: '/design'
-      path: '/design'
-      fullPath: '/design'
-      preLoaderRoute: typeof DesignImport
+    '/design-and-postprocessing': {
+      id: '/design-and-postprocessing'
+      path: '/design-and-postprocessing'
+      fullPath: '/design-and-postprocessing'
+      preLoaderRoute: typeof DesignAndPostprocessingImport
       parentRoute: typeof rootRoute
     }
     '/electronics': {
@@ -158,13 +180,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MaterialsImport
       parentRoute: typeof rootRoute
     }
-    '/postprocessing': {
-      id: '/postprocessing'
-      path: '/postprocessing'
-      fullPath: '/postprocessing'
-      preLoaderRoute: typeof PostprocessingImport
-      parentRoute: typeof rootRoute
-    }
     '/setup': {
       id: '/setup'
       path: '/setup'
@@ -186,6 +201,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsImport
       parentRoute: typeof rootRoute
     }
+    '/deleted_components/design': {
+      id: '/deleted_components/design'
+      path: '/deleted_components/design'
+      fullPath: '/deleted_components/design'
+      preLoaderRoute: typeof DeletedcomponentsDesignImport
+      parentRoute: typeof rootRoute
+    }
+    '/deleted_components/postprocessing': {
+      id: '/deleted_components/postprocessing'
+      path: '/deleted_components/postprocessing'
+      fullPath: '/deleted_components/postprocessing'
+      preLoaderRoute: typeof DeletedcomponentsPostprocessingImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -194,47 +223,53 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
+  '/calendar': typeof CalendarRoute
   '/components': typeof ComponentsRoute
   '/contributors': typeof ContributorsRoute
-  '/design': typeof DesignRoute
+  '/design-and-postprocessing': typeof DesignAndPostprocessingRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
   '/materials': typeof MaterialsRoute
-  '/postprocessing': typeof PostprocessingRoute
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/deleted_components/design': typeof DeletedcomponentsDesignRoute
+  '/deleted_components/postprocessing': typeof DeletedcomponentsPostprocessingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
+  '/calendar': typeof CalendarRoute
   '/components': typeof ComponentsRoute
   '/contributors': typeof ContributorsRoute
-  '/design': typeof DesignRoute
+  '/design-and-postprocessing': typeof DesignAndPostprocessingRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
   '/materials': typeof MaterialsRoute
-  '/postprocessing': typeof PostprocessingRoute
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/deleted_components/design': typeof DeletedcomponentsDesignRoute
+  '/deleted_components/postprocessing': typeof DeletedcomponentsPostprocessingRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
+  '/calendar': typeof CalendarRoute
   '/components': typeof ComponentsRoute
   '/contributors': typeof ContributorsRoute
-  '/design': typeof DesignRoute
+  '/design-and-postprocessing': typeof DesignAndPostprocessingRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
   '/materials': typeof MaterialsRoute
-  '/postprocessing': typeof PostprocessingRoute
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/deleted_components/design': typeof DeletedcomponentsDesignRoute
+  '/deleted_components/postprocessing': typeof DeletedcomponentsPostprocessingRoute
 }
 
 export interface FileRouteTypes {
@@ -242,75 +277,85 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/calculator'
+    | '/calendar'
     | '/components'
     | '/contributors'
-    | '/design'
+    | '/design-and-postprocessing'
     | '/electronics'
     | '/hardware'
     | '/materials'
-    | '/postprocessing'
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/deleted_components/design'
+    | '/deleted_components/postprocessing'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/calculator'
+    | '/calendar'
     | '/components'
     | '/contributors'
-    | '/design'
+    | '/design-and-postprocessing'
     | '/electronics'
     | '/hardware'
     | '/materials'
-    | '/postprocessing'
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/deleted_components/design'
+    | '/deleted_components/postprocessing'
   id:
     | '__root__'
     | '/'
     | '/calculator'
+    | '/calendar'
     | '/components'
     | '/contributors'
-    | '/design'
+    | '/design-and-postprocessing'
     | '/electronics'
     | '/hardware'
     | '/materials'
-    | '/postprocessing'
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/deleted_components/design'
+    | '/deleted_components/postprocessing'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalculatorRoute: typeof CalculatorRoute
+  CalendarRoute: typeof CalendarRoute
   ComponentsRoute: typeof ComponentsRoute
   ContributorsRoute: typeof ContributorsRoute
-  DesignRoute: typeof DesignRoute
+  DesignAndPostprocessingRoute: typeof DesignAndPostprocessingRoute
   ElectronicsRoute: typeof ElectronicsRoute
   HardwareRoute: typeof HardwareRoute
   MaterialsRoute: typeof MaterialsRoute
-  PostprocessingRoute: typeof PostprocessingRoute
   SetupRoute: typeof SetupRoute
   SetupElectronicsRoute: typeof SetupElectronicsRoute
   ToolsRoute: typeof ToolsRoute
+  DeletedcomponentsDesignRoute: typeof DeletedcomponentsDesignRoute
+  DeletedcomponentsPostprocessingRoute: typeof DeletedcomponentsPostprocessingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalculatorRoute: CalculatorRoute,
+  CalendarRoute: CalendarRoute,
   ComponentsRoute: ComponentsRoute,
   ContributorsRoute: ContributorsRoute,
-  DesignRoute: DesignRoute,
+  DesignAndPostprocessingRoute: DesignAndPostprocessingRoute,
   ElectronicsRoute: ElectronicsRoute,
   HardwareRoute: HardwareRoute,
   MaterialsRoute: MaterialsRoute,
-  PostprocessingRoute: PostprocessingRoute,
   SetupRoute: SetupRoute,
   SetupElectronicsRoute: SetupElectronicsRoute,
   ToolsRoute: ToolsRoute,
+  DeletedcomponentsDesignRoute: DeletedcomponentsDesignRoute,
+  DeletedcomponentsPostprocessingRoute: DeletedcomponentsPostprocessingRoute,
 }
 
 export const routeTree = rootRoute
@@ -325,16 +370,18 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/calculator",
+        "/calendar",
         "/components",
         "/contributors",
-        "/design",
+        "/design-and-postprocessing",
         "/electronics",
         "/hardware",
         "/materials",
-        "/postprocessing",
         "/setup",
         "/setup-electronics",
-        "/tools"
+        "/tools",
+        "/deleted_components/design",
+        "/deleted_components/postprocessing"
       ]
     },
     "/": {
@@ -343,14 +390,17 @@ export const routeTree = rootRoute
     "/calculator": {
       "filePath": "calculator.tsx"
     },
+    "/calendar": {
+      "filePath": "calendar.tsx"
+    },
     "/components": {
       "filePath": "components.tsx"
     },
     "/contributors": {
       "filePath": "contributors.tsx"
     },
-    "/design": {
-      "filePath": "design.tsx"
+    "/design-and-postprocessing": {
+      "filePath": "design-and-postprocessing.tsx"
     },
     "/electronics": {
       "filePath": "electronics.tsx"
@@ -361,9 +411,6 @@ export const routeTree = rootRoute
     "/materials": {
       "filePath": "materials.tsx"
     },
-    "/postprocessing": {
-      "filePath": "postprocessing.tsx"
-    },
     "/setup": {
       "filePath": "setup.tsx"
     },
@@ -372,6 +419,12 @@ export const routeTree = rootRoute
     },
     "/tools": {
       "filePath": "tools.tsx"
+    },
+    "/deleted_components/design": {
+      "filePath": "deleted_components/design.tsx"
+    },
+    "/deleted_components/postprocessing": {
+      "filePath": "deleted_components/postprocessing.tsx"
     }
   }
 }

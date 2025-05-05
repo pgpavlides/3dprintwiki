@@ -1,18 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { SEO } from '../components/SEO/SEO'
 
-export const Route = createFileRoute('/design')({
-  component: DesignPage,
+export const Route = createFileRoute('/deleted_components/postprocessing')({
+  component: PostProcessingPage,
 })
 
-function DesignPage() {
+function PostProcessingPage() {
   return (
     <>
       <SEO 
-        title="Design & Modeling | 3D Print Wiki"
-        description="CAD software guides, design tips, model optimization, and file preparation for 3D printing."
-        keywords="3D modeling, CAD software, 3D design tips, model optimization, file preparation"
-        url="https://3dprintwiki.com/design"
+        title="Post-Processing | 3D Print Wiki"
+        description="Sanding, painting, vapor smoothing, support removal, and surface finishing techniques for 3D prints."
+        keywords="3D printing post processing, sanding, painting, vapor smoothing, surface finishing"
+        url="https://3dprintwiki.com/postprocessing"
       />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,7 +32,7 @@ function DesignPage() {
             </h1>
             
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              We're working on comprehensive guides for CAD software, design tips, model optimization, and file preparation. Check back soon!
+              We're working on comprehensive guides for sanding, painting, vapor smoothing, support removal, and surface finishing techniques. Check back soon!
             </p>
           </div>
         </div>
