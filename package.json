@@ -10,6 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@esbuild/linux-x64": "^0.20.0",
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/interaction": "^6.1.17",
