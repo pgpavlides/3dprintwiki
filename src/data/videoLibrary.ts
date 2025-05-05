@@ -22,12 +22,7 @@ const getYouTubeThumbnail = (videoId: string) => {
 const placeholderImage = '/video_thumbnails/placeholder.svg';
 
 // Function to extract YouTube ID from URL
-const extractYouTubeId = (url: string): string => {
-  if (!url || !url.includes('youtube.com/watch?v=')) return '';
-  
-  const match = url.match(/youtube\.com\/watch\?v=([^&]+)/);
-  return match ? match[1].split('&')[0] : '';
-};
+
 
 // Updated video data with all entries
 export const videoData: Video[] = [

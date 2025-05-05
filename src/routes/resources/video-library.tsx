@@ -55,7 +55,6 @@ function VideoLibraryPage() {
   // Generate unique categories, software, and skill levels for filters
   const categories = ['all', ...new Set(mappedVideoData.map(video => video.category))];
   const software = ['all', ...new Set(mappedVideoData.map(video => video.software))];
-  const skillLevels = ['all', 'Beginner', 'Intermediate', 'Advanced', 'All Levels'];
 
   // Filter videos based on search term and selected filters
   const filteredVideos = mappedVideoData.filter(video => {
