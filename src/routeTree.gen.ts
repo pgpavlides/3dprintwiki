@@ -23,8 +23,6 @@ import { Route as ComponentsImport } from './routes/components'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
-import { Route as DeletedcomponentsPostprocessingImport } from './routes/deleted_components/postprocessing'
-import { Route as DeletedcomponentsDesignImport } from './routes/deleted_components/design'
 
 // Create/Update Routes
 
@@ -97,19 +95,6 @@ const CalculatorRoute = CalculatorImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DeletedcomponentsPostprocessingRoute =
-  DeletedcomponentsPostprocessingImport.update({
-    id: '/deleted_components/postprocessing',
-    path: '/deleted_components/postprocessing',
-    getParentRoute: () => rootRoute,
-  } as any)
-
-const DeletedcomponentsDesignRoute = DeletedcomponentsDesignImport.update({
-  id: '/deleted_components/design',
-  path: '/deleted_components/design',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -201,20 +186,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsImport
       parentRoute: typeof rootRoute
     }
-    '/deleted_components/design': {
-      id: '/deleted_components/design'
-      path: '/deleted_components/design'
-      fullPath: '/deleted_components/design'
-      preLoaderRoute: typeof DeletedcomponentsDesignImport
-      parentRoute: typeof rootRoute
-    }
-    '/deleted_components/postprocessing': {
-      id: '/deleted_components/postprocessing'
-      path: '/deleted_components/postprocessing'
-      fullPath: '/deleted_components/postprocessing'
-      preLoaderRoute: typeof DeletedcomponentsPostprocessingImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -233,8 +204,6 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
-  '/deleted_components/design': typeof DeletedcomponentsDesignRoute
-  '/deleted_components/postprocessing': typeof DeletedcomponentsPostprocessingRoute
 }
 
 export interface FileRoutesByTo {
@@ -250,8 +219,6 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
-  '/deleted_components/design': typeof DeletedcomponentsDesignRoute
-  '/deleted_components/postprocessing': typeof DeletedcomponentsPostprocessingRoute
 }
 
 export interface FileRoutesById {
@@ -268,8 +235,6 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
-  '/deleted_components/design': typeof DeletedcomponentsDesignRoute
-  '/deleted_components/postprocessing': typeof DeletedcomponentsPostprocessingRoute
 }
 
 export interface FileRouteTypes {
@@ -287,8 +252,6 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
-    | '/deleted_components/design'
-    | '/deleted_components/postprocessing'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -303,8 +266,6 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
-    | '/deleted_components/design'
-    | '/deleted_components/postprocessing'
   id:
     | '__root__'
     | '/'
@@ -319,8 +280,6 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
-    | '/deleted_components/design'
-    | '/deleted_components/postprocessing'
   fileRoutesById: FileRoutesById
 }
 
@@ -337,8 +296,6 @@ export interface RootRouteChildren {
   SetupRoute: typeof SetupRoute
   SetupElectronicsRoute: typeof SetupElectronicsRoute
   ToolsRoute: typeof ToolsRoute
-  DeletedcomponentsDesignRoute: typeof DeletedcomponentsDesignRoute
-  DeletedcomponentsPostprocessingRoute: typeof DeletedcomponentsPostprocessingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -354,8 +311,6 @@ const rootRouteChildren: RootRouteChildren = {
   SetupRoute: SetupRoute,
   SetupElectronicsRoute: SetupElectronicsRoute,
   ToolsRoute: ToolsRoute,
-  DeletedcomponentsDesignRoute: DeletedcomponentsDesignRoute,
-  DeletedcomponentsPostprocessingRoute: DeletedcomponentsPostprocessingRoute,
 }
 
 export const routeTree = rootRoute
@@ -379,9 +334,7 @@ export const routeTree = rootRoute
         "/materials",
         "/setup",
         "/setup-electronics",
-        "/tools",
-        "/deleted_components/design",
-        "/deleted_components/postprocessing"
+        "/tools"
       ]
     },
     "/": {
@@ -419,12 +372,6 @@ export const routeTree = rootRoute
     },
     "/tools": {
       "filePath": "tools.tsx"
-    },
-    "/deleted_components/design": {
-      "filePath": "deleted_components/design.tsx"
-    },
-    "/deleted_components/postprocessing": {
-      "filePath": "deleted_components/postprocessing.tsx"
     }
   }
 }

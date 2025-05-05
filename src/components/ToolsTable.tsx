@@ -6,7 +6,7 @@ import {
   flexRender,
   type ColumnDef,
 } from "@tanstack/react-table";
-import type { Tool } from '../routes/tools'
+import type { Tool } from '../data/tools'
 
 interface ToolsTableProps {
   tools: Tool[];
@@ -78,14 +78,9 @@ export function ToolsTable({ tools }: ToolsTableProps) {
       cell: ({ row }) => (
         <div className="min-w-[250px]">
           <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-300">
-            {row.original.uses.slice(0, 3).map((use, i) => (
+            {row.original.uses.map((use, i) => (
               <li key={i}>{use}</li>
             ))}
-            {row.original.uses.length > 3 && (
-              <li className="text-gray-400 dark:text-gray-500">
-                +{row.original.uses.length - 3} more...
-              </li>
-            )}
           </ul>
         </div>
       ),

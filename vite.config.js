@@ -5,7 +5,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), TanStackRouterVite({ autoCodeSplitting: true })],
+  plugins: [TanStackRouterVite({ autoCodeSplitting: true }), react() ],
   test: {
     globals: true,
     environment: "jsdom",

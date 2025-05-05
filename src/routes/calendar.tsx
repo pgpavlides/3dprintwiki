@@ -71,7 +71,7 @@ function CalendarPage() {
         url="https://3dprintwiki.com/calendar"
       />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors p-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
             3D Printing Calendar
           </h1>
@@ -94,6 +94,55 @@ function CalendarPage() {
             .dark .fc .fc-day-today {
               background-color: rgba(16, 185, 129, 0.2) !important;
               border: 2px solid rgba(16, 185, 129, 0.6) !important;
+            }
+            
+            /* Make day names (column headers) white in dark mode */
+            .dark .fc-col-header-cell-cushion {
+              color: white !important;
+              font-weight: 600;
+            }
+            
+            /* Fix for date number color in dark mode */
+            .dark .fc-daygrid-day-number {
+              color: white !important;
+            }
+            
+            /* Improve readability of event text in dark mode */
+            .dark .fc-event-title {
+              color: white !important;
+            }
+            
+            /* Make the calendar title (month/year) bigger, bolder and white in dark mode */
+            .dark .fc-toolbar-title {
+              color: white !important;
+              font-size: 1.75rem !important;
+              font-weight: 700 !important;
+            }
+            
+            /* Calendar cell responsive sizing */
+            .fc-daygrid-day {
+              min-height: 80px;
+              max-height: 120px;
+            }
+            
+            @media (min-width: 1024px) {
+              .fc-daygrid-day {
+                min-height: 100px;
+                max-height: 140px;
+              }
+            }
+            
+            /* Control overall calendar height on different screens */
+            @media (max-height: 800px) {
+              .calendar-container .fc {
+                max-height: 70vh;
+              }
+            }
+            
+            /* Make sure event text is readable */
+            .fc-event-title {
+              font-weight: 500;
+              padding: 2px 0;
             }
 
             /* Add pointer cursor to events */
@@ -155,7 +204,7 @@ function CalendarPage() {
             )}
             
             {/* Calendar Layout with Categories on the Left */}
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row h-full">
               {/* Categories Side Panel */}
               <div className="w-full md:w-64 flex-shrink-0 mb-4 md:mb-0 md:mr-6">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Event Categories</h3>
@@ -174,7 +223,7 @@ function CalendarPage() {
               </div>
               
               {/* Calendar */}
-              <div className="flex-grow">
+              <div className="flex-grow calendar-container">
                 <FullCalendar
                   plugins={[dayGridPlugin, interactionPlugin]}
                   initialView="dayGridMonth"
@@ -183,8 +232,10 @@ function CalendarPage() {
                     center: 'title',
                     right: 'dayGridMonth,dayGridWeek'
                   }}
-                  height="auto"
-                  dayMaxEvents={3}
+                  height="75vh"
+                  contentHeight="auto"
+                  aspectRatio={1.8}
+                  dayMaxEvents={5}
                   dayCellClassNames="calendar-day-cell"
                   datesSet={handleCalendarDidMount}
                   viewDidMount={handleCalendarDidMount}
