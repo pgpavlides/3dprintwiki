@@ -66,7 +66,7 @@ function HomePage() {
     },
     {
       icon: '🌟',
-      title: 'Resources',
+      title: 'Contributors',
       description: 'Featured 3D printing YouTubers, content creators, and valuable community resources',
       path: '/contributors',
       gradient: 'from-yellow-500 to-orange-500',
@@ -74,13 +74,31 @@ function HomePage() {
       iconColor: 'text-yellow-500'
     },
     {
+      icon: '📺',
+      title: 'Video Library',
+      description: 'Curated collection of tutorials and guides for 3D modeling and printing software',
+      path: '/resources/video-library',
+      gradient: 'from-red-500 to-pink-500',
+      iconBg: 'bg-red-500/10',
+      iconColor: 'text-red-500'
+    },
+    {
       icon: '🎨',
-      title: 'Design, Modeling & Post-Processing',
-      description: 'CAD software guides, design tips, model optimization, file preparation, and finishing techniques',
+      title: 'Design & Modeling',
+      description: 'CAD software guides, design tips, model optimization, and file preparation techniques',
       path: '/design-and-postprocessing',
       gradient: 'from-sky-500 to-blue-500',
       iconBg: 'bg-sky-500/10',
       iconColor: 'text-sky-500'
+    },
+    {
+      icon: '✨',
+      title: 'Post-Processing',
+      description: 'Finishing techniques, painting guides, assembly tips, and surface treatment methods',
+      path: '/design-and-postprocessing',
+      gradient: 'from-violet-500 to-purple-500',
+      iconBg: 'bg-violet-500/10',
+      iconColor: 'text-violet-500'
     }
   ]
 
@@ -95,13 +113,35 @@ function HomePage() {
       <div className="fixed inset-0">
         <AnimatedBackground />
       </div>
-      <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm flex flex-col justify-center items-center transition-colors relative z-10">
+      <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm flex flex-col justify-center items-center transition-colors relative z-10 py-8 px-1">
+        {/* Social Links - top left corner */}
+        <div className="absolute top-4 left-4 flex gap-2 z-10">
+          <a
+            href="https://github.com/pgpavlides"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gray-800/90 hover:bg-gray-700 dark:bg-gray-700/90 dark:hover:bg-gray-600 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-110"
+            title="GitHub"
+          >
+            <img src="/svg/github.svg" alt="GitHub" className="w-6 h-6" />
+          </a>
+          <a
+            href="https://buymeacoffee.com/broccolidev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#FFDD00]/90 hover:bg-[#FFEE00] p-3 rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-110"
+            title="Buy Me a Coffee"
+          >
+            <img src="/svg/buymeacoffee.svg" alt="Buy Me a Coffee" className="w-6 h-6" />
+          </a>
+        </div>
+
         {/* Theme Toggle and Font Toggle in top right corner */}
         <div className="absolute top-4 right-4 flex items-center space-x-2">
           <FontToggle />
           <ThemeToggle />
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4 py-8">
           {/* Header */}
           <div className="text-center mb-8">
             {/* Logo */}
@@ -121,12 +161,12 @@ function HomePage() {
           </div>
 
           {/* Grid Menu */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-fr">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 auto-rows-fr">
             {menuItems.map((item, index) => (
               <div key={index} className="group relative w-full h-full">
                 <Link
                   to={item.path}
-                  className="block relative overflow-hidden rounded-2xl bg-white dark:bg-slate-950 shadow-lg dark:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:hover:shadow-blue-500/10 h-full min-h-[180px]"
+                  className="block relative overflow-hidden rounded-2xl bg-white dark:bg-slate-950 shadow-lg dark:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:hover:shadow-blue-500/10 h-full min-h-[160px]"
                 >
                   {/* Background gradients */}
                   <div className={`absolute -left-16 -top-16 h-32 w-32 rounded-full bg-gradient-to-br ${item.gradient} opacity-20 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70`} />

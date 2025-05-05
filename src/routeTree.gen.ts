@@ -23,6 +23,7 @@ import { Route as ComponentsImport } from './routes/components'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
+import { Route as ResourcesVideoLibraryImport } from './routes/resources/video-library'
 
 // Create/Update Routes
 
@@ -95,6 +96,12 @@ const CalculatorRoute = CalculatorImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResourcesVideoLibraryRoute = ResourcesVideoLibraryImport.update({
+  id: '/resources/video-library',
+  path: '/resources/video-library',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -186,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsImport
       parentRoute: typeof rootRoute
     }
+    '/resources/video-library': {
+      id: '/resources/video-library'
+      path: '/resources/video-library'
+      fullPath: '/resources/video-library'
+      preLoaderRoute: typeof ResourcesVideoLibraryImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -204,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/resources/video-library': typeof ResourcesVideoLibraryRoute
 }
 
 export interface FileRoutesByTo {
@@ -219,6 +234,7 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/resources/video-library': typeof ResourcesVideoLibraryRoute
 }
 
 export interface FileRoutesById {
@@ -235,6 +251,7 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/resources/video-library': typeof ResourcesVideoLibraryRoute
 }
 
 export interface FileRouteTypes {
@@ -252,6 +269,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/resources/video-library'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -266,6 +284,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/resources/video-library'
   id:
     | '__root__'
     | '/'
@@ -280,6 +299,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/resources/video-library'
   fileRoutesById: FileRoutesById
 }
 
@@ -296,6 +316,7 @@ export interface RootRouteChildren {
   SetupRoute: typeof SetupRoute
   SetupElectronicsRoute: typeof SetupElectronicsRoute
   ToolsRoute: typeof ToolsRoute
+  ResourcesVideoLibraryRoute: typeof ResourcesVideoLibraryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -311,6 +332,7 @@ const rootRouteChildren: RootRouteChildren = {
   SetupRoute: SetupRoute,
   SetupElectronicsRoute: SetupElectronicsRoute,
   ToolsRoute: ToolsRoute,
+  ResourcesVideoLibraryRoute: ResourcesVideoLibraryRoute,
 }
 
 export const routeTree = rootRoute
@@ -334,7 +356,8 @@ export const routeTree = rootRoute
         "/materials",
         "/setup",
         "/setup-electronics",
-        "/tools"
+        "/tools",
+        "/resources/video-library"
       ]
     },
     "/": {
@@ -372,6 +395,9 @@ export const routeTree = rootRoute
     },
     "/tools": {
       "filePath": "tools.tsx"
+    },
+    "/resources/video-library": {
+      "filePath": "resources/video-library.tsx"
     }
   }
 }

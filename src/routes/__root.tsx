@@ -94,27 +94,7 @@ function RootComponent() {
         <TanStackRouterDevtools />
       </div>
       
-      {/* Floating social links - bottom right */}
-      <div className="fixed bottom-4 right-4 flex flex-col gap-3 z-50">
-        <a
-          href="https://github.com/pgpavlides"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-gray-800/90 hover:bg-gray-700 dark:bg-gray-700/90 dark:hover:bg-gray-600 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-110"
-          title="GitHub"
-        >
-          <img src="/svg/github.svg" alt="GitHub" className="w-6 h-6" />
-        </a>
-        <a
-          href="https://buymeacoffee.com/broccolidev"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-[#FFDD00]/90 hover:bg-[#FFEE00] p-3 rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-110"
-          title="Buy Me a Coffee"
-        >
-          <img src="/svg/buymeacoffee.svg" alt="Buy Me a Coffee" className="w-6 h-6" />
-        </a>
-      </div>
+      {/* Floating social links - removed from root component */}
     </LenisWrapper>
   )
 }
