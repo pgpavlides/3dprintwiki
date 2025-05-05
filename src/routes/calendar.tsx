@@ -3,7 +3,7 @@ import { SEO } from '../components/SEO/SEO'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { FaCalendarDay } from 'react-icons/fa'
+// Removed unused import: FaCalendarDay
 import { useRef, useState } from 'react'
 
 export const Route = createFileRoute('/calendar')({
@@ -13,13 +13,13 @@ export const Route = createFileRoute('/calendar')({
 function CalendarPage() {
   // Add custom styling to highlight today's date and customize the today button
   const [notification, setNotification] = useState('');
-  const notificationTimeoutRef = useRef(null);
+  const notificationTimeoutRef = useRef<number | null>(null);
   
   // Function to modify the today button after render
-  const handleCalendarDidMount = (info) => {
+  const handleCalendarDidMount = () => {
     // Find the today button
     const todayButton = document.querySelector('.fc-today-button');
-    if (todayButton) {
+    if (todayButton && todayButton instanceof HTMLElement) {
       // Check if icon already exists to prevent duplicates
       const existingIcon = todayButton.querySelector('svg');
       if (!existingIcon) {
@@ -39,7 +39,7 @@ function CalendarPage() {
   };
 
   // Function to handle event click and copy title to clipboard
-  const handleEventClick = (clickInfo) => {
+  const handleEventClick = (clickInfo: { event: { title: string } }) => {
     const eventTitle = clickInfo.event.title;
     navigator.clipboard.writeText(eventTitle)
       .then(() => {
@@ -52,7 +52,7 @@ function CalendarPage() {
         }
         
         // Set timeout to clear notification after 2 seconds
-        notificationTimeoutRef.current = setTimeout(() => {
+        notificationTimeoutRef.current = window.setTimeout(() => {
           setNotification('');
         }, 2000);
       })
