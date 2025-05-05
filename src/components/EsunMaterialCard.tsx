@@ -1,6 +1,6 @@
 import React from 'react';
 import type { EsunMaterialProperties } from '../types/esunMaterials';
-import { FaThermometerHalf, FaTint, FaPrint, FaBox, FaFistRaised, FaRuler } from 'react-icons/fa';
+import { FaThermometerHalf, FaTint, FaPrint, FaBox, FaRuler } from 'react-icons/fa';
 
 interface EsunMaterialCardProps {
   material: EsunMaterialProperties;
