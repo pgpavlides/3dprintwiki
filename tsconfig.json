@@ -2,7 +2,8 @@
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": [
     "node_modules",
-    "src/components/deleted_components/**/*"
+    "src/components/deleted_components/**/*",
+    "src/routes/deleted_components/**/*"
   ],
   "compilerOptions": {
     "target": "ES2020",

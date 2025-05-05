@@ -28,6 +28,10 @@ export default defineConfig({
         }
         warn(warning);
       },
+      // Exclude the deleted_components directory from the build
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      }
     },
   }
 });
