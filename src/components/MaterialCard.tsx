@@ -13,21 +13,20 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({ material, onCompare,
   const rating = Math.min(5, Math.round(material.printability.value / 2));
   
   return (
-    <div className="group relative w-full">
+    <div className="group relative h-full">
       <div
-        className={`relative overflow-hidden rounded-2xl bg-white dark:bg-slate-950 shadow-lg dark:shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:hover:shadow-blue-500/10 ${
+        className={`relative h-full overflow-hidden rounded-xl bg-white dark:bg-slate-950 shadow-md dark:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-blue-500/10 ${
           isSelected ? 'ring-2 ring-blue-500' : ''
         }`}
       >
         {/* Background gradients */}
-        <div
-          className="absolute -left-16 -top-16 h-32 w-32 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/0 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70"
+        <div className="absolute -left-12 -top-12 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/0 blur-xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70"
         ></div>
         <div
-          className="absolute -right-16 -bottom-16 h-32 w-32 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/0 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70"
+          className="absolute -right-12 -bottom-12 h-24 w-24 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/0 blur-xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-70"
         ></div>
 
-        <div className="relative p-6">
+        <div className="relative p-4 h-full flex flex-col">
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex gap-4">
@@ -178,7 +177,7 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({ material, onCompare,
 
           {/* Characteristics */}
           {Object.keys(material.characteristics).length > 0 && (
-            <div className="mt-6">
+            <div className="mt-4 h-12 overflow-y-auto">
               <div className="flex flex-wrap gap-2">
                 {Object.entries(material.characteristics)
                   .filter(([_, value]) => value)
@@ -195,12 +194,12 @@ export const MaterialCard: React.FC<MaterialCardProps> = ({ material, onCompare,
           )}
 
           {/* Action Buttons */}
-          <div className="mt-8 flex gap-3">
+          <div className="mt-4 flex-grow">
             <button
-              className="group/btn relative flex-1 overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 p-px font-semibold text-white"
+              className="group/btn relative w-full overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 p-px font-semibold text-white"
             >
               <div
-                className="relative rounded-xl bg-white dark:bg-slate-950 px-4 py-3 transition-all duration-300 group-hover/btn:bg-opacity-0 dark:group-hover/btn:bg-opacity-0"
+                className="relative rounded-lg bg-white dark:bg-slate-950 px-3 py-2 text-xs transition-all duration-300 group-hover/btn:bg-opacity-0 dark:group-hover/btn:bg-opacity-0"
               >
                 <span className="relative flex items-center justify-center gap-2">
                   View Details

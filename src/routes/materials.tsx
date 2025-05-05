@@ -2,10 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { materialData } from "../data/materials";
 import { bambuMaterialData } from "../data/bambuMaterials";
+import { esunMaterialData } from "../data/esunMaterials";
 import { MaterialsGrid } from "../components/MaterialsGrid";
 import { MaterialsTable } from "../components/MaterialsTable";
 import { BambuMaterialsTable } from "../components/BambuMaterialsTable";
 import { BambuMaterialsGrid } from "../components/BambuMaterialsGrid";
+import { EsunMaterialsTable } from "../components/EsunMaterialsTable";
+import { EsunMaterialsGrid } from "../components/EsunMaterialsGrid";
 import { SEO } from "../components/SEO/SEO";
 
 export const Route = createFileRoute("/materials")({
@@ -14,8 +17,8 @@ export const Route = createFileRoute("/materials")({
 
 function MaterialsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
-  const [tableType, setTableType] = useState<"generic" | "bambu">("bambu");
-  const [gridType, setGridType] = useState<"generic" | "bambu">("generic");
+  const [tableType, setTableType] = useState<"generic" | "bambu" | "esun">("bambu");
+  const [gridType, setGridType] = useState<"generic" | "bambu" | "esun">("generic");
 
   return (
     <>
@@ -27,7 +30,7 @@ function MaterialsPage() {
       />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
       <div
-        className={`${viewMode === "table" ? "w-full px-2" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"}`}
+        className={`${viewMode === "table" ? "w-full" : "max-w-full mx-2"}`}
       >
         {/* Header */}
         <div className="text-center mb-12">
@@ -91,6 +94,16 @@ function MaterialsPage() {
               >
                 Bambu Materials
               </button>
+              <button
+                onClick={() => setTableType("esun")}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  tableType === "esun"
+                    ? "bg-green-500 text-white"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
+                }`}
+              >
+                eSun Materials
+              </button>
             </div>
           ) : (
             <div className="flex gap-2">
@@ -114,6 +127,16 @@ function MaterialsPage() {
               >
                 Bambu Materials
               </button>
+              <button
+                onClick={() => setGridType("esun")}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  gridType === "esun"
+                    ? "bg-green-500 text-white"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
+                }`}
+              >
+                eSun Materials
+              </button>
             </div>
           )}
         </div>
@@ -122,13 +145,17 @@ function MaterialsPage() {
         {viewMode === "grid" ? (
           gridType === "generic" ? (
             <MaterialsGrid materials={materialData} />
-          ) : (
+          ) : gridType === "bambu" ? (
             <BambuMaterialsGrid materials={bambuMaterialData} />
+          ) : (
+            <EsunMaterialsGrid materials={esunMaterialData} />
           )
         ) : tableType === "generic" ? (
           <MaterialsTable materials={materialData} />
-        ) : (
+        ) : tableType === "bambu" ? (
           <BambuMaterialsTable materials={bambuMaterialData} />
+        ) : (
+          <EsunMaterialsTable materials={esunMaterialData} />
         )}
 
         {/* Additional Info */}
