@@ -11,6 +11,15 @@ export interface Tool {
 
 export const toolsData: Tool[] = [
   {
+    id: 'nitrile-gloves',
+    name: 'Nitrile Gloves',
+    description: 'Disposable protective gloves for handling chemicals, resin, and maintaining cleanliness during printing operations',
+    uses: ['Chemical handling', 'Resin printing safety', 'Preventing fingerprints on prints', 'Maintaining cleanliness'],
+    category: 'safety',
+    recommended: true,
+    image: '/tool_images/nitrile_gloves.webp'
+  },
+  {
     id: 'hobby-torch',
     name: 'Hobby Torch',
     description: 'Small handheld torch for removing stringing, smoothing surfaces, and heat-treating prints',

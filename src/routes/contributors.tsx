@@ -147,6 +147,62 @@ function ContributorsPage() {
       name: "Macy Makes 3d",
       channelUrl: "https://www.youtube.com/@macymakes3d",
     },
+    {
+      name: "ItsMeaDMaDe",
+      channelUrl: "https://www.youtube.com/@ItsMeaDMaDe",
+    },
+    {
+      name: "Lukas Engstrom",
+      channelUrl: "https://www.youtube.com/@TheFullTimeYouTuber",
+    },
+    {
+      name: "M.M's Prop Shop",
+      channelUrl: "https://www.youtube.com/@MMsPropShop",
+    },
+    {
+      name: "Joshua Bird",
+      channelUrl: "https://www.youtube.com/@joshuayjbird",
+    },
+    {
+      name: "Samcraft",
+      channelUrl: "https://www.youtube.com/@Samcraftcom",
+    },
+    {
+      name: "Shop Nation",
+      channelUrl: "https://www.youtube.com/@ShopNation",
+    },
+    {
+      name: "LayerLab",
+      channelUrl: "https://www.youtube.com/@LayerLabAustralia",
+    },
+    {
+      name: "3D Printer Academy Tutorials",
+      channelUrl: "https://www.youtube.com/@3DPrinterAcademyTutorials",
+    },
+    {
+      name: "DraftID",
+      channelUrl: "https://www.youtube.com/@DraftID",
+    },
+    {
+      name: "Groundeffected",
+      channelUrl: "https://www.youtube.com/@Groundeffected",
+    },
+    {
+      name: "Resin Forge",
+      channelUrl: "https://www.youtube.com/@ResinForge",
+    },
+    {
+      name: "EvoLutionX Studios",
+      channelUrl: "https://www.youtube.com/@evolutionxstudios",
+    },
+    {
+      name: "The Creative Collector",
+      channelUrl: "https://www.youtube.com/@TheCreativeCollector",
+    },
+    {
+      name: "All Things Art",
+      channelUrl: "https://www.youtube.com/@itsallthingsart",
+    },
   ];
 
   const modelRepositories = [
@@ -260,6 +316,11 @@ function ContributorsPage() {
       name: "TinkerCAD",
       description: "Browser-based 3D design tool for beginners",
       url: "https://www.tinkercad.com/",
+    },
+    {
+      name: "Blender",
+      description: "Free, open-source 3D modeling and animation software",
+      url: "https://www.blender.org/",
     },
   ];
 
