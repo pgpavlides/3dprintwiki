@@ -7,14 +7,14 @@
     "start": "vite --port 3000",
     "build": "vite build --emptyOutDir && tsc",
     "serve": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "postinstall": "npm install @rollup/rollup-win32-x64-msvc@4.40.2 --no-save"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/interaction": "^6.1.17",
     "@fullcalendar/react": "^6.1.17",
-    "@supabase/supabase-js": "^2.49.4",
     "@tanstack/react-router": "^1.114.3",
     "@tanstack/react-router-devtools": "^1.114.3",
     "@tanstack/react-table": "^8.21.3",
@@ -29,7 +29,6 @@
     "zustand": "^5.0.4"
   },
   "devDependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.40.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/react": "^18.2.0",

@@ -25,8 +25,10 @@ import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as ResourcesVideoLibraryImport } from './routes/resources/video-library'
+import { Route as AdminNotesImport } from './routes/admin/notes'
 import { Route as AdminLoginImport } from './routes/admin/login'
 import { Route as AdminContentImport } from './routes/admin/content'
+import { Route as AdminChecklistImport } from './routes/admin/checklist'
 
 // Create/Update Routes
 
@@ -114,6 +116,12 @@ const ResourcesVideoLibraryRoute = ResourcesVideoLibraryImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminNotesRoute = AdminNotesImport.update({
+  id: '/admin/notes',
+  path: '/admin/notes',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AdminLoginRoute = AdminLoginImport.update({
   id: '/admin/login',
   path: '/admin/login',
@@ -123,6 +131,12 @@ const AdminLoginRoute = AdminLoginImport.update({
 const AdminContentRoute = AdminContentImport.update({
   id: '/admin/content',
   path: '/admin/content',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminChecklistRoute = AdminChecklistImport.update({
+  id: '/admin/checklist',
+  path: '/admin/checklist',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -214,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsImport
       parentRoute: typeof rootRoute
     }
+    '/admin/checklist': {
+      id: '/admin/checklist'
+      path: '/admin/checklist'
+      fullPath: '/admin/checklist'
+      preLoaderRoute: typeof AdminChecklistImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/content': {
       id: '/admin/content'
       path: '/admin/content'
@@ -226,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/notes': {
+      id: '/admin/notes'
+      path: '/admin/notes'
+      fullPath: '/admin/notes'
+      preLoaderRoute: typeof AdminNotesImport
       parentRoute: typeof rootRoute
     }
     '/resources/video-library': {
@@ -260,8 +288,10 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/admin/checklist': typeof AdminChecklistRoute
   '/admin/content': typeof AdminContentRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/notes': typeof AdminNotesRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -279,8 +309,10 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/admin/checklist': typeof AdminChecklistRoute
   '/admin/content': typeof AdminContentRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/notes': typeof AdminNotesRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -299,8 +331,10 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/admin/checklist': typeof AdminChecklistRoute
   '/admin/content': typeof AdminContentRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/notes': typeof AdminNotesRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -320,8 +354,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/admin/checklist'
     | '/admin/content'
     | '/admin/login'
+    | '/admin/notes'
     | '/resources/video-library'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
@@ -338,8 +374,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/admin/checklist'
     | '/admin/content'
     | '/admin/login'
+    | '/admin/notes'
     | '/resources/video-library'
     | '/admin'
   id:
@@ -356,8 +394,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/admin/checklist'
     | '/admin/content'
     | '/admin/login'
+    | '/admin/notes'
     | '/resources/video-library'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -376,8 +416,10 @@ export interface RootRouteChildren {
   SetupRoute: typeof SetupRoute
   SetupElectronicsRoute: typeof SetupElectronicsRoute
   ToolsRoute: typeof ToolsRoute
+  AdminChecklistRoute: typeof AdminChecklistRoute
   AdminContentRoute: typeof AdminContentRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminNotesRoute: typeof AdminNotesRoute
   ResourcesVideoLibraryRoute: typeof ResourcesVideoLibraryRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -395,8 +437,10 @@ const rootRouteChildren: RootRouteChildren = {
   SetupRoute: SetupRoute,
   SetupElectronicsRoute: SetupElectronicsRoute,
   ToolsRoute: ToolsRoute,
+  AdminChecklistRoute: AdminChecklistRoute,
   AdminContentRoute: AdminContentRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminNotesRoute: AdminNotesRoute,
   ResourcesVideoLibraryRoute: ResourcesVideoLibraryRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -423,8 +467,10 @@ export const routeTree = rootRoute
         "/setup",
         "/setup-electronics",
         "/tools",
+        "/admin/checklist",
         "/admin/content",
         "/admin/login",
+        "/admin/notes",
         "/resources/video-library",
         "/admin/"
       ]
@@ -465,11 +511,17 @@ export const routeTree = rootRoute
     "/tools": {
       "filePath": "tools.tsx"
     },
+    "/admin/checklist": {
+      "filePath": "admin/checklist.tsx"
+    },
     "/admin/content": {
       "filePath": "admin/content.tsx"
     },
     "/admin/login": {
       "filePath": "admin/login.tsx"
+    },
+    "/admin/notes": {
+      "filePath": "admin/notes.tsx"
     },
     "/resources/video-library": {
       "filePath": "resources/video-library.tsx"

@@ -10,6 +10,7 @@ import { FaQuestion } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { isAuthenticated, getCurrentUser } from '../utils/auth';
+import { KeyboardShortcutDetector } from '../components/secret/KeyboardShortcutDetector';
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -219,6 +220,9 @@ function RootComponent() {
       )}
 
       <TanStackRouterDevtools />
+      
+      {/* Add the hidden keyboard shortcut detector */}
+      <KeyboardShortcutDetector />
       </div>
       
       {/* Floating social links - removed from root component */}
