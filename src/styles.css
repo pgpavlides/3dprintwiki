@@ -113,6 +113,19 @@
   .lenis.lenis-smooth iframe {
     pointer-events: none;
   }
+  
+  /* Disable scrollbar on homepage */
+  .home-page-container {
+    overflow: hidden !important;
+  }
+
+  /* Add this class to your homepage container to disable scrolling */
+  .no-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+    position: fixed !important;
+    width: 100% !important;
+  }
 }
 
 /* Custom checkbox for material comparison */

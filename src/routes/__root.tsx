@@ -5,10 +5,11 @@ import { FontToggle } from '../components/FontToggle'
 import { SEO } from '../components/SEO/SEO'
 import { LenisWrapper, scrollTo } from '../components/LenisWrapper'
 import { NavigationProvider, useNavigation } from '../contexts/NavigationContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FaQuestion } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
+import { isAuthenticated, getCurrentUser } from '../utils/auth';
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -27,6 +28,29 @@ function RootComponent() {
   const isHomePage = location.pathname === '/';
   const { customBackHandler } = useNavigation();
   const [showCreatorInfo, setShowCreatorInfo] = useState(false);
+  const username = isAuthenticated() ? getCurrentUser() : null;
+
+  // Add effect to disable/enable body scrolling based on homepage
+  useEffect(() => {
+    if (isHomePage) {
+      // Disable scrolling on homepage
+      document.body.classList.add('overflow-hidden');
+      document.body.style.height = '100vh';
+      document.body.style.overflowY = 'hidden';
+    } else {
+      // Enable scrolling on other pages
+      document.body.classList.remove('overflow-hidden');
+      document.body.style.height = 'auto';
+      document.body.style.overflowY = 'auto';
+    }
+    
+    // Cleanup function
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+      document.body.style.height = 'auto';
+      document.body.style.overflowY = 'auto';
+    };
+  }, [isHomePage]);
 
   return (
     <LenisWrapper>
@@ -79,6 +103,16 @@ function RootComponent() {
                   3D Print Wiki
                 </span>
               </Link>
+              
+              {username && (
+                <Link
+                  to="/admin"
+                  className="bg-blue-600/90 hover:bg-blue-700 px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm transition-all duration-200 text-white font-medium flex items-center cursor-pointer"
+                  title="Go to Admin Panel"
+                >
+                  <span>{username}</span>
+                </Link>
+              )}
             </div>
 
             {/* Font and Theme toggles - top right */}

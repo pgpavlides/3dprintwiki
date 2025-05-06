@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatedBackground } from '../components/AnimatedBackground'
-import { ThemeToggle } from '../components/ThemeToggle'
-import { FontToggle } from '../components/FontToggle'
 import { SEO } from '../components/SEO/SEO'
+import { isAuthenticated, getCurrentUser } from '../utils/auth'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
 function HomePage() {
+  // Get current admin user if authenticated
+  const username = isAuthenticated() ? getCurrentUser() : null;
   const menuItems = [
     {
       icon: '💰',
@@ -109,13 +110,22 @@ function HomePage() {
         description="Explore comprehensive 3D printing guides, material databases, cost calculators, and troubleshooting resources. Learn everything about FDM, SLA, and resin printing in one place."
         keywords="3D printing guide, 3D print wiki, FDM printing, SLA printing, resin printing, 3D printer materials, 3D printing cost calculator, 3D printing troubleshooting"
       />
-      <div className="min-h-screen relative">
+      <div className="min-h-screen overflow-hidden">
       <div className="fixed inset-0">
         <AnimatedBackground />
       </div>
-      <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm flex flex-col justify-center items-center transition-colors relative z-10 py-8 px-1">
+      <div className="min-h-screen bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm flex flex-col justify-center items-center transition-colors relative z-10 py-8 px-1 overflow-hidden">
         {/* Social Links - top left corner */}
-        <div className="absolute top-4 left-4 flex gap-2 z-10">
+        <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+          {username && (
+            <Link
+              to="/admin"
+              className="bg-blue-600/90 hover:bg-blue-700 p-3 rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 text-white font-medium flex items-center cursor-pointer"
+              title="Go to Admin Panel"
+            >
+              <span>{username}</span>
+            </Link>
+          )}
           <a
             href="https://github.com/pgpavlides"
             target="_blank"
@@ -136,11 +146,6 @@ function HomePage() {
           </a>
         </div>
 
-        {/* Theme Toggle and Font Toggle in top right corner */}
-        <div className="absolute top-4 right-4 flex items-center space-x-2">
-          <FontToggle />
-          <ThemeToggle />
-        </div>
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4 py-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -200,6 +205,20 @@ function HomePage() {
                 </Link>
               </div>
             ))}
+          </div>
+          
+          {/* Very subtle admin link at bottom */}
+          <div className="text-center mt-16">
+            <p className="text-xs text-gray-400 dark:text-gray-600">
+              &copy; {new Date().getFullYear()} 3D Print Wiki
+              <Link
+                to="/admin/login"
+                className="ml-2 text-gray-400 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-500"
+                title="Admin"
+              >
+                •
+              </Link>
+            </p>
           </div>
         </div>
       </div>

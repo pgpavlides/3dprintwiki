@@ -23,7 +23,10 @@ import { Route as ComponentsImport } from './routes/components'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as ResourcesVideoLibraryImport } from './routes/resources/video-library'
+import { Route as AdminLoginImport } from './routes/admin/login'
+import { Route as AdminContentImport } from './routes/admin/content'
 
 // Create/Update Routes
 
@@ -99,9 +102,27 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminIndexRoute = AdminIndexImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ResourcesVideoLibraryRoute = ResourcesVideoLibraryImport.update({
   id: '/resources/video-library',
   path: '/resources/video-library',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminLoginRoute = AdminLoginImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminContentRoute = AdminContentImport.update({
+  id: '/admin/content',
+  path: '/admin/content',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -193,11 +214,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsImport
       parentRoute: typeof rootRoute
     }
+    '/admin/content': {
+      id: '/admin/content'
+      path: '/admin/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AdminContentImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginImport
+      parentRoute: typeof rootRoute
+    }
     '/resources/video-library': {
       id: '/resources/video-library'
       path: '/resources/video-library'
       fullPath: '/resources/video-library'
       preLoaderRoute: typeof ResourcesVideoLibraryImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -218,7 +260,10 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/admin/content': typeof AdminContentRoute
+  '/admin/login': typeof AdminLoginRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
+  '/admin': typeof AdminIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -234,7 +279,10 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/admin/content': typeof AdminContentRoute
+  '/admin/login': typeof AdminLoginRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
+  '/admin': typeof AdminIndexRoute
 }
 
 export interface FileRoutesById {
@@ -251,7 +299,10 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
   '/tools': typeof ToolsRoute
+  '/admin/content': typeof AdminContentRoute
+  '/admin/login': typeof AdminLoginRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
+  '/admin/': typeof AdminIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -269,7 +320,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/admin/content'
+    | '/admin/login'
     | '/resources/video-library'
+    | '/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -284,7 +338,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/admin/content'
+    | '/admin/login'
     | '/resources/video-library'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -299,7 +356,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/setup-electronics'
     | '/tools'
+    | '/admin/content'
+    | '/admin/login'
     | '/resources/video-library'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 
@@ -316,7 +376,10 @@ export interface RootRouteChildren {
   SetupRoute: typeof SetupRoute
   SetupElectronicsRoute: typeof SetupElectronicsRoute
   ToolsRoute: typeof ToolsRoute
+  AdminContentRoute: typeof AdminContentRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ResourcesVideoLibraryRoute: typeof ResourcesVideoLibraryRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -332,7 +395,10 @@ const rootRouteChildren: RootRouteChildren = {
   SetupRoute: SetupRoute,
   SetupElectronicsRoute: SetupElectronicsRoute,
   ToolsRoute: ToolsRoute,
+  AdminContentRoute: AdminContentRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ResourcesVideoLibraryRoute: ResourcesVideoLibraryRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -357,7 +423,10 @@ export const routeTree = rootRoute
         "/setup",
         "/setup-electronics",
         "/tools",
-        "/resources/video-library"
+        "/admin/content",
+        "/admin/login",
+        "/resources/video-library",
+        "/admin/"
       ]
     },
     "/": {
@@ -396,8 +465,17 @@ export const routeTree = rootRoute
     "/tools": {
       "filePath": "tools.tsx"
     },
+    "/admin/content": {
+      "filePath": "admin/content.tsx"
+    },
+    "/admin/login": {
+      "filePath": "admin/login.tsx"
+    },
     "/resources/video-library": {
       "filePath": "resources/video-library.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.tsx"
     }
   }
 }
