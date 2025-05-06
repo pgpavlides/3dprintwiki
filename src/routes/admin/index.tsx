@@ -48,7 +48,8 @@ function AdminDashboard() {
 
   // Load data and set up realtime subscriptions
   useEffect(() => {
-    if (!isAuthenticated() || !isSupabaseConnected) return;
+    if (!isAuthenticated()) return;
+    // Proceed even if Supabase isn't connected - we'll handle errors gracefully
     
     const fetchData = async () => {
       try {
@@ -59,8 +60,12 @@ function AdminDashboard() {
           .order('created_at', { ascending: false })
           .limit(10);
         
-        if (tasksError) throw tasksError;
-        if (tasksData) setTasks(tasksData);
+        if (tasksError) {
+          console.error('Error fetching tasks:', tasksError);
+          // Continue with empty tasks
+        } else if (tasksData) {
+          setTasks(tasksData);
+        }
         
         // Fetch notes
         const { data: notesData, error: notesError } = await supabase
@@ -69,8 +74,12 @@ function AdminDashboard() {
           .order('updated_at', { ascending: false })
           .limit(10);
         
-        if (notesError) throw notesError;
-        if (notesData) setNotes(notesData);
+        if (notesError) {
+          console.error('Error fetching notes:', notesError);
+          // Continue with empty notes
+        } else if (notesData) {
+          setNotes(notesData);
+        }
         
         // Generate activity feed
         const activityItems: ActivityItem[] = [];

@@ -1,0 +1,63 @@
+// Just replace these parts in your index.tsx:
+
+// In the AdminDashboard component:
+
+// Update this function to handle errors gracefully
+const initSupabase = async () => {
+  try {
+    const success = await createSupabaseSession(username || 'unknown');
+    setIsSupabaseConnected(success);
+    if (!success) {
+      console.error('Failed to connect to Supabase. Continuing with limited functionality.');
+    }
+  } catch (error) {
+    console.error('Error connecting to Supabase:', error);
+    setIsSupabaseConnected(false);
+  }
+};
+
+// And make sure that your fetchData function has good error handling:
+
+const fetchData = async () => {
+  try {
+    // Fetch tasks
+    const { data: tasksData, error: tasksError } = await supabase
+      .from('tasks')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
+    
+    if (tasksError) {
+      console.error('Error fetching tasks:', tasksError);
+      // Continue with default empty array
+    } else if (tasksData) {
+      setTasks(tasksData);
+    }
+    
+    // Fetch notes
+    const { data: notesData, error: notesError } = await supabase
+      .from('notes')
+      .select('*')
+      .order('updated_at', { ascending: false })
+      .limit(10);
+    
+    if (notesError) {
+      console.error('Error fetching notes:', notesError);
+      // Continue with default empty array
+    } else if (notesData) {
+      setNotes(notesData);
+    }
+    
+    // Generate activity feed if we have data
+    if (tasksData || notesData) {
+      const activityItems: ActivityItem[] = [];
+      
+      // Add activities as before...
+      
+      // Set activities
+      setActivities(activityItems.slice(0, 10));
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
