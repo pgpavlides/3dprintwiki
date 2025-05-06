@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
-import { isAuthenticated, getCurrentUser } from '../../utils/auth';
+import { isAuthenticated } from '../../utils/auth';
 import { SEO } from '../../components/SEO/SEO';
 
 export const Route = createFileRoute('/admin/content')({
@@ -9,7 +9,6 @@ export const Route = createFileRoute('/admin/content')({
 
 function ContentManagement() {
   const navigate = useNavigate();
-  const username = getCurrentUser();
 
   // Check authentication on component mount
   useEffect(() => {

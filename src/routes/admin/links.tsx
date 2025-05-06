@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { isAuthenticated, getCurrentUser } from '../../utils/auth';
+import { supabase, subscribeToTable } from '../../utils/supabase/client';
 import { SEO } from '../../components/SEO/SEO';
 
 export const Route = createFileRoute('/admin/links')({
@@ -31,6 +32,8 @@ function LinksPage() {
   const navigate = useNavigate();
   const username = getCurrentUser();
   const [links, setLinks] = useState<Link[]>([]);
+  // Use a ref to track the subscription channel
+  const subscriptionRef = useRef<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isAddingLink, setIsAddingLink] = useState(false);

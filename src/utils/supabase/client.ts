@@ -14,7 +14,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 // Simplified Supabase session approach that doesn't try to create users
-export const createSupabaseSession = async (username: string) => {
+export const createSupabaseSession = async () => {
   // For now, we'll just assume success and proceed without trying 
   // to create a Supabase session or check connectivity
   

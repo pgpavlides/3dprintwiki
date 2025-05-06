@@ -39,12 +39,12 @@ function AdminDashboard() {
 
     // Initialize Supabase session
     const initSupabase = async () => {
-      const success = await createSupabaseSession(username || 'unknown');
+      const success = await createSupabaseSession();
       setIsSupabaseConnected(success);
     };
 
     initSupabase();
-  }, [navigate, username]);
+  }, [navigate]);
 
   // Load data and set up realtime subscriptions
   useEffect(() => {
@@ -495,9 +495,7 @@ function AdminDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <Link
                   to="/admin/notes"
-                  search={{
-                    createNew: true
-                  }}
+                  search={{ createNew: true }}
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -507,9 +505,7 @@ function AdminDashboard() {
                 </Link>
                 <Link
                   to="/admin/checklist"
-                  search={{
-                    createNew: true
-                  }}
+                  search={{ createNew: true }}
                   className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -524,9 +520,7 @@ function AdminDashboard() {
               <div className="grid grid-cols-1 gap-4">
                 <Link
                   to="/admin/links"
-                  search={{
-                    createNew: true
-                  }}
+                  search={{ createNew: true }}
                   className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

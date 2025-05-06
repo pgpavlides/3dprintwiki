@@ -305,9 +305,11 @@ export const deleteNoteWithEvents = (id: string): boolean => {
 };
 
 // Export the event-dispatching versions as the default API
-export const createTask = createTaskWithEvents;
-export const updateTask = updateTaskWithEvents;
-export const deleteTask = deleteTaskWithEvents;
-export const createNote = createNoteWithEvents;
-export const updateNote = updateNoteWithEvents;
-export const deleteNote = deleteNoteWithEvents;
+export { 
+  createTaskWithEvents as createTask,
+  updateTaskWithEvents as updateTask,
+  deleteTaskWithEvents as deleteTask,
+  createNoteWithEvents as createNote,
+  updateNoteWithEvents as updateNote,
+  deleteNoteWithEvents as deleteNote
+};
