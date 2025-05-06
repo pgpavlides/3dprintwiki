@@ -29,7 +29,6 @@
     "zustand": "^5.0.4"
   },
   "devDependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.40.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/react": "^18.2.0",
@@ -46,5 +45,10 @@
     "vite": "^6.1.0",
     "vitest": "^3.0.5",
     "web-vitals": "^4.2.4"
+  },
+  "overrides": {
+    "vite": {
+      "rollup": "npm:@rollup/wasm-node"
+    }
   }
 }
