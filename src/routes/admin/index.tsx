@@ -270,12 +270,24 @@ function AdminDashboard() {
 
   const getActivityIcon = (type: ActivityItem['type'], user: string) => {
     const getUserAvatar = (name: string) => {
-      if (name === 'admin') return 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300';
-      if (name === 'partner') return 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300';
+      if (name === 'admin') {
+        // Blue color for George (admin)
+        return 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300';
+      }
+      if (name === 'partner') {
+        // Purple color for Sokratis (partner)
+        return 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300';
+      }
       return 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300';
     };
     
-    const userInitial = user.charAt(0).toUpperCase();
+    // Get first letter for avatar
+    const userMapping = {
+      'admin': 'G', // G for George
+      'partner': 'S', // S for Sokratis
+    };
+    
+    const userInitial = userMapping[user as keyof typeof userMapping] || user.charAt(0).toUpperCase();
     
     return (
       <div className={`${getUserAvatar(user)} rounded-full w-8 h-8 flex items-center justify-center mr-3`}>
@@ -285,35 +297,44 @@ function AdminDashboard() {
   };
 
   const getActivityText = (activity: ActivityItem) => {
+    // Map usernames to display names
+    const mapUserToDisplayName = (username: string) => {
+      if (username === 'admin') return 'George';
+      if (username === 'partner') return 'Sokratis';
+      return username;
+    };
+    
+    const displayName = mapUserToDisplayName(activity.user);
+    
     switch (activity.type) {
       case 'task_added':
         return (
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            <span className="font-medium text-gray-900 dark:text-white">{activity.user}</span> created a new task "{activity.title}"
+            <span className="font-medium text-gray-900 dark:text-white">{displayName}</span> created a new task "{activity.title}"
           </p>
         );
       case 'task_completed':
         return (
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            <span className="font-medium text-gray-900 dark:text-white">{activity.user}</span> completed the task "{activity.title}"
+            <span className="font-medium text-gray-900 dark:text-white">{displayName}</span> completed the task "{activity.title}"
           </p>
         );
       case 'note_added':
         return (
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            <span className="font-medium text-gray-900 dark:text-white">{activity.user}</span> created a new note "{activity.title}"
+            <span className="font-medium text-gray-900 dark:text-white">{displayName}</span> created a new note "{activity.title}"
           </p>
         );
       case 'note_updated':
         return (
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            <span className="font-medium text-gray-900 dark:text-white">{activity.user}</span> updated the note "{activity.title}"
+            <span className="font-medium text-gray-900 dark:text-white">{displayName}</span> updated the note "{activity.title}"
           </p>
         );
       default:
         return (
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            <span className="font-medium text-gray-900 dark:text-white">{activity.user}</span> performed an action
+            <span className="font-medium text-gray-900 dark:text-white">{displayName}</span> performed an action
           </p>
         );
     }
@@ -343,7 +364,7 @@ function AdminDashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600 dark:text-gray-300">
-                Welcome, {username || 'Admin'}
+                Welcome, {username === 'admin' ? 'George' : username === 'partner' ? 'Sokratis' : username || 'Admin'}
               </span>
               <button
                 onClick={handleLogout}
@@ -361,8 +382,8 @@ function AdminDashboard() {
           </div>
         </header>
 
-        {/* Navigation */}
-        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        {/* Navigation - Now with sticky positioning */}
+        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
             <Link
               to="/admin/"
@@ -384,6 +405,13 @@ function AdminDashboard() {
               className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               Notes
+            </Link>
+            <Link
+              to="/admin/links"
+              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600' }}
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Links
             </Link>
           </div>
         </div>
@@ -455,6 +483,50 @@ function AdminDashboard() {
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm text-center"
                 >
                   Manage Notes
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Action Buttons */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <Link
+                  to="/admin/notes"
+                  state={{ createNew: true }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className="font-medium text-sm">Create New Note</span>
+                </Link>
+                <Link
+                  to="/admin/checklist"
+                  state={{ createNew: true }}
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  <span className="font-medium text-sm">Create New Task</span>
+                </Link>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Resource Collection</h3>
+              <div className="grid grid-cols-1 gap-4">
+                <Link
+                  to="/admin/links"
+                  state={{ createNew: true }}
+                  className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  <span className="font-medium text-sm">Save New Resource Link</span>
                 </Link>
               </div>
             </div>

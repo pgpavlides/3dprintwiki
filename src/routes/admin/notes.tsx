@@ -21,12 +21,82 @@ function NotesPage() {
   // Use a ref to track the subscription channel
   const subscriptionRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);
 
+  // Handle creating a new note
+  const handleCreateNote = () => {
+    setSelectedNote(null);
+    setIsCreatingNote(true);
+  };
+
   // Check authentication on component mount
   useEffect(() => {
     if (!isAuthenticated()) {
       navigate({ to: '/admin/login' });
+      return;
+    }
+    
+    // Check for state from navigation to auto-open new note
+    const locationState = window.history.state?.usr || {};
+    if (locationState.createNew) {
+      handleCreateNote();
+      
+      // Clear the state to prevent re-opening on refresh
+      const newState = { ...locationState };
+      delete newState.createNew;
+      navigate({ to: '/admin/notes', state: newState, replace: true });
     }
   }, [navigate]);
+
+  // Manually handle note events
+  useEffect(() => {
+    // Handle note deletion
+    const handleNoteDeleted = (event: any) => {
+      const { noteId } = event.detail;
+      
+      // Update notes state immediately
+      setNotes(prev => prev.filter(note => note.id !== noteId));
+      
+      // If the deleted note is currently selected, deselect it
+      if (selectedNote && selectedNote.id === noteId) {
+        setSelectedNote(null);
+      }
+    };
+    
+    // Handle note added
+    const handleNoteAdded = (event: any) => {
+      const { note } = event.detail;
+      if (note) {
+        // Add to the top of the list
+        setNotes(prev => [note, ...prev.filter(n => n.id !== note.id)]);
+        setSelectedNote(note);
+        setIsCreatingNote(false);
+      }
+    };
+
+    // Handle note updated
+    const handleNoteUpdated = (event: any) => {
+      const { note } = event.detail;
+      if (note) {
+        // Update the note in the list
+        setNotes(prev => prev.map(n => n.id === note.id ? note : n));
+        // Update selected note if it's the one being edited
+        if (selectedNote && selectedNote.id === note.id) {
+          setSelectedNote(note);
+        }
+      }
+    };
+    
+    // Add event listeners
+    window.addEventListener('note_deleted', handleNoteDeleted);
+    window.addEventListener('note_added', handleNoteAdded);
+    window.addEventListener('note_updated', handleNoteUpdated);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('note_deleted', handleNoteDeleted);
+      window.removeEventListener('note_added', handleNoteAdded);
+      window.removeEventListener('note_updated', handleNoteUpdated);
+    };
+  }, [selectedNote]);
 
   // Load notes and set up realtime subscription
   useEffect(() => {
@@ -134,12 +204,6 @@ function NotesPage() {
     return 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300';
   };
 
-  // Handle creating a new note
-  const handleCreateNote = () => {
-    setSelectedNote(null);
-    setIsCreatingNote(true);
-  };
-
   // If not authenticated, don't render the page
   if (!isAuthenticated()) {
     return null;
@@ -164,7 +228,7 @@ function NotesPage() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600 dark:text-gray-300">
-                Welcome, {username || 'Admin'}
+                Welcome, {username === 'admin' ? 'George' : username === 'partner' ? 'Sokratis' : username || 'Admin'}
               </span>
               <a
                 href="/admin"
@@ -175,6 +239,36 @@ function NotesPage() {
             </div>
           </div>
         </header>
+
+        {/* Navigation - Now with sticky positioning */}
+        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
+            <a
+              href="/admin"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Dashboard
+            </a>
+            <a
+              href="/admin/checklist"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Checklist
+            </a>
+            <a
+              href="/admin/notes"
+              className="px-6 py-3 font-medium text-sm text-blue-600 border-b-2 border-blue-600"
+            >
+              Notes
+            </a>
+            <a
+              href="/admin/links"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Links
+            </a>
+          </div>
+        </div>
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -223,8 +317,8 @@ function NotesPage() {
                         {note.title}
                       </h3>
                       {note.content && (
-                        <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-2">
-                          {note.content.replace(/\n/g, ' ')}
+                        <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-2 whitespace-pre-line">
+                          {note.content.replace(/\n\n+/g, '\n')}
                         </p>
                       )}
                       <div className="flex items-center justify-between mt-2">

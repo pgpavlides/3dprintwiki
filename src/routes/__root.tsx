@@ -91,19 +91,22 @@ function RootComponent() {
                 </svg>
               </button>
               
-              <Link
-                to="/"
-                className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200 dark:border-gray-700"
-              >
-                <img
-                  src="/logo/logo.svg"
-                  alt="3D Print Wiki Logo"
-                  className="h-6 w-6"
-                />
-                <span className="text-gray-900 dark:text-white font-bold text-lg">
-                  3D Print Wiki
-                </span>
-              </Link>
+              {/* Hide the 3D Print Wiki link on admin pages */}
+              {!location.pathname.startsWith('/admin') && (
+                <Link
+                  to="/"
+                  className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200 dark:border-gray-700"
+                >
+                  <img
+                    src="/logo/logo.svg"
+                    alt="3D Print Wiki Logo"
+                    className="h-6 w-6"
+                  />
+                  <span className="text-gray-900 dark:text-white font-bold text-lg">
+                    3D Print Wiki
+                  </span>
+                </Link>
+              )}
               
               {username && (
                 <Link

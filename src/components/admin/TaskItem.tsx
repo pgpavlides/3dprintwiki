@@ -43,14 +43,17 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, currentUser }) => {
         updated_at: new Date().toISOString(),
       };
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('tasks')
         .update(updateData)
-        .eq('id', task.id);
+        .eq('id', task.id)
+        .select('*')
+        .single();
       
       if (error) throw error;
       
-      // The UI will be updated automatically via the realtime subscription
+      // No need to update UI manually - the parent component will handle this through subscription
+      // or its own state updates
     } catch (error) {
       console.error('Error updating task status:', error);
     } finally {
@@ -70,15 +73,17 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, currentUser }) => {
         updated_at: new Date().toISOString(),
       };
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('tasks')
         .update(updateData)
-        .eq('id', task.id);
+        .eq('id', task.id)
+        .select('*')
+        .single();
       
       if (error) throw error;
       
       setIsEditing(false);
-      // The UI will be updated automatically via the realtime subscription
+      // No need to update UI manually - the parent component will handle this
     } catch (error) {
       console.error('Error updating task:', error);
     } finally {
@@ -99,7 +104,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, currentUser }) => {
       
       if (error) throw error;
       
-      // The UI will be updated automatically via the realtime subscription
+      // The UI will be updated via the parent's subscription or state management
     } catch (error) {
       console.error('Error deleting task:', error);
     } finally {

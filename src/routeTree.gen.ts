@@ -27,6 +27,7 @@ import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as ResourcesVideoLibraryImport } from './routes/resources/video-library'
 import { Route as AdminNotesImport } from './routes/admin/notes'
 import { Route as AdminLoginImport } from './routes/admin/login'
+import { Route as AdminLinksImport } from './routes/admin/links'
 import { Route as AdminContentImport } from './routes/admin/content'
 import { Route as AdminChecklistImport } from './routes/admin/checklist'
 
@@ -125,6 +126,12 @@ const AdminNotesRoute = AdminNotesImport.update({
 const AdminLoginRoute = AdminLoginImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminLinksRoute = AdminLinksImport.update({
+  id: '/admin/links',
+  path: '/admin/links',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -242,6 +249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContentImport
       parentRoute: typeof rootRoute
     }
+    '/admin/links': {
+      id: '/admin/links'
+      path: '/admin/links'
+      fullPath: '/admin/links'
+      preLoaderRoute: typeof AdminLinksImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -290,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/tools': typeof ToolsRoute
   '/admin/checklist': typeof AdminChecklistRoute
   '/admin/content': typeof AdminContentRoute
+  '/admin/links': typeof AdminLinksRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/notes': typeof AdminNotesRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
@@ -311,6 +326,7 @@ export interface FileRoutesByTo {
   '/tools': typeof ToolsRoute
   '/admin/checklist': typeof AdminChecklistRoute
   '/admin/content': typeof AdminContentRoute
+  '/admin/links': typeof AdminLinksRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/notes': typeof AdminNotesRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
@@ -333,6 +349,7 @@ export interface FileRoutesById {
   '/tools': typeof ToolsRoute
   '/admin/checklist': typeof AdminChecklistRoute
   '/admin/content': typeof AdminContentRoute
+  '/admin/links': typeof AdminLinksRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/notes': typeof AdminNotesRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
@@ -356,6 +373,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/admin/checklist'
     | '/admin/content'
+    | '/admin/links'
     | '/admin/login'
     | '/admin/notes'
     | '/resources/video-library'
@@ -376,6 +394,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/admin/checklist'
     | '/admin/content'
+    | '/admin/links'
     | '/admin/login'
     | '/admin/notes'
     | '/resources/video-library'
@@ -396,6 +415,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/admin/checklist'
     | '/admin/content'
+    | '/admin/links'
     | '/admin/login'
     | '/admin/notes'
     | '/resources/video-library'
@@ -418,6 +438,7 @@ export interface RootRouteChildren {
   ToolsRoute: typeof ToolsRoute
   AdminChecklistRoute: typeof AdminChecklistRoute
   AdminContentRoute: typeof AdminContentRoute
+  AdminLinksRoute: typeof AdminLinksRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminNotesRoute: typeof AdminNotesRoute
   ResourcesVideoLibraryRoute: typeof ResourcesVideoLibraryRoute
@@ -439,6 +460,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsRoute: ToolsRoute,
   AdminChecklistRoute: AdminChecklistRoute,
   AdminContentRoute: AdminContentRoute,
+  AdminLinksRoute: AdminLinksRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminNotesRoute: AdminNotesRoute,
   ResourcesVideoLibraryRoute: ResourcesVideoLibraryRoute,
@@ -469,6 +491,7 @@ export const routeTree = rootRoute
         "/tools",
         "/admin/checklist",
         "/admin/content",
+        "/admin/links",
         "/admin/login",
         "/admin/notes",
         "/resources/video-library",
@@ -516,6 +539,9 @@ export const routeTree = rootRoute
     },
     "/admin/content": {
       "filePath": "admin/content.tsx"
+    },
+    "/admin/links": {
+      "filePath": "admin/links.tsx"
     },
     "/admin/login": {
       "filePath": "admin/login.tsx"

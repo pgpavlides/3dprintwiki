@@ -36,6 +36,17 @@ function ChecklistPage() {
     if (!isAuthenticated()) {
       navigate({ to: '/admin/login' });
     }
+    
+    // Check for state from navigation to auto-open new task
+    const locationState = window.history.state?.usr || {};
+    if (locationState.createNew) {
+      setIsAddingTask(true);
+      
+      // Clear the state to prevent re-opening on refresh
+      const newState = { ...locationState };
+      delete newState.createNew;
+      navigate({ to: '/admin/checklist', state: newState, replace: true });
+    }
   }, [navigate]);
 
   // Load tasks and set up realtime subscription
@@ -105,11 +116,18 @@ function ChecklistPage() {
         created_by: username || 'unknown',
       };
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('tasks')
-        .insert(taskData);
+        .insert(taskData)
+        .select('*')
+        .single();
       
       if (error) throw error;
+      
+      // Manually update the tasks state with the new task
+      if (data) {
+        setTasks(prev => [data as Task, ...prev]);
+      }
       
       // Reset form
       setNewTask({
@@ -120,7 +138,6 @@ function ChecklistPage() {
       });
       
       setIsAddingTask(false);
-      // The UI will be updated automatically via the realtime subscription
     } catch (error) {
       console.error('Error adding task:', error);
     } finally {
@@ -152,7 +169,7 @@ function ChecklistPage() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600 dark:text-gray-300">
-                Welcome, {username || 'Admin'}
+                Welcome, {username === 'admin' ? 'George' : username === 'partner' ? 'Sokratis' : username || 'Admin'}
               </span>
               <a
                 href="/admin"
@@ -163,6 +180,36 @@ function ChecklistPage() {
             </div>
           </div>
         </header>
+
+        {/* Navigation - Now with sticky positioning */}
+        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
+            <a
+              href="/admin"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Dashboard
+            </a>
+            <a
+              href="/admin/checklist"
+              className="px-6 py-3 font-medium text-sm text-blue-600 border-b-2 border-blue-600"
+            >
+              Checklist
+            </a>
+            <a
+              href="/admin/notes"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Notes
+            </a>
+            <a
+              href="/admin/links"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              Links
+            </a>
+          </div>
+        </div>
 
         {/* Main Content */}
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

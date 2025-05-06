@@ -55,15 +55,25 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
     try {
       if (isNew) {
         // Create a new note
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('notes')
           .insert({
             title: noteData.title,
             content: noteData.content,
             created_by: currentUser,
-          });
+          })
+          .select('*')
+          .single();
 
         if (error) throw error;
+        
+        // Dispatch custom event for new note
+        if (data) {
+          const noteAddedEvent = new CustomEvent('note_added', {
+            detail: { note: data }
+          });
+          window.dispatchEvent(noteAddedEvent);
+        }
       } else {
         // Update existing note
         const updateData: UpdateNote = {
@@ -72,18 +82,26 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
           updated_at: new Date().toISOString(),
         };
 
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('notes')
           .update(updateData)
-          .eq('id', noteData.id);
+          .eq('id', noteData.id)
+          .select('*')
+          .single();
 
         if (error) throw error;
+        
+        // Dispatch custom event for updated note
+        if (data) {
+          const noteUpdatedEvent = new CustomEvent('note_updated', {
+            detail: { note: data }
+          });
+          window.dispatchEvent(noteUpdatedEvent);
+        }
       }
 
       // Close editor after saving
       if (onClose) onClose();
-      
-      // The UI will be updated automatically via the realtime subscription
     } catch (error) {
       console.error('Error saving note:', error);
     } finally {
@@ -102,6 +120,11 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
     setIsLoading(true);
 
     try {
+      // Custom event to notify parent about deletion
+      const noteDeleteEvent = new CustomEvent('note_deleted', {
+        detail: { noteId: noteData.id }
+      });
+      
       const { error } = await supabase
         .from('notes')
         .delete()
@@ -109,9 +132,12 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
 
       if (error) throw error;
 
+      // Dispatch event to notify parent component about the deletion
+      window.dispatchEvent(noteDeleteEvent);
+      
       if (onClose) onClose();
       
-      // The UI will be updated automatically via the realtime subscription
+      // The parent component will handle UI update
     } catch (error) {
       console.error('Error deleting note:', error);
     } finally {
@@ -194,8 +220,16 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
           placeholder="Start typing your note here..."
           value={noteData.content || ''}
           onChange={(e) => setNoteData({ ...noteData, content: e.target.value })}
-          className="w-full h-full min-h-[300px] bg-transparent border-0 focus:ring-0 resize-none text-gray-800 dark:text-gray-200"
+          className="w-full h-full min-h-[300px] bg-transparent border-0 focus:ring-0 resize-none text-gray-800 dark:text-gray-200 whitespace-pre-wrap"
           disabled={isLoading}
+          onKeyDown={(e) => {
+            // Make sure we don't prevent default behavior for Enter key
+            // This allows normal textarea behavior of inserting a new line
+            if (e.key === 'Enter') {
+              // Let the default behavior happen
+              // No need to call e.preventDefault()
+            }
+          }}
         ></textarea>
       </div>
     </div>

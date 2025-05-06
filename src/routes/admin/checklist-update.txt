@@ -1,0 +1,18 @@
+// Add this useEffect near the other useEffect hooks in the checklist.tsx file
+// Add it after the authentication useEffect
+
+// Check for state from navigation to auto-open new task
+useEffect(() => {
+  // Get location state
+  const locationState = window.history.state?.usr || {};
+  
+  // If createNew flag is present, open the task form
+  if (locationState.createNew) {
+    setIsAddingTask(true);
+    
+    // Clear the state to prevent re-opening on refresh
+    const newState = { ...locationState };
+    delete newState.createNew;
+    navigate({ to: '/admin/checklist', state: newState, replace: true });
+  }
+}, [navigate]);
