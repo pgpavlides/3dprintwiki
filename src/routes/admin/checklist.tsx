@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { isAuthenticated, getCurrentUser } from '../../utils/auth';
 import { supabase, subscribeToTable } from '../../utils/supabase/client';
 import { TaskItem } from '../../components/admin/TaskItem';
-import { Task, InsertTask } from '../../types/database';
+import { Task } from '../../types/database';
 import { SEO } from '../../components/SEO/SEO';
 
 export const Route = createFileRoute('/admin/checklist')({
@@ -107,7 +107,7 @@ function ChecklistPage() {
     setIsLoading(true);
     
     try {
-      const taskData: InsertTask = {
+      const taskData = {
         title: newTask.title,
         description: newTask.description || null,
         due_date: newTask.due_date || null,
@@ -324,7 +324,7 @@ function ChecklistPage() {
                   tasks.map((task) => (
                     <TaskItem 
                       key={task.id} 
-                      task={task} 
+                      task={task}
                     />
                   ))
                 )}
