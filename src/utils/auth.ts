@@ -1,7 +1,7 @@
 // Simple authentication utility for admin access using environment variables
 
 // Debug logging to help troubleshoot authentication issues
-const logAuthAttempt = (username: string, inputPassword: string) => {
+const logAuthAttempt = (username: string) => {
   console.log('Auth attempt:', {
     entered: { username, password: '***' },
     adminMatch: username === import.meta.env.VITE_ADMIN_USERNAME,
@@ -12,7 +12,7 @@ const logAuthAttempt = (username: string, inputPassword: string) => {
 // Check if a user is authorized
 export const authenticateUser = (username: string, password: string): boolean => {
   // Log auth attempt for debugging (password is hidden)
-  logAuthAttempt(username, password);
+  logAuthAttempt(username);
   
   // Simple direct comparison with environment variables
   const isAdminUser = username === import.meta.env.VITE_ADMIN_USERNAME && 

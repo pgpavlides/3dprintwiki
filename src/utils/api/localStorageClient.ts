@@ -55,7 +55,8 @@ export const getTasks = (): Task[] => {
   return JSON.parse(tasksJson);
 };
 
-export const createTask = (task: Omit<Task, 'id' | 'created_at' | 'updated_at'>): Task => {
+// Base task operations
+export const _createTask = (task: Omit<Task, 'id' | 'created_at' | 'updated_at'>): Task => {
   const tasks = getTasks();
   const now = new Date().toISOString();
   
@@ -82,7 +83,7 @@ export const createTask = (task: Omit<Task, 'id' | 'created_at' | 'updated_at'>)
   return newTask;
 };
 
-export const updateTask = (id: string, updates: UpdateTask): Task | null => {
+export const _updateTask = (id: string, updates: UpdateTask): Task | null => {
   const tasks = getTasks();
   const taskIndex = tasks.findIndex(t => t.id === id);
   
@@ -115,7 +116,7 @@ export const updateTask = (id: string, updates: UpdateTask): Task | null => {
   return updatedTask;
 };
 
-export const deleteTask = (id: string): boolean => {
+export const _deleteTask = (id: string): boolean => {
   const tasks = getTasks();
   const updatedTasks = tasks.filter(t => t.id !== id);
   
@@ -132,7 +133,8 @@ export const getNotes = (): Note[] => {
   return JSON.parse(notesJson);
 };
 
-export const createNote = (note: Omit<Note, 'id' | 'created_at' | 'updated_at'>): Note => {
+// Base note operations
+export const _createNote = (note: Omit<Note, 'id' | 'created_at' | 'updated_at'>): Note => {
   const notes = getNotes();
   const now = new Date().toISOString();
   
@@ -159,7 +161,7 @@ export const createNote = (note: Omit<Note, 'id' | 'created_at' | 'updated_at'>)
   return newNote;
 };
 
-export const updateNote = (id: string, updates: UpdateNote): Note | null => {
+export const _updateNote = (id: string, updates: UpdateNote): Note | null => {
   const notes = getNotes();
   const noteIndex = notes.findIndex(n => n.id === id);
   
@@ -190,7 +192,7 @@ export const updateNote = (id: string, updates: UpdateNote): Note | null => {
   return updatedNote;
 };
 
-export const deleteNote = (id: string): boolean => {
+export const _deleteNote = (id: string): boolean => {
   const notes = getNotes();
   const updatedNotes = notes.filter(n => n.id !== id);
   
@@ -251,20 +253,16 @@ const dispatchEvent = (name: string, data: any) => {
   eventTarget.dispatchEvent(new CustomEvent(name, { detail: data }));
 };
 
-// Override the methods to dispatch events
-const originalCreateTask = createTask;
-export { originalCreateTask as _createTask };
+// Event-dispatching versions of the methods
 export const createTaskWithEvents = (task: Omit<Task, 'id' | 'created_at' | 'updated_at'>): Task => {
-  const newTask = originalCreateTask(task);
+  const newTask = _createTask(task);
   dispatchEvent(EVENTS.TASK_CREATED, newTask);
   dispatchEvent(EVENTS.ACTIVITY_ADDED, null);
   return newTask;
 };
 
-const originalUpdateTask = updateTask;
-export { originalUpdateTask as _updateTask };
 export const updateTaskWithEvents = (id: string, updates: UpdateTask): Task | null => {
-  const updatedTask = originalUpdateTask(id, updates);
+  const updatedTask = _updateTask(id, updates);
   if (updatedTask) {
     dispatchEvent(EVENTS.TASK_UPDATED, updatedTask);
     if (updates.status === 'completed') {
@@ -274,29 +272,23 @@ export const updateTaskWithEvents = (id: string, updates: UpdateTask): Task | nu
   return updatedTask;
 };
 
-const originalDeleteTask = deleteTask;
-export { originalDeleteTask as _deleteTask };
 export const deleteTaskWithEvents = (id: string): boolean => {
-  const result = originalDeleteTask(id);
+  const result = _deleteTask(id);
   if (result) {
     dispatchEvent(EVENTS.TASK_DELETED, { id });
   }
   return result;
 };
 
-const originalCreateNote = createNote;
-export { originalCreateNote as _createNote };
 export const createNoteWithEvents = (note: Omit<Note, 'id' | 'created_at' | 'updated_at'>): Note => {
-  const newNote = originalCreateNote(note);
+  const newNote = _createNote(note);
   dispatchEvent(EVENTS.NOTE_CREATED, newNote);
   dispatchEvent(EVENTS.ACTIVITY_ADDED, null);
   return newNote;
 };
 
-const originalUpdateNote = updateNote;
-export { originalUpdateNote as _updateNote };
 export const updateNoteWithEvents = (id: string, updates: UpdateNote): Note | null => {
-  const updatedNote = originalUpdateNote(id, updates);
+  const updatedNote = _updateNote(id, updates);
   if (updatedNote) {
     dispatchEvent(EVENTS.NOTE_UPDATED, updatedNote);
     dispatchEvent(EVENTS.ACTIVITY_ADDED, null);
@@ -304,22 +296,18 @@ export const updateNoteWithEvents = (id: string, updates: UpdateNote): Note | nu
   return updatedNote;
 };
 
-const originalDeleteNote = deleteNote;
-export { originalDeleteNote as _deleteNote };
 export const deleteNoteWithEvents = (id: string): boolean => {
-  const result = originalDeleteNote(id);
+  const result = _deleteNote(id);
   if (result) {
     dispatchEvent(EVENTS.NOTE_DELETED, { id });
   }
   return result;
 };
 
-// Export the event-dispatching versions as the default methods
-export {
-  createTaskWithEvents as createTask,
-  updateTaskWithEvents as updateTask,
-  deleteTaskWithEvents as deleteTask,
-  createNoteWithEvents as createNote,
-  updateNoteWithEvents as updateNote,
-  deleteNoteWithEvents as deleteNote
-};
+// Export the event-dispatching versions as the default API
+export const createTask = createTaskWithEvents;
+export const updateTask = updateTaskWithEvents;
+export const deleteTask = deleteTaskWithEvents;
+export const createNote = createNoteWithEvents;
+export const updateNote = updateNoteWithEvents;
+export const deleteNote = deleteNoteWithEvents;

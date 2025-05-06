@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { isAuthenticated, getCurrentUser } from '../../utils/auth';
 import { SEO } from '../../components/SEO/SEO';
 
@@ -64,9 +64,6 @@ function LinksPage() {
     { id: '11', name: 'Research Papers', color: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200' },
     { id: '12', name: 'Other', color: 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200' },
   ];
-
-  // Use a ref to track the subscription channel
-  const subscriptionRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);
 
   // Check authentication on component mount
   useEffect(() => {
@@ -157,8 +154,6 @@ function LinksPage() {
         );
       }
     });
-    
-    subscriptionRef.current = channel;
     
     // Cleanup subscription on unmount
     return () => {

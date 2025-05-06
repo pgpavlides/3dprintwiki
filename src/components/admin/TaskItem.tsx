@@ -4,10 +4,11 @@ import { supabase } from '../../utils/supabase/client';
 
 interface TaskItemProps {
   task: Task;
-  currentUser: string;
+  deleteTask?: (id: string) => void;
+  updateTask?: (task: Task) => void;
 }
 
-export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ task, deleteTask, updateTask }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState<Task>(task);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,14 +47,14 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       const { error } = await supabase
         .from('tasks')
         .update(updateData)
-        .eq('id', task.id)
-        .select('*')
-        .single();
+        .eq('id', task.id);
       
       if (error) throw error;
       
-      // No need to update UI manually - the parent component will handle this through subscription
-      // or its own state updates
+      // If updateTask prop is provided, call it
+      if (updateTask) {
+        updateTask({...task, ...updateData});
+      }
     } catch (error) {
       console.error('Error updating task status:', error);
     } finally {
@@ -76,14 +77,16 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       const { error } = await supabase
         .from('tasks')
         .update(updateData)
-        .eq('id', task.id)
-        .select('*')
-        .single();
+        .eq('id', task.id);
       
       if (error) throw error;
       
       setIsEditing(false);
-      // No need to update UI manually - the parent component will handle this
+      
+      // If updateTask prop is provided, call it
+      if (updateTask) {
+        updateTask({...task, ...updateData});
+      }
     } catch (error) {
       console.error('Error updating task:', error);
     } finally {
@@ -104,7 +107,10 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       
       if (error) throw error;
       
-      // The UI will be updated via the parent's subscription or state management
+      // If deleteTask prop is provided, call it
+      if (deleteTask) {
+        deleteTask(task.id);
+      }
     } catch (error) {
       console.error('Error deleting task:', error);
     } finally {

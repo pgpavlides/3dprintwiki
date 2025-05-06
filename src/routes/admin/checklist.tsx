@@ -325,7 +325,6 @@ function ChecklistPage() {
                     <TaskItem 
                       key={task.id} 
                       task={task} 
-                      currentUser={username || 'unknown'} 
                     />
                   ))
                 )}
