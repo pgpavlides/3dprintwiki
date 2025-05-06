@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState, useRef } from 'react';
 import { isAuthenticated, getCurrentUser } from '../../utils/auth';
-import { supabase, subscribeToTable } from '../../utils/supabase/client';
 import { SEO } from '../../components/SEO/SEO';
 
 export const Route = createFileRoute('/admin/links')({

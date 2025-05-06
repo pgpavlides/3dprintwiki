@@ -5,8 +5,8 @@ import { supabase, subscribeToTable, createSupabaseSession } from '../../utils/s
 import { Task, Note } from '../../types/database';
 import { SEO } from '../../components/SEO/SEO';
 
-export const Route = createFileRoute('/admin/')({
-  component: AdminDashboard,
+export const Route = createFileRoute('/admin/')({  
+component: AdminDashboard,
 });
 
 type ActivityItem = {
@@ -268,7 +268,7 @@ function AdminDashboard() {
     });
   };
 
-  const getActivityIcon = (type: ActivityItem['type'], user: string) => {
+  const getActivityIcon = (user: string) => {
     const getUserAvatar = (name: string) => {
       if (name === 'admin') {
         // Blue color for George (admin)
@@ -434,7 +434,7 @@ function AdminDashboard() {
                 <div className="space-y-4">
                   {activities.map((activity) => (
                     <div key={activity.id} className="flex items-start">
-                      {getActivityIcon(activity.type, activity.user)}
+                      {getActivityIcon(activity.user)}
                       <div>
                         {getActivityText(activity)}
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{formatDate(activity.timestamp)}</p>
@@ -495,7 +495,9 @@ function AdminDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <Link
                   to="/admin/notes"
-                  state={{ createNew: true }}
+                  search={{
+                    createNew: true
+                  }}
                   className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -505,7 +507,9 @@ function AdminDashboard() {
                 </Link>
                 <Link
                   to="/admin/checklist"
-                  state={{ createNew: true }}
+                  search={{
+                    createNew: true
+                  }}
                   className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -520,7 +524,9 @@ function AdminDashboard() {
               <div className="grid grid-cols-1 gap-4">
                 <Link
                   to="/admin/links"
-                  state={{ createNew: true }}
+                  search={{
+                    createNew: true
+                  }}
                   className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-4 py-6 rounded-lg text-center flex flex-col items-center justify-center transition-all duration-200"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

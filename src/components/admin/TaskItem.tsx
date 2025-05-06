@@ -7,7 +7,7 @@ interface TaskItemProps {
   currentUser: string;
 }
 
-export const TaskItem: React.FC<TaskItemProps> = ({ task, currentUser }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState<Task>(task);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +43,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, currentUser }) => {
         updated_at: new Date().toISOString(),
       };
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('tasks')
         .update(updateData)
         .eq('id', task.id)
@@ -73,7 +73,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, currentUser }) => {
         updated_at: new Date().toISOString(),
       };
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('tasks')
         .update(updateData)
         .eq('id', task.id)

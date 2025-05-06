@@ -9,7 +9,6 @@ export const Route = createFileRoute('/admin/content')({
 
 function ContentManagement() {
   const navigate = useNavigate();
-  const username = getCurrentUser();
 
   // Check authentication on component mount
   useEffect(() => {
