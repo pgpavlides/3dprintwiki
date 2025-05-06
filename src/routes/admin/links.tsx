@@ -18,6 +18,7 @@ interface Link {
   created_by: string;
   created_at: string;
   updated_at: string;
+  notes: string | null;
 }
 
 // Define the LinkCategory type
@@ -41,12 +42,14 @@ function LinksPage() {
     description: string;
     category: string;
     tags: string;
+    notes: string;
   }>({
     title: '',
     url: '',
     description: '',
     category: '3D Models',
     tags: '',
+    notes: '',
   });
   
   // Define link categories with colors
@@ -102,6 +105,7 @@ function LinksPage() {
             created_by: username || 'admin',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
+            notes: 'Good source for beginners, but many models have issues with printability.',
           },
           {
             id: '2',
@@ -113,6 +117,7 @@ function LinksPage() {
             created_by: username || 'admin',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
+            notes: 'His calibration guide is excellent for new users. Should link to this in the setup guide.',
           },
           {
             id: '3',
@@ -124,6 +129,7 @@ function LinksPage() {
             created_by: username || 'admin',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
+            notes: 'Well-maintained documentation. Consider adding specific articles to the hardware section.',
           },
         ];
         
@@ -191,6 +197,7 @@ function LinksPage() {
       created_by: username || 'unknown',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      notes: linkForm.notes.trim() || null,
     };
     
     // Add to state (would be inserted to Supabase in the real implementation)
@@ -203,6 +210,7 @@ function LinksPage() {
       description: '',
       category: '3D Models',
       tags: '',
+      notes: '',
     });
     setIsAddingLink(false);
   };
@@ -234,6 +242,7 @@ function LinksPage() {
           category: linkForm.category,
           tags: linkForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') || null,
           updated_at: new Date().toISOString(),
+          notes: linkForm.notes.trim() || null,
         };
       }
       return link;
@@ -246,6 +255,7 @@ function LinksPage() {
       description: '',
       category: '3D Models',
       tags: '',
+      notes: '',
     });
     setIsEditingLink(null);
   };
@@ -266,6 +276,7 @@ function LinksPage() {
       description: link.description || '',
       category: link.category,
       tags: link.tags ? link.tags.join(', ') : '',
+      notes: link.notes || '',
     });
     setIsEditingLink(link.id);
   };
@@ -399,6 +410,20 @@ function LinksPage() {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Notes (Internal use only)
+                    </label>
+                    <textarea
+                      name="notes"
+                      value={linkForm.notes}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm"
+                      rows={4}
+                      placeholder="Add private notes about this resource (only visible to admins)"
+                    ></textarea>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       URL *
                     </label>
                     <input
@@ -472,6 +497,7 @@ function LinksPage() {
                       description: '',
                       category: '3D Models',
                       tags: '',
+                      notes: '',
                     });
                   }}
                   className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md text-sm"
@@ -526,16 +552,6 @@ function LinksPage() {
                   </button>
                 ))}
               </div>
-              
-              <button
-                onClick={() => setIsAddingLink(true)}
-                className="md:w-auto w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm flex items-center justify-center"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Add New Link
-              </button>
             </div>
           </div>
           

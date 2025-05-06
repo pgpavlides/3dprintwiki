@@ -29,6 +29,16 @@ export type Note = {
 
 export type UpdateNote = Partial<Omit<Note, 'id' | 'created_at'>>;
 
+export type AdminMessage = {
+  id: string;
+  content: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type UpdateAdminMessage = Partial<Omit<AdminMessage, 'id' | 'created_at'>>;
+
 // For future remote sync implementation
 export type Database = {
   public: {
@@ -42,6 +52,11 @@ export type Database = {
         Row: Note;
         Insert: Omit<Note, 'id' | 'created_at' | 'updated_at'>;
         Update: UpdateNote;
+      };
+      admin_messages: {
+        Row: AdminMessage;
+        Insert: Omit<AdminMessage, 'id' | 'created_at' | 'updated_at'>;
+        Update: UpdateAdminMessage;
       };
       links: {
         Row: {

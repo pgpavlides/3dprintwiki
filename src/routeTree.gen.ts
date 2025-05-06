@@ -15,6 +15,7 @@ import { Route as ToolsImport } from './routes/tools'
 import { Route as SetupElectronicsImport } from './routes/setup-electronics'
 import { Route as SetupImport } from './routes/setup'
 import { Route as MaterialsImport } from './routes/materials'
+import { Route as LinksImport } from './routes/links'
 import { Route as HardwareImport } from './routes/hardware'
 import { Route as ElectronicsImport } from './routes/electronics'
 import { Route as DesignAndPostprocessingImport } from './routes/design-and-postprocessing'
@@ -54,6 +55,12 @@ const SetupRoute = SetupImport.update({
 const MaterialsRoute = MaterialsImport.update({
   id: '/materials',
   path: '/materials',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LinksRoute = LinksImport.update({
+  id: '/links',
+  path: '/links',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -207,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HardwareImport
       parentRoute: typeof rootRoute
     }
+    '/links': {
+      id: '/links'
+      path: '/links'
+      fullPath: '/links'
+      preLoaderRoute: typeof LinksImport
+      parentRoute: typeof rootRoute
+    }
     '/materials': {
       id: '/materials'
       path: '/materials'
@@ -298,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/design-and-postprocessing': typeof DesignAndPostprocessingRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
+  '/links': typeof LinksRoute
   '/materials': typeof MaterialsRoute
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
@@ -320,6 +335,7 @@ export interface FileRoutesByTo {
   '/design-and-postprocessing': typeof DesignAndPostprocessingRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
+  '/links': typeof LinksRoute
   '/materials': typeof MaterialsRoute
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
@@ -343,6 +359,7 @@ export interface FileRoutesById {
   '/design-and-postprocessing': typeof DesignAndPostprocessingRoute
   '/electronics': typeof ElectronicsRoute
   '/hardware': typeof HardwareRoute
+  '/links': typeof LinksRoute
   '/materials': typeof MaterialsRoute
   '/setup': typeof SetupRoute
   '/setup-electronics': typeof SetupElectronicsRoute
@@ -367,6 +384,7 @@ export interface FileRouteTypes {
     | '/design-and-postprocessing'
     | '/electronics'
     | '/hardware'
+    | '/links'
     | '/materials'
     | '/setup'
     | '/setup-electronics'
@@ -388,6 +406,7 @@ export interface FileRouteTypes {
     | '/design-and-postprocessing'
     | '/electronics'
     | '/hardware'
+    | '/links'
     | '/materials'
     | '/setup'
     | '/setup-electronics'
@@ -409,6 +428,7 @@ export interface FileRouteTypes {
     | '/design-and-postprocessing'
     | '/electronics'
     | '/hardware'
+    | '/links'
     | '/materials'
     | '/setup'
     | '/setup-electronics'
@@ -432,6 +452,7 @@ export interface RootRouteChildren {
   DesignAndPostprocessingRoute: typeof DesignAndPostprocessingRoute
   ElectronicsRoute: typeof ElectronicsRoute
   HardwareRoute: typeof HardwareRoute
+  LinksRoute: typeof LinksRoute
   MaterialsRoute: typeof MaterialsRoute
   SetupRoute: typeof SetupRoute
   SetupElectronicsRoute: typeof SetupElectronicsRoute
@@ -454,6 +475,7 @@ const rootRouteChildren: RootRouteChildren = {
   DesignAndPostprocessingRoute: DesignAndPostprocessingRoute,
   ElectronicsRoute: ElectronicsRoute,
   HardwareRoute: HardwareRoute,
+  LinksRoute: LinksRoute,
   MaterialsRoute: MaterialsRoute,
   SetupRoute: SetupRoute,
   SetupElectronicsRoute: SetupElectronicsRoute,
@@ -485,6 +507,7 @@ export const routeTree = rootRoute
         "/design-and-postprocessing",
         "/electronics",
         "/hardware",
+        "/links",
         "/materials",
         "/setup",
         "/setup-electronics",
@@ -521,6 +544,9 @@ export const routeTree = rootRoute
     },
     "/hardware": {
       "filePath": "hardware.tsx"
+    },
+    "/links": {
+      "filePath": "links.tsx"
     },
     "/materials": {
       "filePath": "materials.tsx"

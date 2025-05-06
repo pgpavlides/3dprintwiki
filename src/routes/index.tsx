@@ -67,9 +67,9 @@ function HomePage() {
     },
     {
       icon: '🌟',
-      title: 'Contributors',
+      title: 'Links',
       description: 'Featured 3D printing YouTubers, content creators, and valuable community resources',
-      path: '/contributors',
+      path: '/links',
       gradient: 'from-yellow-500 to-orange-500',
       iconBg: 'bg-yellow-500/10',
       iconColor: 'text-yellow-500'

@@ -19,6 +19,9 @@ export const createSupabaseSession = async () => {
   // to create a Supabase session or check connectivity
   
   try {
+    // Initialize required tables
+    await initializeTables();
+    
     // Just return true to bypass Supabase authentication errors
     console.log('Bypassing Supabase authentication');
     return true;
@@ -29,9 +32,102 @@ export const createSupabaseSession = async () => {
   }
 };
 
+// Create sample data for development
+const createSampleData = async () => {
+  // Skip sample data creation in production
+  if (process.env.NODE_ENV !== 'development') return;
+  
+  // Also skip if we're not in initial development
+  const skipSampleData = localStorage.getItem('skipSampleData');
+  if (skipSampleData === 'true') return;
+  
+  try {
+    // Check if we already have messages
+    const { data, error } = await supabase
+      .from('admin_messages')
+      .select('id')
+      .limit(1);
+      
+    if (!error && (!data || data.length === 0)) {
+      console.log('Adding sample messages...');
+      
+      // Insert sample messages
+      const sampleMessages = [
+        {
+          content: 'Welcome to the 3D Print Wiki admin panel!',
+          created_by: 'admin',
+        }
+      ];
+      
+      const { error: insertError } = await supabase
+        .from('admin_messages')
+        .insert(sampleMessages);
+        
+      if (insertError) {
+        console.error('Error inserting sample messages:', insertError);
+      } else {
+        console.log('Sample message inserted successfully');
+        // Mark that we've added sample data so we don't do it again
+        localStorage.setItem('skipSampleData', 'true');
+      }
+    } else {
+      // We already have messages, so we don't need to add sample data again
+      localStorage.setItem('skipSampleData', 'true');
+    }
+  } catch (error) {
+    console.error('Error creating sample data:', error);
+  }
+};
+
+// Initialize required tables
+const initializeTables = async () => {
+  try {
+    // Check if admin_messages table exists
+    const { error: checkError } = await supabase
+      .from('admin_messages')
+      .select('id')
+      .limit(1);
+    
+    if (checkError) {
+      console.log('Admin messages table might not exist, attempting to create it');
+      
+      // Try using SQL to create the table
+      try {
+        // We'll use raw SQL instead of RPC to be more compatible
+        const { error: sqlError } = await supabase.rpc('exec_sql', {
+          query: `
+            CREATE TABLE IF NOT EXISTS admin_messages (
+              id SERIAL PRIMARY KEY,
+              content TEXT NOT NULL,
+              created_by TEXT NOT NULL,
+              created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+              updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+          `
+        });
+        
+        if (sqlError) {
+          console.error('Error creating table with exec_sql:', sqlError);
+          
+          // Fallback method - assume it's already there and rely on error handling
+          console.log('Falling back to assuming the table exists or will be created by Supabase');
+        } else {
+          console.log('Table created successfully');
+        }
+      } catch (sqlCreateError) {
+        console.error('Error creating admin_messages table:', sqlCreateError);
+      }
+    } else {
+      console.log('Admin messages table already exists');
+    }
+  } catch (error) {
+    console.error('Error initializing tables:', error);
+  }
+};
+
 // Function to subscribe to realtime changes on a table
 export const subscribeToTable = (
-  tableName: 'tasks' | 'notes',
+  tableName: 'tasks' | 'notes' | 'admin_messages',
   callback: (payload: any) => void
 ) => {
   const channel = supabase
