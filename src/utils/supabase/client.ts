@@ -31,54 +31,6 @@ export const createSupabaseSession = async () => {
     return true;
   }
 };
-
-// Create sample data for development
-const createSampleData = async () => {
-  // Skip sample data creation in production
-  if (process.env.NODE_ENV !== 'development') return;
-  
-  // Also skip if we're not in initial development
-  const skipSampleData = localStorage.getItem('skipSampleData');
-  if (skipSampleData === 'true') return;
-  
-  try {
-    // Check if we already have messages
-    const { data, error } = await supabase
-      .from('admin_messages')
-      .select('id')
-      .limit(1);
-      
-    if (!error && (!data || data.length === 0)) {
-      console.log('Adding sample messages...');
-      
-      // Insert sample messages
-      const sampleMessages = [
-        {
-          content: 'Welcome to the 3D Print Wiki admin panel!',
-          created_by: 'admin',
-        }
-      ];
-      
-      const { error: insertError } = await supabase
-        .from('admin_messages')
-        .insert(sampleMessages);
-        
-      if (insertError) {
-        console.error('Error inserting sample messages:', insertError);
-      } else {
-        console.log('Sample message inserted successfully');
-        // Mark that we've added sample data so we don't do it again
-        localStorage.setItem('skipSampleData', 'true');
-      }
-    } else {
-      // We already have messages, so we don't need to add sample data again
-      localStorage.setItem('skipSampleData', 'true');
-    }
-  } catch (error) {
-    console.error('Error creating sample data:', error);
-  }
-};
-
 // Initialize required tables
 const initializeTables = async () => {
   try {

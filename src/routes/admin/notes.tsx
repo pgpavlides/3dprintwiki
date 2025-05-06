@@ -175,7 +175,6 @@ function NotesPage() {
   
   // Limit displayed notes to maximum 3
   const displayedNotes = filteredNotes.slice(0, 3);
-  const hasMoreNotes = filteredNotes.length > 3;
 
   // Format date to be more readable
   const formatDate = (dateString: string) => {
