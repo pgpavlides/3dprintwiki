@@ -26,7 +26,6 @@ import { Route as CalculatorImport } from './routes/calculator'
 import { Route as IndexImport } from './routes/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as ResourcesVideoLibraryImport } from './routes/resources/video-library'
-import { Route as AdminSuggestionsImport } from './routes/admin/suggestions'
 import { Route as AdminNotesImport } from './routes/admin/notes'
 import { Route as AdminLoginImport } from './routes/admin/login'
 import { Route as AdminLinksImport } from './routes/admin/links'
@@ -122,12 +121,6 @@ const AdminIndexRoute = AdminIndexImport.update({
 const ResourcesVideoLibraryRoute = ResourcesVideoLibraryImport.update({
   id: '/resources/video-library',
   path: '/resources/video-library',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AdminSuggestionsRoute = AdminSuggestionsImport.update({
-  id: '/admin/suggestions',
-  path: '/admin/suggestions',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -291,13 +284,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNotesImport
       parentRoute: typeof rootRoute
     }
-    '/admin/suggestions': {
-      id: '/admin/suggestions'
-      path: '/admin/suggestions'
-      fullPath: '/admin/suggestions'
-      preLoaderRoute: typeof AdminSuggestionsImport
-      parentRoute: typeof rootRoute
-    }
     '/resources/video-library': {
       id: '/resources/video-library'
       path: '/resources/video-library'
@@ -336,7 +322,6 @@ export interface FileRoutesByFullPath {
   '/admin/links': typeof AdminLinksRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/notes': typeof AdminNotesRoute
-  '/admin/suggestions': typeof AdminSuggestionsRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -360,7 +345,6 @@ export interface FileRoutesByTo {
   '/admin/links': typeof AdminLinksRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/notes': typeof AdminNotesRoute
-  '/admin/suggestions': typeof AdminSuggestionsRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -385,7 +369,6 @@ export interface FileRoutesById {
   '/admin/links': typeof AdminLinksRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/notes': typeof AdminNotesRoute
-  '/admin/suggestions': typeof AdminSuggestionsRoute
   '/resources/video-library': typeof ResourcesVideoLibraryRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -411,7 +394,6 @@ export interface FileRouteTypes {
     | '/admin/links'
     | '/admin/login'
     | '/admin/notes'
-    | '/admin/suggestions'
     | '/resources/video-library'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
@@ -434,7 +416,6 @@ export interface FileRouteTypes {
     | '/admin/links'
     | '/admin/login'
     | '/admin/notes'
-    | '/admin/suggestions'
     | '/resources/video-library'
     | '/admin'
   id:
@@ -457,7 +438,6 @@ export interface FileRouteTypes {
     | '/admin/links'
     | '/admin/login'
     | '/admin/notes'
-    | '/admin/suggestions'
     | '/resources/video-library'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -482,7 +462,6 @@ export interface RootRouteChildren {
   AdminLinksRoute: typeof AdminLinksRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminNotesRoute: typeof AdminNotesRoute
-  AdminSuggestionsRoute: typeof AdminSuggestionsRoute
   ResourcesVideoLibraryRoute: typeof ResourcesVideoLibraryRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -506,7 +485,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLinksRoute: AdminLinksRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminNotesRoute: AdminNotesRoute,
-  AdminSuggestionsRoute: AdminSuggestionsRoute,
   ResourcesVideoLibraryRoute: ResourcesVideoLibraryRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -539,7 +517,6 @@ export const routeTree = rootRoute
         "/admin/links",
         "/admin/login",
         "/admin/notes",
-        "/admin/suggestions",
         "/resources/video-library",
         "/admin/"
       ]
@@ -597,9 +574,6 @@ export const routeTree = rootRoute
     },
     "/admin/notes": {
       "filePath": "admin/notes.tsx"
-    },
-    "/admin/suggestions": {
-      "filePath": "admin/suggestions.tsx"
     },
     "/resources/video-library": {
       "filePath": "resources/video-library.tsx"

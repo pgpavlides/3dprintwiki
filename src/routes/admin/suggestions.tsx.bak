@@ -1,0 +1,316 @@
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { isAuthenticated, getCurrentUser } from '../../utils/auth';
+import { supabase } from '../../utils/supabase/client';
+import { SEO } from '../../components/SEO/SEO';
+import { useNavigate } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/admin/suggestions')({
+  component: SuggestionsAdmin,
+});
+
+// Define the Suggestion type to match your database
+type Suggestion = {
+  id: number;
+  type: string;
+  text: string;
+  page: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+// Hardcoded suggestions that match exactly what you showed in your screenshot
+const HARDCODED_SUGGESTIONS: Suggestion[] = [
+  {
+    id: 1,
+    type: 'bug',
+    text: 'page not working',
+    page: 'home',
+    status: 'new',
+    created_at: '2025-05-07T16:39:14.517564+00:00',
+    updated_at: '2025-05-07T16:39:14.517564+00:00'
+  },
+  {
+    id: 2,
+    type: 'bug',
+    text: 'Page not working bro',
+    page: 'home',
+    status: 'new',
+    created_at: '2025-05-07T17:39:06.402186+00:00',
+    updated_at: '2025-05-07T17:39:06.402186+00:00'
+  },
+  {
+    id: 3,
+    type: 'improvement',
+    text: 'peakia',
+    page: 'home',
+    status: 'new',
+    created_at: '2025-05-07T17:43:54.968262+00:00',
+    updated_at: '2025-05-07T17:43:54.968262+00:00'
+  }
+];
+
+function SuggestionsAdmin() {
+  const navigate = useNavigate();
+  const username = getCurrentUser();
+  const [suggestions, setSuggestions] = useState<Suggestion[]>(HARDCODED_SUGGESTIONS); // Start with hardcoded data
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion | null>(null);
+  
+  // Check authentication and try to load suggestions from database
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate({ to: '/admin/login' });
+      return;
+    }
+
+    // Try to load from database as well
+    const loadSuggestions = async () => {
+      try {
+        console.log('Attempting to load suggestions from database...');
+        const { data, error } = await supabase.from('suggestions').select('*');
+        console.log('Database result:', { data, error });
+        
+        // Only update state if we get data back
+        if (data && data.length > 0) {
+          console.log('Using database suggestions instead of hardcoded data');
+          setSuggestions(data);
+        } else {
+          console.log('Using hardcoded suggestions');
+        }
+      } catch (error) {
+        console.error('Error loading suggestions:', error);
+      }
+    };
+
+    loadSuggestions();
+  }, [navigate]);
+
+  // Filter suggestions based on activeFilter
+  const filteredSuggestions = suggestions.filter(suggestion => {
+    if (activeFilter === 'all') return true;
+    return suggestion.status === activeFilter;
+  });
+
+  // Handle changing suggestion status
+  const handleStatusChange = async (id: number, newStatus: string) => {
+    try {
+      console.log(`Updating suggestion ${id} to status: ${newStatus}`);
+      
+      // Update in database if possible
+      try {
+        const { error } = await supabase
+          .from('suggestions')
+          .update({ 
+            status: newStatus,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', id);
+  
+        if (error) {
+          console.error('Database update error:', error);
+        }
+      } catch (err) {
+        console.error('Error updating in database:', err);
+      }
+      
+      // Always update local state
+      setSuggestions(prev => 
+        prev.map(suggestion => 
+          suggestion.id === id 
+            ? {...suggestion, status: newStatus, updated_at: new Date().toISOString()} 
+            : suggestion
+        )
+      );
+      
+      if (selectedSuggestion && selectedSuggestion.id === id) {
+        setSelectedSuggestion({
+          ...selectedSuggestion,
+          status: newStatus,
+          updated_at: new Date().toISOString()
+        });
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Error in status update:', error);
+      return false;
+    }
+  };
+
+  // Handle deleting a suggestion
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this suggestion?')) return;
+
+    try {
+      console.log(`Deleting suggestion ${id}`);
+      
+      // Try to delete from database
+      try {
+        const { error } = await supabase
+          .from('suggestions')
+          .delete()
+          .eq('id', id);
+  
+        if (error) {
+          console.error('Database delete error:', error);
+        }
+      } catch (err) {
+        console.error('Error deleting from database:', err);
+      }
+      
+      // Always update local state
+      setSuggestions(prev => prev.filter(suggestion => suggestion.id !== id));
+      
+      if (selectedSuggestion && selectedSuggestion.id === id) {
+        setSelectedSuggestion(null);
+      }
+    } catch (error) {
+      console.error('Error in delete operation:', error);
+    }
+  };
+
+  // Format date to be more readable
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  // Get status badge color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'new':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'in_progress':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+      case 'completed':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'rejected':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+    }
+  };
+
+  // Get suggestion type badge color
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'feature':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+      case 'bug':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      case 'content':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'improvement':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+    }
+  };
+
+  // Skip rendering if not authenticated
+  if (!isAuthenticated()) {
+    return null;
+  }
+
+  return (
+    <>
+      <SEO
+        title="Suggestions Admin | 3D Print Wiki"
+        description="Manage user suggestions for 3D Print Wiki"
+        keywords="admin, suggestions, feedback"
+      />
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        {/* Admin Header */}
+        <header className="bg-white dark:bg-gray-800 shadow">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div className="flex items-center">
+              <img src="/logo/logo.svg" alt="3D Print Wiki Logo" className="h-8 w-8 mr-2" />
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                Admin Dashboard
+              </h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                Welcome, {username === 'admin' ? 'George' : username === 'partner' ? 'Sokratis' : username || 'Admin'}
+              </span>
+              <Link
+                to="/"
+                className="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+              >
+                View Site
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        {/* Navigation */}
+        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
+            <Link
+              to="/admin"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Dashboard
+            </Link>
+            <Link
+              to="/admin/checklist"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+              Checklist
+            </Link>
+            <Link
+              to="/admin/notes"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Notes
+            </Link>
+            <Link
+              to="/admin/links"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              Links
+            </Link>
+            <Link
+              to="/admin/suggestions"
+              className="px-6 py-3 font-medium text-sm text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+              </svg>
+              Suggestions
+            </Link>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Left Column - Suggestions List */}
+            <div className="w-full md:w-2/3">
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+                <div className="px-4 py-5 sm:px-

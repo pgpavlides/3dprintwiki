@@ -40,7 +40,7 @@ export type AdminMessage = {
 export type UpdateAdminMessage = Partial<Omit<AdminMessage, 'id' | 'created_at'>>;
 
 export type Suggestion = {
-  id: string;
+  id: string | number;
   type: 'feature' | 'bug' | 'content' | 'improvement' | 'other';
   text: string;
   page: string;

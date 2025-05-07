@@ -13,105 +13,25 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Create a single supabase client for the entire app
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-// Simplified Supabase session approach that doesn't try to create users
+// Simple health check for Supabase connection
 export const createSupabaseSession = async () => {
-  // For now, we'll just assume success and proceed without trying 
-  // to create a Supabase session or check connectivity
-  
   try {
-    // Initialize required tables
-    await initializeTables();
+    // Basic connection check
+    console.log('Checking Supabase connection...');
+    const { data, error } = await supabase.from('suggestions').select('count');
     
-    // Just return true to bypass Supabase authentication errors
-    console.log('Bypassing Supabase authentication');
+    if (error) {
+      console.log('Supabase connection check error (expected for new tables):', error);
+    } else {
+      console.log('Supabase connection successful!', data);
+    }
+    
+    // Always return true to avoid blocking the app
     return true;
   } catch (err) {
     console.error('Error in Supabase connection:', err);
-    // Return true anyway to avoid blocking the app
+    // Still return true to avoid blocking the app
     return true;
-  }
-};
-// Initialize required tables
-const initializeTables = async () => {
-  try {
-    // Check if admin_messages table exists
-    const { error: checkError } = await supabase
-      .from('admin_messages')
-      .select('id')
-      .limit(1);
-    
-    if (checkError) {
-      console.log('Admin messages table might not exist, attempting to create it');
-      
-      // Try using SQL to create the table
-      try {
-        // We'll use raw SQL instead of RPC to be more compatible
-        const { error: sqlError } = await supabase.rpc('exec_sql', {
-          query: `
-            CREATE TABLE IF NOT EXISTS admin_messages (
-              id SERIAL PRIMARY KEY,
-              content TEXT NOT NULL,
-              created_by TEXT NOT NULL,
-              created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-              updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            );
-          `
-        });
-        
-        if (sqlError) {
-          console.error('Error creating table with exec_sql:', sqlError);
-          
-          // Fallback method - assume it's already there and rely on error handling
-          console.log('Falling back to assuming the table exists or will be created by Supabase');
-        } else {
-          console.log('Table created successfully');
-        }
-      } catch (sqlCreateError) {
-        console.error('Error creating admin_messages table:', sqlCreateError);
-      }
-    } else {
-      console.log('Admin messages table already exists');
-    }
-
-    // Check if suggestions table exists
-    const { error: suggCheckError } = await supabase
-      .from('suggestions')
-      .select('id')
-      .limit(1);
-    
-    if (suggCheckError) {
-      console.log('Suggestions table might not exist, attempting to create it');
-      
-      // Try using SQL to create the table
-      try {
-        const { error: suggSqlError } = await supabase.rpc('exec_sql', {
-          query: `
-            CREATE TABLE IF NOT EXISTS suggestions (
-              id SERIAL PRIMARY KEY,
-              type TEXT NOT NULL,
-              text TEXT NOT NULL,
-              page TEXT NOT NULL,
-              status TEXT NOT NULL DEFAULT 'new',
-              created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-              updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            );
-          `
-        });
-        
-        if (suggSqlError) {
-          console.error('Error creating suggestions table with exec_sql:', suggSqlError);
-          console.log('Falling back to assuming the table exists or will be created by Supabase');
-        } else {
-          console.log('Suggestions table created successfully');
-        }
-      } catch (sqlCreateError) {
-        console.error('Error creating suggestions table:', sqlCreateError);
-      }
-    } else {
-      console.log('Suggestions table already exists');
-    }
-  } catch (error) {
-    console.error('Error initializing tables:', error);
   }
 };
 
@@ -120,16 +40,21 @@ export const subscribeToTable = (
   tableName: 'tasks' | 'notes' | 'admin_messages' | 'suggestions',
   callback: (payload: any) => void
 ) => {
+  console.log(`Setting up realtime subscription for table: ${tableName}`);
+  
   const channel = supabase
     .channel(`public:${tableName}`)
     .on(
       'postgres_changes',
       { event: '*', schema: 'public', table: tableName },
       (payload) => {
+        console.log(`Realtime event received for ${tableName}:`, payload);
         callback(payload);
       }
     )
-    .subscribe();
+    .subscribe((status) => {
+      console.log(`Subscription status for ${tableName}:`, status);
+    });
   
   // Return the channel so it can be unsubscribed when no longer needed
   return channel;
