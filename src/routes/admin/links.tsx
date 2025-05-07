@@ -37,6 +37,7 @@ function LinksPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isAddingLink, setIsAddingLink] = useState(false);
   const [isEditingLink, setIsEditingLink] = useState<string | null>(null);
+  // Used throughout the component for loading states
   const [isLoading, setIsLoading] = useState(false);
   
   // Use a ref to track the subscription channel
@@ -667,23 +668,23 @@ function LinksPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
             {filteredLinks.length === 0 ? (
               <div className="text-center py-12">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                </svg>
-                <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">No links found</p>
-                <p className="text-gray-500 dark:text-gray-400 mb-6">
-                  {searchQuery || selectedCategory
-                    ? 'Try changing your search or category filter'
-                    : 'Start by adding your first link'}
-                </p>
-                {!isAddingLink && (
-                  <button
-                    onClick={() => setIsAddingLink(true)}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
-                  >
-                    Add New Link
-                  </button>
-                )}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">No links found</p>
+              <p className="text-gray-500 dark:text-gray-400 mb-6">
+              {searchQuery || selectedCategory
+              ? 'Try changing your search or category filter'
+              : 'Start by adding your first link'}
+              </p>
+              {!isAddingLink && (
+              <button
+              onClick={() => setIsAddingLink(true)}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+              >
+              Add New Link
+              </button>
+              )}
               </div>
             ) : (
               <div className="overflow-x-auto">
