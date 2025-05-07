@@ -37,6 +37,7 @@ function LinksPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isAddingLink, setIsAddingLink] = useState(false);
   const [isEditingLink, setIsEditingLink] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Use a ref to track the subscription channel
   const subscriptionRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);
@@ -169,7 +170,7 @@ function LinksPage() {
     fetchLinks();
     
     // Set up realtime subscription for links
-    const channel = subscribeToTable('links', (payload) => {
+    const channel = subscribeToTable('admin_messages', (payload) => {
       if (payload.eventType === 'INSERT') {
         setLinks(prev => [payload.new as Link, ...prev]);
       } else if (payload.eventType === 'UPDATE') {
