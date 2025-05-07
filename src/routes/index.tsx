@@ -28,7 +28,7 @@ function HomePage() {
     
     try {
       // Insert suggestion into Supabase database
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('suggestions')
         .insert([
           {

@@ -37,7 +37,6 @@ function LinksPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isAddingLink, setIsAddingLink] = useState(false);
   const [isEditingLink, setIsEditingLink] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   
   // Use a ref to track the subscription channel
   const subscriptionRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useEffect, useState, useRef } from 'react';
 import { isAuthenticated, getCurrentUser } from '../../utils/auth';
 import { supabase, subscribeToTable } from '../../utils/supabase/client';
-import { Suggestion, UpdateSuggestion } from '../../types/database';
+import { Suggestion } from '../../types/database';
 import { SEO } from '../../components/SEO/SEO';
 import { useNavigate } from '@tanstack/react-router';
 
