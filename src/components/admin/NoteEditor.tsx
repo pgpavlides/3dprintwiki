@@ -50,7 +50,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
   
   // Listen for external save requests (from parent component buttons)
   useEffect(() => {
-    const handleSaveRequest = (event: any) => {
+    const handleSaveRequest = (event: CustomEvent) => {
       // Get the title from the event if provided
       const title = event.detail?.title;
       if (title) {
@@ -62,20 +62,20 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
       handleSaveNote();
     };
     
-    const handleDeleteRequest = (event: any) => {
+    const handleDeleteRequest = (event: CustomEvent) => {
       if (event.detail?.noteId && event.detail.noteId === noteData.id) {
         handleDeleteNote();
       }
     };
     
     // Add event listeners
-    window.addEventListener('note_save_requested', handleSaveRequest);
-    window.addEventListener('note_delete_requested', handleDeleteRequest);
+    window.addEventListener('note_save_requested', handleSaveRequest as EventListener);
+    window.addEventListener('note_delete_requested', handleDeleteRequest as EventListener);
     
     // Clean up
     return () => {
-      window.removeEventListener('note_save_requested', handleSaveRequest);
-      window.removeEventListener('note_delete_requested', handleDeleteRequest);
+      window.removeEventListener('note_save_requested', handleSaveRequest as EventListener);
+      window.removeEventListener('note_delete_requested', handleDeleteRequest as EventListener);
     };
   }, [noteData]);
 
@@ -180,28 +180,6 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
     }
   };
 
-  // Format date to be more readable
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getInitial = (name: string) => {
-    return name.charAt(0).toUpperCase();
-  };
-
-  const getAvatarColor = (name: string) => {
-    if (name === 'admin') return 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300';
-    if (name === 'partner') return 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300';
-    return 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300';
-  };
-
   // Function to determine if dark mode is active
   const isDarkMode = () => {
     return document.documentElement.classList.contains('dark') ||
@@ -239,7 +217,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
   // Add event listeners to handle scroll capture
   useEffect(() => {
     // Function to handle wheel events and prevent them from propagating
-    const handleWheel = (e) => {
+    const handleWheel = (e: WheelEvent) => {
       // Don't let the parent capture this event
       e.stopPropagation();
     };
@@ -261,7 +239,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
   }, []);
 
   // Function to convert plain text with URLs to HTML with clickable links
-  const convertUrlsToLinks = (text) => {
+  const convertUrlsToLinks = (text: string | null) => {
     if (!text) return '';
     
     // Regular expression to match URLs
@@ -303,7 +281,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
         key: 'textarea',
         placeholder: 'Start typing your note here...',
         value: noteData.content || '',
-        onChange: (e) => setNoteData({ ...noteData, content: e.target.value }),
+        onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => setNoteData({ ...noteData, content: e.target.value }),
         style: {
           width: '100%',
           height: '100%',
@@ -314,7 +292,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
           fontSize: '1rem',
           overflowY: 'auto'
         },
-        onWheel: (e) => {
+        onWheel: (e: React.WheelEvent<HTMLTextAreaElement>) => {
           // Stop propagation to prevent parent from capturing the event
           e.stopPropagation();
         },
@@ -341,7 +319,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, title
           overflowY: 'auto',
           whiteSpace: 'pre-wrap'
         },
-        onWheel: (e) => {
+        onWheel: (e: React.WheelEvent<HTMLDivElement>) => {
           // Stop propagation to prevent parent from capturing the event
           e.stopPropagation();
         }
