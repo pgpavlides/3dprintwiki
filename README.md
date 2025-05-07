@@ -1,6 +1,13 @@
+
+
+<p align="center">
+  <img src="./public/logo/logo.svg" alt="3D Print Wiki Logo" width="150" />
+</p>
+
 # 3D Print Wiki
 
 ![3D Print Wiki](./public/docs/3dprintwiki_1.png)
+
 
 ## Hi there! 👋
 
@@ -9,6 +16,8 @@ Welcome to 3D Print Wiki! I'm just an amateur 3D printing enthusiast who wanted 
 I'm not an expert by any means - just someone who loves the hobby and has made plenty of mistakes along the way. This wiki is my way of sharing what I've learned so you might avoid some of the same pitfalls and discover the joy of 3D printing a little faster than I did.
 
 ## What You'll Find Here
+
+
 
 This is my collection of guides, tips, and resources that have helped me in my 3D printing journey:
 
