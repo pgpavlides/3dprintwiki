@@ -2,6 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { AnimatedBackground } from '../components/AnimatedBackground'
 import { SEO } from '../components/SEO/SEO'
 import { isAuthenticated, getCurrentUser } from '../utils/auth'
+import { useState } from 'react'
+import { supabase } from '../utils/supabase/client'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -10,6 +12,57 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   // Get current admin user if authenticated
   const username = isAuthenticated() ? getCurrentUser() : null;
+  
+  // Suggestion modal state
+  const [isSuggestionModalOpen, setIsSuggestionModalOpen] = useState(false)
+  const [suggestionType, setSuggestionType] = useState('feature')
+  const [suggestionText, setSuggestionText] = useState('')
+  const [submittingFeedback, setSubmittingFeedback] = useState(false)
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false)
+  
+  // Submit suggestion to admin
+  const submitSuggestion = async () => {
+    if (!suggestionText.trim()) return;
+    
+    setSubmittingFeedback(true);
+    
+    try {
+      // Insert suggestion into Supabase database
+      const { data, error } = await supabase
+        .from('suggestions')
+        .insert([
+          {
+            type: suggestionType,
+            text: suggestionText,
+            page: 'home', // Page where suggestion was submitted
+            status: 'new' // Default status for new suggestions
+          }
+        ]);
+      
+      if (error) {
+        console.error('Error saving suggestion:', error);
+        throw error;
+      }
+      
+      console.log('Suggestion saved successfully to database');
+      
+      // Show success message
+      setFeedbackSubmitted(true);
+      
+      // Reset form after a delay
+      setTimeout(() => {
+        setIsSuggestionModalOpen(false);
+        setSuggestionText('');
+        setFeedbackSubmitted(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Error in suggestion submission:', error);
+      alert('Failed to save your suggestion. Please try again later.');
+    } finally {
+      setSubmittingFeedback(false);
+    }
+  };
+  
   const menuItems = [
     {
       icon: '💰',
@@ -209,20 +262,111 @@ function HomePage() {
           
           {/* Very subtle admin link at bottom */}
           <div className="text-center mt-16">
-            <p className="text-xs text-gray-400 dark:text-gray-600">
-              &copy; {new Date().getFullYear()} 3D Print Wiki
-              <Link
-                to="/admin/login"
-                className="ml-2 text-gray-400 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-500"
-                title="Admin"
-              >
-                •
-              </Link>
+            <p className="text-base text-gray-500 dark:text-gray-400">
+              &copy; {new Date().getFullYear()} 3D Print Wiki • <button 
+                onClick={() => setIsSuggestionModalOpen(true)}
+                className="text-blue-600 dark:text-blue-400 hover:underline text-base font-medium px-1 py-1 inline-block"
+              >Leave Suggestions and additions here!</button>
             </p>
           </div>
         </div>
       </div>
       </div>
+      
+      {/* Suggestion Modal */}
+      {isSuggestionModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex">
+          <div className="relative p-4 bg-white dark:bg-gray-800 w-full max-w-md m-auto rounded-lg shadow-xl">
+            {/* Modal header */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {feedbackSubmitted ? "Thank you!" : "Leave a Suggestion"}
+              </h3>
+              {!submittingFeedback && (
+                <button 
+                  onClick={() => setIsSuggestionModalOpen(false)}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+            
+            {/* Modal content */}
+            {feedbackSubmitted ? (
+              <div className="text-center py-4">
+                <svg className="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <p className="text-gray-700 dark:text-gray-300">Your suggestion has been submitted successfully!</p>
+              </div>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Suggestion Type
+                  </label>
+                  <select
+                    value={suggestionType}
+                    onChange={(e) => setSuggestionType(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  >
+                    <option value="feature">New Feature</option>
+                    <option value="bug">Bug Report</option>
+                    <option value="content">Content Addition</option>
+                    <option value="improvement">Improvement</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Your Suggestion
+                  </label>
+                  <textarea
+                    value={suggestionText}
+                    onChange={(e) => setSuggestionText(e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Please describe your suggestion or report in detail..."
+                  />
+                </div>
+                
+                <div className="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsSuggestionModalOpen(false)}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150"
+                    disabled={submittingFeedback}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={submitSuggestion}
+                    className="px-4 py-2 bg-blue-600 rounded-lg text-white hover:bg-blue-700 transition duration-150 flex items-center"
+                    disabled={submittingFeedback || !suggestionText.trim()}
+                  >
+                    {submittingFeedback ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit'
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </>
   )
 }

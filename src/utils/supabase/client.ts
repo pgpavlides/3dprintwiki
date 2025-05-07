@@ -72,6 +72,44 @@ const initializeTables = async () => {
     } else {
       console.log('Admin messages table already exists');
     }
+
+    // Check if suggestions table exists
+    const { error: suggCheckError } = await supabase
+      .from('suggestions')
+      .select('id')
+      .limit(1);
+    
+    if (suggCheckError) {
+      console.log('Suggestions table might not exist, attempting to create it');
+      
+      // Try using SQL to create the table
+      try {
+        const { error: suggSqlError } = await supabase.rpc('exec_sql', {
+          query: `
+            CREATE TABLE IF NOT EXISTS suggestions (
+              id SERIAL PRIMARY KEY,
+              type TEXT NOT NULL,
+              text TEXT NOT NULL,
+              page TEXT NOT NULL,
+              status TEXT NOT NULL DEFAULT 'new',
+              created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+              updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+          `
+        });
+        
+        if (suggSqlError) {
+          console.error('Error creating suggestions table with exec_sql:', suggSqlError);
+          console.log('Falling back to assuming the table exists or will be created by Supabase');
+        } else {
+          console.log('Suggestions table created successfully');
+        }
+      } catch (sqlCreateError) {
+        console.error('Error creating suggestions table:', sqlCreateError);
+      }
+    } else {
+      console.log('Suggestions table already exists');
+    }
   } catch (error) {
     console.error('Error initializing tables:', error);
   }
@@ -79,7 +117,7 @@ const initializeTables = async () => {
 
 // Function to subscribe to realtime changes on a table
 export const subscribeToTable = (
-  tableName: 'tasks' | 'notes' | 'admin_messages',
+  tableName: 'tasks' | 'notes' | 'admin_messages' | 'suggestions',
   callback: (payload: any) => void
 ) => {
   const channel = supabase

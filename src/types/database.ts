@@ -39,6 +39,18 @@ export type AdminMessage = {
 
 export type UpdateAdminMessage = Partial<Omit<AdminMessage, 'id' | 'created_at'>>;
 
+export type Suggestion = {
+  id: string;
+  type: 'feature' | 'bug' | 'content' | 'improvement' | 'other';
+  text: string;
+  page: string;
+  status: 'new' | 'in_progress' | 'completed' | 'rejected';
+  created_at: string;
+  updated_at: string;
+};
+
+export type UpdateSuggestion = Partial<Omit<Suggestion, 'id' | 'created_at'>>;
+
 // For future remote sync implementation
 export type Database = {
   public: {
@@ -92,6 +104,11 @@ export type Database = {
           created_at: string;
           updated_at: string;
         }, 'id' | 'created_at'>>;
+      };
+      suggestions: {
+        Row: Suggestion;
+        Insert: Omit<Suggestion, 'id' | 'created_at' | 'updated_at' | 'status'> & { status?: 'new' | 'in_progress' | 'completed' | 'rejected' };
+        Update: UpdateSuggestion;
       };
     };
   };

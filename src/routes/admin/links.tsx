@@ -1,6 +1,7 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { createFileRoute, useNavigate, Link as RouterLink } from '@tanstack/react-router';
+import { useEffect, useState, useRef } from 'react';
 import { isAuthenticated, getCurrentUser } from '../../utils/auth';
+import { supabase, subscribeToTable } from '../../utils/supabase/client';
 import { SEO } from '../../components/SEO/SEO';
 
 export const Route = createFileRoute('/admin/links')({
@@ -36,6 +37,10 @@ function LinksPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isAddingLink, setIsAddingLink] = useState(false);
   const [isEditingLink, setIsEditingLink] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Use a ref to track the subscription channel
+  const subscriptionRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);
   const [linkForm, setLinkForm] = useState<{
     title: string;
     url: string;
@@ -92,61 +97,79 @@ function LinksPage() {
     
     const fetchLinks = async () => {
       try {
-        // For the initial implementation, we'll mock some sample links
-        // In the future, this will be replaced with a real Supabase query
-        const sampleLinks: Link[] = [
-          {
-            id: '1',
-            title: 'Thingiverse - 3D Models Platform',
-            url: 'https://www.thingiverse.com/',
-            description: 'A large repository of free 3D models for printing',
-            category: '3D Models',
-            tags: ['repositories', 'free', 'models'],
-            created_by: username || 'admin',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            notes: 'Good source for beginners, but many models have issues with printability.',
-          },
-          {
-            id: '2',
-            title: 'Teaching Tech YouTube Channel',
-            url: 'https://www.youtube.com/channel/UCbgBDBrwsikmtoLqtpc59Bw',
-            description: 'Great 3D printing tutorials and calibration guides',
-            category: 'YouTube Channels',
-            tags: ['tutorials', 'education', 'calibration'],
-            created_by: username || 'admin',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            notes: 'His calibration guide is excellent for new users. Should link to this in the setup guide.',
-          },
-          {
-            id: '3',
-            title: 'Prusa Knowledge Base',
-            url: 'https://help.prusa3d.com/',
-            description: 'Official documentation for Prusa 3D printers',
-            category: 'Documentation',
-            tags: ['guides', 'official', 'prusa'],
-            created_by: username || 'admin',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            notes: 'Well-maintained documentation. Consider adding specific articles to the hardware section.',
-          },
-        ];
+        setIsLoading(true);
         
-        setLinks(sampleLinks);
+        // Create the links table if it doesn't exist
+        await initializeLinksTable();
+        
+        // Fetch links from Supabase
+        const { data, error } = await supabase
+          .from('links')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.error('Error fetching links:', error);
+          // If there's an error, we'll just use an empty array
+          setLinks([]);
+        } else if (data) {
+          setLinks(data);
+        }
       } catch (error) {
         console.error('Error fetching links:', error);
+        setLinks([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    // Initialize the links table
+    const initializeLinksTable = async () => {
+      try {
+        // Check if links table exists
+        const { error: checkError } = await supabase
+          .from('links')
+          .select('id')
+          .limit(1);
+        
+        if (checkError) {
+          console.log('Links table might not exist, attempting to create it');
+          
+          // Try using SQL to create the table
+          const { error: sqlError } = await supabase.rpc('exec_sql', {
+            query: `
+              CREATE TABLE IF NOT EXISTS links (
+                id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+                title TEXT NOT NULL,
+                url TEXT NOT NULL,
+                description TEXT,
+                category TEXT NOT NULL,
+                tags TEXT[],
+                notes TEXT,
+                created_by TEXT NOT NULL,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+              );
+            `
+          });
+          
+          if (sqlError) {
+            console.error('Error creating links table:', sqlError);
+          } else {
+            console.log('Links table created successfully');
+          }
+        } else {
+          console.log('Links table already exists');
+        }
+      } catch (error) {
+        console.error('Error initializing links table:', error);
       }
     };
     
     // Initial load
     fetchLinks();
     
-    // In the future, this will be a real Supabase subscription
-    // For now, it's just a placeholder
-    
-    /*
-    // Once we have a 'links' table in Supabase, we'll use this code:
+    // Set up realtime subscription for links
     const channel = subscribeToTable('links', (payload) => {
       if (payload.eventType === 'INSERT') {
         setLinks(prev => [payload.new as Link, ...prev]);
@@ -160,7 +183,15 @@ function LinksPage() {
         );
       }
     });
-    */
+    
+    subscriptionRef.current = channel;
+    
+    // Cleanup subscription on unmount
+    return () => {
+      if (subscriptionRef.current) {
+        supabase.removeChannel(subscriptionRef.current);
+      }
+    };
   }, [navigate, username]);
 
   // Handle form input changes
@@ -173,50 +204,69 @@ function LinksPage() {
   };
 
   // Handle adding a new link
-  const handleAddLink = () => {
+  const handleAddLink = async () => {
     // Validate required fields
     if (!linkForm.title.trim() || !linkForm.url.trim()) {
       alert('Title and URL are required');
       return;
     }
     
-    // Ensure URL has http/https protocol
-    let url = linkForm.url;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = 'https://' + url;
+    setIsLoading(true);
+    
+    try {
+      // Ensure URL has http/https protocol
+      let url = linkForm.url;
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+      
+      // Prepare tags as array
+      const tags = linkForm.tags ? 
+        linkForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : 
+        null;
+      
+      // Insert into Supabase
+      const { data, error } = await supabase
+        .from('links')
+        .insert({
+          title: linkForm.title.trim(),
+          url: url,
+          description: linkForm.description.trim() || null,
+          category: linkForm.category,
+          tags: tags,
+          notes: linkForm.notes.trim() || null,
+          created_by: username || 'unknown',
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      // Update links state if Supabase doesn't trigger the subscription
+      if (data) {
+        setLinks(prev => [data as Link, ...prev]);
+      }
+      
+      // Reset form and exit adding mode
+      setLinkForm({
+        title: '',
+        url: '',
+        description: '',
+        category: '3D Models',
+        tags: '',
+        notes: '',
+      });
+      setIsAddingLink(false);
+    } catch (error) {
+      console.error('Error adding link:', error);
+      alert('Failed to add link. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Create a new link object
-    const newLink: Link = {
-      id: Date.now().toString(), // temporary ID, would be replaced by Supabase
-      title: linkForm.title.trim(),
-      url: url,
-      description: linkForm.description.trim() || null,
-      category: linkForm.category,
-      tags: linkForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') || null,
-      created_by: username || 'unknown',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      notes: linkForm.notes.trim() || null,
-    };
-    
-    // Add to state (would be inserted to Supabase in the real implementation)
-    setLinks(prev => [newLink, ...prev]);
-    
-    // Reset form and exit adding mode
-    setLinkForm({
-      title: '',
-      url: '',
-      description: '',
-      category: '3D Models',
-      tags: '',
-      notes: '',
-    });
-    setIsAddingLink(false);
   };
 
   // Handle editing a link
-  const handleEditLink = () => {
+  const handleEditLink = async () => {
     if (!isEditingLink) return;
     
     // Validate required fields
@@ -225,47 +275,84 @@ function LinksPage() {
       return;
     }
     
-    // Ensure URL has http/https protocol
-    let url = linkForm.url;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = 'https://' + url;
-    }
+    setIsLoading(true);
     
-    // Update the link (in the real implementation, this would be a Supabase update)
-    setLinks(prev => prev.map(link => {
-      if (link.id === isEditingLink) {
-        return {
-          ...link,
+    try {
+      // Ensure URL has http/https protocol
+      let url = linkForm.url;
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+      
+      // Prepare tags as array
+      const tags = linkForm.tags ? 
+        linkForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : 
+        null;
+      
+      // Update in Supabase
+      const { data, error } = await supabase
+        .from('links')
+        .update({
           title: linkForm.title.trim(),
           url: url,
           description: linkForm.description.trim() || null,
           category: linkForm.category,
-          tags: linkForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') || null,
-          updated_at: new Date().toISOString(),
+          tags: tags,
           notes: linkForm.notes.trim() || null,
-        };
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', isEditingLink)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      // Update links state if Supabase doesn't trigger the subscription
+      if (data) {
+        setLinks(prev => prev.map(link => link.id === isEditingLink ? data as Link : link));
       }
-      return link;
-    }));
-    
-    // Reset form and exit editing mode
-    setLinkForm({
-      title: '',
-      url: '',
-      description: '',
-      category: '3D Models',
-      tags: '',
-      notes: '',
-    });
-    setIsEditingLink(null);
+      
+      // Reset form and exit editing mode
+      setLinkForm({
+        title: '',
+        url: '',
+        description: '',
+        category: '3D Models',
+        tags: '',
+        notes: '',
+      });
+      setIsEditingLink(null);
+    } catch (error) {
+      console.error('Error updating link:', error);
+      alert('Failed to update link. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle deleting a link
-  const handleDeleteLink = (id: string) => {
+  const handleDeleteLink = async (id: string) => {
     if (!confirm('Are you sure you want to delete this link?')) return;
     
-    // Remove from state (would delete from Supabase in the real implementation)
-    setLinks(prev => prev.filter(link => link.id !== id));
+    setIsLoading(true);
+    
+    try {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from('links')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      // Update links state if Supabase doesn't trigger the subscription
+      setLinks(prev => prev.filter(link => link.id !== id));
+    } catch (error) {
+      console.error('Error deleting link:', error);
+      alert('Failed to delete link. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle starting to edit a link
@@ -357,30 +444,51 @@ function LinksPage() {
         {/* Navigation - Now with sticky positioning */}
         <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
-            <a
-              href="/admin"
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            <RouterLink
+              to="/admin"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
               Dashboard
-            </a>
-            <a
-              href="/admin/checklist"
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            </RouterLink>
+            <RouterLink
+              to="/admin/checklist"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
               Checklist
-            </a>
-            <a
-              href="/admin/notes"
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            </RouterLink>
+            <RouterLink
+              to="/admin/notes"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
               Notes
-            </a>
-            <a
-              href="/admin/links"
-              className="px-6 py-3 font-medium text-sm text-blue-600 border-b-2 border-blue-600"
+            </RouterLink>
+            <RouterLink
+              to="/admin/links"
+              className="px-6 py-3 font-medium text-sm text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
               Links
-            </a>
+            </RouterLink>
+            <RouterLink
+              to="/admin/suggestions"
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+              </svg>
+              Suggestions
+            </RouterLink>
           </div>
         </div>
 

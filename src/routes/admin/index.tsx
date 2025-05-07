@@ -38,6 +38,7 @@ function AdminDashboard() {
   const [isSavingMessage, setIsSavingMessage] = useState(false);
   const [showAllMessages, setShowAllMessages] = useState(false);
   const [showNewMessagePopup, setShowNewMessagePopup] = useState(false);
+  // No longer needed as we're using a simpler approach
 
   // Use refs to track subscription channels
   const tasksChannelRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);
@@ -179,8 +180,8 @@ function AdminDashboard() {
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
         
-        // Limit to 10 most recent activities
-        setActivities(activityItems.slice(0, 10));
+        // Limit to 4 most recent activities
+        setActivities(activityItems.slice(0, 4));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -204,7 +205,7 @@ function AdminDashboard() {
               title: payload.new.title,
               objectId: payload.new.id,
             };
-            return [newActivity, ...prevActivities].slice(0, 10);
+            return [newActivity, ...prevActivities].slice(0, 4);
           });
           return newTasks;
         });
@@ -226,7 +227,7 @@ function AdminDashboard() {
                 title: payload.new.title,
                 objectId: payload.new.id,
               };
-              return [newActivity, ...prevActivities].slice(0, 10);
+              return [newActivity, ...prevActivities].slice(0, 4);
             });
           }
           
@@ -252,7 +253,7 @@ function AdminDashboard() {
               title: payload.new.title,
               objectId: payload.new.id,
             };
-            return [newActivity, ...prevActivities].slice(0, 10);
+            return [newActivity, ...prevActivities].slice(0, 4);
           });
           return newNotes;
         });
@@ -474,6 +475,9 @@ function AdminDashboard() {
     }
   };
 
+  // We're using a simpler approach for click outside handling
+  // The click handlers are directly attached to the background overlay in the JSX
+  
   // If not authenticated, don't render the dashboard
   if (!isAuthenticated()) {
     return null;
@@ -489,7 +493,7 @@ function AdminDashboard() {
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
         {/* Admin Header */}
         <header className="bg-white dark:bg-gray-800 shadow">
-          <div className="w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <div className="flex items-center">
               <img src="/logo/logo.svg" alt="3D Print Wiki Logo" className="h-8 w-8 mr-2" />
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -518,40 +522,63 @@ function AdminDashboard() {
 
         {/* Navigation - Now with sticky positioning */}
         <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-          <div className="w-full px-4 sm:px-6 lg:px-8 flex">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
             <Link
               to="/admin"
-              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600' }}
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className="px-6 py-3 font-medium text-sm text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
               Dashboard
             </Link>
             <Link
               to="/admin/checklist"
-              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600' }}
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              activeProps={{ 
+                className: 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center'
+              }}
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
               Checklist
             </Link>
             <Link
               to="/admin/notes"
-              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600' }}
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center' }}
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
               Notes
             </Link>
             <Link
               to="/admin/links"
-              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600' }}
-              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center' }}
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
               Links
+            </Link>
+            <Link
+              to="/admin/suggestions"
+              activeProps={{ className: 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400 flex items-center' }}
+              className="px-6 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+              </svg>
+              Suggestions
             </Link>
           </div>
         </div>
 
         {/* Main Content */}
-        <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 <div className="flex flex-wrap -mx-3">
             {/* Overview - Left Side (20% width) */}
             <div className="w-full md:w-1/5 px-3 mb-6">
@@ -775,8 +802,14 @@ function AdminDashboard() {
         
         {/* New Message Popup */}
         {showNewMessagePopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            onClick={() => setShowNewMessagePopup(false)}
+          >
+            <div 
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">Write New Message</h3>
                 <button onClick={() => setShowNewMessagePopup(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
