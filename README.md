@@ -50,12 +50,6 @@ This isn't meant to be the most professional or comprehensive guide out there - 
 
 Happy printing, and may your bed always be level and your filament never tangle!
 
-## Get In Touch
-
-If you want to chat about 3D printing or have suggestions for the wiki:
-- Check out the [GitHub repo](https://github.com/pgpavlides/3dprintwiki)
-- Support this project on [Buy Me a Coffee](https://buymeacoffee.com/broccolidev)
-
 ## GitHub Issues
 
 Found a bug or have an idea to make this wiki better? I'd love to hear from you! Feel free to open an issue on GitHub:
