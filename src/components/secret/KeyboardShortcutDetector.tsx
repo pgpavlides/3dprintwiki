@@ -101,7 +101,7 @@ export const KeyboardShortcutDetector = () => {
       return;
     }
     
-    // Special case for Backspace key as a 'back' shortcut (when not in command mode)
+    // Special case for Backspace key as a 'back' shortcut (only when not in command mode)
     if (event.key === 'Backspace' && !commandInputVisible && !isInputField) {
       event.preventDefault();
       window.history.back();
