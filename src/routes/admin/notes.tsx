@@ -18,6 +18,9 @@ function NotesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreatingNote, setIsCreatingNote] = useState(false);
   
+  // State for view mode toggle
+  const [isViewMode, setIsViewMode] = useState(false);
+  
   // Use a ref to track the subscription channel
   const subscriptionRef = useRef<ReturnType<typeof subscribeToTable> | null>(null);
 
@@ -208,29 +211,18 @@ function NotesPage() {
   };
   
   // State for popups
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isWriteMessageOpen, setIsWriteMessageOpen] = useState(false);
-  const [selectedHistoryNote, setSelectedHistoryNote] = useState<Note | null>(null);
-
-  // Open history popup
-  const openHistoryPopup = () => {
-    setIsHistoryOpen(true);
-  };
-
-  // Close history popup
-  const closeHistoryPopup = () => {
-    setIsHistoryOpen(false);
-    setSelectedHistoryNote(null);
-  };
   
   // Open write message popup
   const openWriteMessagePopup = () => {
+    setSelectedNote(null);
     setIsWriteMessageOpen(true);
   };
   
   // Close write message popup
   const closeWriteMessagePopup = () => {
     setIsWriteMessageOpen(false);
+    setSelectedNote(null);
   };
 
   // If not authenticated, don't render the page
@@ -307,16 +299,6 @@ function NotesPage() {
               <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex justify-between items-center">
                   <h2 className="font-medium text-gray-900 dark:text-white">Notes</h2>
-                  <button 
-                    onClick={openHistoryPopup}
-                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm flex items-center"
-                    title="View Message History"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                    </svg>
-                    Message History
-                  </button>
                 </div>
                 <div className="mt-2">
                   <input 
@@ -349,8 +331,8 @@ function NotesPage() {
                     <div 
                       key={note.id}
                       onClick={() => {
-                        setSelectedHistoryNote(note);
-                        setIsHistoryOpen(true);
+                        setSelectedNote(note);
+                        setIsWriteMessageOpen(true);
                       }}
                       className="p-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                     >
@@ -379,24 +361,116 @@ function NotesPage() {
           </div>
         </main>
         
-        {/* Write Message Popup */}
+        {/* Write/Edit Message Popup */}
         {isWriteMessageOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Write New Message</h3>
-                <button onClick={closeWriteMessagePopup} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+          <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-6xl h-[85vh] flex flex-col overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-800">
+                <div className="flex items-center space-x-3">
+                  <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+                    {selectedNote ? 'Edit Message -' : 'Write New Message'}
+                  </h3>
+                  
+                  {selectedNote && (
+                    <>
+                      <span className="text-xl text-gray-900 dark:text-white font-medium">
+                        {selectedNote.title}
+                      </span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        Last edited: {formatDate(selectedNote.updated_at)}
+                      </span>
+                      <span className={`${getAvatarColor(selectedNote.created_by)} rounded-full w-6 h-6 flex items-center justify-center`}>
+                        <span className="text-xs">{getInitial(selectedNote.created_by)}</span>
+                      </span>
+                    </>
+                  )}
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                {/* Delete button (only show for existing notes) */}
+                {selectedNote && (
+                <button 
+                onClick={() => {
+                if (confirm('Are you sure you want to delete this note?')) {
+                // Dispatch a custom event that the NoteEditor will listen for
+                const noteDeleteEvent = new CustomEvent('note_delete_requested', {
+                detail: { noteId: selectedNote.id }
+                });
+                window.dispatchEvent(noteDeleteEvent);
+                // Close after a small delay
+                setTimeout(() => {
+                closeWriteMessagePopup();
+                }, 300);
+                }
+                }} 
+                className="px-3 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 rounded-md flex items-center text-sm"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                Delete
                 </button>
+                )}
+                
+                <button 
+                onClick={() => {
+                  setIsViewMode(!isViewMode);
+                  const toggleEvent = new CustomEvent('toggle_view_mode');
+                  window.dispatchEvent(toggleEvent);
+                }} 
+                className={`px-3 py-1.5 rounded-md flex items-center text-sm ${isViewMode ? 
+                  'bg-teal-100 hover:bg-teal-200 dark:bg-teal-900/30 dark:hover:bg-teal-900/50 text-teal-600 dark:text-teal-400' : 
+                  'bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400'}`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {isViewMode ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    )}
+                    {isViewMode ? null : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    )}
+                  </svg>
+                  {isViewMode ? 'Edit Mode' : 'View Mode'}
+                </button>
+                
+                <button 
+                onClick={closeWriteMessagePopup} 
+                className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-md text-gray-700 dark:text-gray-200 text-sm"
+                >
+                Cancel
+                </button>
+                
+                <button 
+                onClick={() => {
+                  // Dispatch a custom event that the NoteEditor will listen for
+                  const noteSaveEvent = new CustomEvent('note_save_requested', {
+                      detail: { title: selectedNote?.title || '' }
+                      });
+                      window.dispatchEvent(noteSaveEvent);
+                      // Close after a small delay
+                      setTimeout(() => {
+                        closeWriteMessagePopup();
+                      }, 300);
+                    }} 
+                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-md flex items-center text-sm"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
+                    </svg>
+                    {selectedNote ? 'Save Changes' : 'Create Note'}
+                  </button>
+                </div>
               </div>
               
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-hidden">
                 <NoteEditor 
-                  note={null}
+                  note={selectedNote}
                   currentUser={username || 'unknown'} 
+                  titleValue={selectedNote?.title || ''}
                   onClose={() => {
+                    setSelectedNote(null);
                     closeWriteMessagePopup();
                   }}
                 />
@@ -405,74 +479,7 @@ function NotesPage() {
           </div>
         )}
         
-        {/* History Popup */}
-        {isHistoryOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Message History</h3>
-                <button onClick={closeHistoryPopup} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="flex h-[70vh] overflow-hidden">
-                {/* Notes List */}
-                <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
-                  {filteredNotes.map((note) => (
-                    <div 
-                      key={note.id}
-                      onClick={() => setSelectedHistoryNote(note)}
-                      className={`p-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ${selectedHistoryNote && selectedHistoryNote.id === note.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
-                    >
-                      <h3 className="font-medium text-gray-900 dark:text-white text-sm line-clamp-1">{note.title}</h3>
-                      {note.content && (
-                        <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 line-clamp-2 whitespace-pre-line">
-                          {note.content.replace(/\n\n+/g, '\n')}
-                        </p>
-                      )}
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          Updated {formatDate(note.updated_at)}
-                        </span>
-                        <span className={`${getAvatarColor(note.created_by)} rounded-full w-6 h-6 flex items-center justify-center`}>
-                          <span className="text-xs">{getInitial(note.created_by)}</span>
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Note Editor */}
-                <div className="w-2/3 overflow-hidden">
-                  {selectedHistoryNote ? (
-                    <NoteEditor 
-                      note={selectedHistoryNote}
-                      currentUser={username || 'unknown'} 
-                      onClose={() => setSelectedHistoryNote(null)}
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <div className="text-center p-6">
-                        <svg className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                        </svg>
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                          Select a Message
-                        </h3>
-                        <p className="text-gray-500 dark:text-gray-400">
-                          Select a message from the list to view, edit, or delete.
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
       </div>
     </>
   );

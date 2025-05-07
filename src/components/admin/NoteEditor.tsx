@@ -5,10 +5,11 @@ import { supabase } from '../../utils/supabase/client';
 interface NoteEditorProps {
   note: Note | null;
   currentUser: string;
+  titleValue?: string;
   onClose?: () => void;
 }
 
-export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClose }) => {
+export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, titleValue, onClose }) => {
   const [isNew, setIsNew] = useState<boolean>(!note);
   const [noteData, setNoteData] = useState<Note | { 
     id: string, 
@@ -29,12 +30,15 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
 
   useEffect(() => {
     if (note) {
-      setNoteData(note);
+      setNoteData({
+        ...note,
+        title: titleValue || note.title // Use the title from props if provided
+      });
       setIsNew(false);
     } else {
       setNoteData({
         id: '',
-        title: '',
+        title: titleValue || '', // Use the title from props if provided
         content: '',
         created_by: currentUser,
         created_at: new Date().toISOString(),
@@ -42,7 +46,38 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
       });
       setIsNew(true);
     }
-  }, [note, currentUser]);
+  }, [note, currentUser, titleValue]);
+  
+  // Listen for external save requests (from parent component buttons)
+  useEffect(() => {
+    const handleSaveRequest = (event: any) => {
+      // Get the title from the event if provided
+      const title = event.detail?.title;
+      if (title) {
+        setNoteData(prevData => ({
+          ...prevData,
+          title: title
+        }));
+      }
+      handleSaveNote();
+    };
+    
+    const handleDeleteRequest = (event: any) => {
+      if (event.detail?.noteId && event.detail.noteId === noteData.id) {
+        handleDeleteNote();
+      }
+    };
+    
+    // Add event listeners
+    window.addEventListener('note_save_requested', handleSaveRequest);
+    window.addEventListener('note_delete_requested', handleDeleteRequest);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('note_save_requested', handleSaveRequest);
+      window.removeEventListener('note_delete_requested', handleDeleteRequest);
+    };
+  }, [noteData]);
 
   const handleSaveNote = async () => {
     if (!noteData.title.trim()) {
@@ -167,71 +202,150 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, currentUser, onClo
     return 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300';
   };
 
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg h-full flex flex-col">
-      <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Note Title"
-            value={noteData.title}
-            onChange={(e) => setNoteData({ ...noteData, title: e.target.value })}
-            className="w-full text-lg font-semibold bg-transparent border-0 focus:ring-0 text-gray-900 dark:text-white p-0"
-            disabled={isLoading}
-          />
-        </div>
-        <div className="flex items-center space-x-3">
-          {!isNew && (
-            <div className="flex items-center">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">
-                Last edited: {formatDate(noteData.updated_at)}
-              </span>
-              <span className={`${getAvatarColor(noteData.created_by)} rounded-full w-6 h-6 flex items-center justify-center`}>
-                <span className="text-xs">{getInitial(noteData.created_by)}</span>
-              </span>
-            </div>
-          )}
-          <div className="flex space-x-2">
-            <button
-              onClick={handleDeleteNote}
-              className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 rounded-lg"
-              title={isNew ? "Cancel" : "Delete Note"}
-              disabled={isLoading}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-            </button>
-            <button
-              onClick={handleSaveNote}
-              className="p-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 rounded-lg"
-              title="Save Note"
-              disabled={isLoading}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="flex-1 p-4 overflow-y-auto">
-        <textarea
-          placeholder="Start typing your note here..."
-          value={noteData.content || ''}
-          onChange={(e) => setNoteData({ ...noteData, content: e.target.value })}
-          className="w-full h-full min-h-[300px] bg-transparent border-0 focus:ring-0 resize-none text-gray-800 dark:text-gray-200 whitespace-pre-wrap"
-          disabled={isLoading}
-          onKeyDown={(e) => {
-            // Make sure we don't prevent default behavior for Enter key
-            // This allows normal textarea behavior of inserting a new line
-            if (e.key === 'Enter') {
-              // Let the default behavior happen
-              // No need to call e.preventDefault()
-            }
-          }}
-        ></textarea>
-      </div>
-    </div>
-  );
+  // Function to determine if dark mode is active
+  const isDarkMode = () => {
+    return document.documentElement.classList.contains('dark') ||
+           window.matchMedia('(prefers-color-scheme: dark)').matches;
+  };
+
+  // Set up state for dark mode
+  const [darkMode, setDarkMode] = useState(isDarkMode());
+
+  // Update dark mode state when it changes
+  useEffect(() => {
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => setDarkMode(isDarkMode());
+    
+    // Add listener for dark mode changes
+    darkModeMediaQuery.addEventListener('change', handleChange);
+    
+    // Also check for changes to the HTML class
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setDarkMode(isDarkMode());
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    
+    return () => {
+      darkModeMediaQuery.removeEventListener('change', handleChange);
+      observer.disconnect();
+    };
+  }, []);
+
+  // Add event listeners to handle scroll capture
+  useEffect(() => {
+    // Function to handle wheel events and prevent them from propagating
+    const handleWheel = (e) => {
+      // Don't let the parent capture this event
+      e.stopPropagation();
+    };
+
+    // Get all textareas after render
+    const textareas = document.querySelectorAll('textarea');
+    
+    // Add event listeners to all textareas
+    textareas.forEach(textarea => {
+      textarea.addEventListener('wheel', handleWheel, { passive: false });
+    });
+
+    // Cleanup function
+    return () => {
+      textareas.forEach(textarea => {
+        textarea.removeEventListener('wheel', handleWheel);
+      });
+    };
+  }, []);
+
+  // Function to convert plain text with URLs to HTML with clickable links
+  const convertUrlsToLinks = (text) => {
+    if (!text) return '';
+    
+    // Regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    
+    // Replace URLs with HTML anchor tags
+    return text.replace(urlRegex, (url) => {
+      return `<a href="${url}" target="_blank" style="color: ${darkMode ? '#93c5fd' : '#3b82f6'};">${url}</a>`;
+    });
+  };
+
+  // Create a div with HTML content instead of a textarea when displaying
+  // but keep using textarea for editing
+  const [isEditing, setIsEditing] = useState(true);
+
+  // Listen for toggle view mode event
+  useEffect(() => {
+    // Function to toggle between edit and view modes
+    const handleToggleViewMode = () => {
+      setIsEditing(!isEditing);
+    };
+    
+    // Add event listener
+    window.addEventListener('toggle_view_mode', handleToggleViewMode);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('toggle_view_mode', handleToggleViewMode);
+    };
+  }, [isEditing]);
+
+  if (isEditing) {
+    // Return the editable textarea
+    return React.createElement('div', {
+      style: { position: 'relative', width: '100%', height: '70vh' }
+    }, [
+      // Textarea for editing
+      React.createElement('textarea', {
+        key: 'textarea',
+        placeholder: 'Start typing your note here...',
+        value: noteData.content || '',
+        onChange: (e) => setNoteData({ ...noteData, content: e.target.value }),
+        style: {
+          width: '100%',
+          height: '100%',
+          padding: '20px',
+          backgroundColor: darkMode ? '#111827' : '#f9fafb',
+          border: 'none',
+          color: darkMode ? '#f3f4f6' : '#1f2937',
+          fontSize: '1rem',
+          overflowY: 'auto'
+        },
+        onWheel: (e) => {
+          // Stop propagation to prevent parent from capturing the event
+          e.stopPropagation();
+        },
+        disabled: isLoading
+      })
+    ]);
+  } else {
+    // Return a div with HTML content and clickable links
+    return React.createElement('div', {
+      style: { position: 'relative', width: '100%', height: '70vh' }
+    }, [
+      // Content display with links
+      React.createElement('div', {
+        key: 'content-display',
+        dangerouslySetInnerHTML: { __html: convertUrlsToLinks(noteData.content) },
+        style: {
+          width: '100%',
+          height: '100%',
+          padding: '20px',
+          backgroundColor: darkMode ? '#111827' : '#f9fafb',
+          border: 'none',
+          color: darkMode ? '#f3f4f6' : '#1f2937',
+          fontSize: '1rem',
+          overflowY: 'auto',
+          whiteSpace: 'pre-wrap'
+        },
+        onWheel: (e) => {
+          // Stop propagation to prevent parent from capturing the event
+          e.stopPropagation();
+        }
+      })
+    ]);
+  }
 };
