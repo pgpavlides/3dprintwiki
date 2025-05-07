@@ -15,7 +15,7 @@ export const KeyboardShortcutDetector = () => {
   const [commandInputVisible, setCommandInputVisible] = useState<boolean>(false);
   const [commandValue, setCommandValue] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
-
+  
   // Define keyword mappings to pages
   const KEYWORD_MAPPINGS = {
     'admin': '/admin', // Admin dashboard
@@ -70,44 +70,43 @@ export const KeyboardShortcutDetector = () => {
     return false;
   };
 
-  // Handle global keydown events to show/hide command input
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    // Check if the active element is an input, textarea, or has contentEditable
-    // BUT allow toggling the command panel even if our command input is focused
+  // Handle keyboard events for the whole document
+  const handleDocumentKeyDown = useCallback((event: KeyboardEvent) => {
+    // Check if we're in an input field
     const activeElement = document.activeElement as HTMLElement;
+    const isInputField = activeElement.tagName === 'INPUT' || 
+                         activeElement.tagName === 'TEXTAREA' || 
+                         activeElement.isContentEditable;
     const isCommandInput = inputRef.current === activeElement;
-    const isInputField = !isCommandInput && (
-      activeElement.tagName === 'INPUT' || 
-      activeElement.tagName === 'TEXTAREA' || 
-      activeElement.isContentEditable
-    );
     
-    // Special case for ~ or ` key to toggle command input
-    if ((event.key === '~' || event.key === '`') && (!isInputField || isCommandInput)) {
-      event.preventDefault();
-      
-      // Toggle the command input visibility
-      const newVisibility = !commandInputVisible;
-      setCommandInputVisible(newVisibility);
-      
-      // If opening, focus the input after it's visible
-      if (newVisibility) {
-        setTimeout(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
-        }, 10);
+    // Handle ~ or ` key to toggle command input
+    if (event.key === '~' || event.key === '`') {
+      // Only handle if we're not in another input field OR we're in our command input
+      if (!isInputField || isCommandInput) {
+        event.preventDefault();
+        setCommandInputVisible(!commandInputVisible);
+        
+        // Focus the input if we're opening it
+        if (!commandInputVisible) {
+          setTimeout(() => {
+            if (inputRef.current) {
+              inputRef.current.focus();
+            }
+          }, 10);
+        }
       }
       return;
     }
     
-    // Special case for Backspace key as a 'back' shortcut (only when not in command mode)
+    // Handle Backspace for navigation ONLY when command panel is NOT open
+    // and we're not in any input field
     if (event.key === 'Backspace' && !commandInputVisible && !isInputField) {
       event.preventDefault();
       window.history.back();
+      return;
     }
-  }, [navigate, location]);
-  
+  }, [commandInputVisible, navigate]);
+
   // Handle command input submission
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,8 +126,12 @@ export const KeyboardShortcutDetector = () => {
       } else {
         // Command was successful, hide the input
         setCommandInputVisible(false);
-        // Focus the body to ensure keyboard events are captured globally
+        // Reset focus to the document body
         document.body.focus();
+        // Important: remove any active element focus to ensure keyboard events work
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
       }
     }
     
@@ -141,38 +144,43 @@ export const KeyboardShortcutDetector = () => {
       e.preventDefault(); // Prevent the key from being entered in the input
       setCommandInputVisible(false);
       setCommandValue('');
+      // Reset focus to ensure keyboard events work
+      document.body.focus();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
     }
   };
 
-  // Set up and clean up event listeners
+  // Set up the global keyboard event listener
   useEffect(() => {
-    // Add the event listener when component mounts
-    window.addEventListener('keydown', handleKeyDown);
+    // Add the global keyboard event listener
+    window.addEventListener('keydown', handleDocumentKeyDown);
     
-    // Clean up the event listener when component unmounts
+    // Clean up on unmount
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keydown', handleDocumentKeyDown);
     };
-  }, [handleKeyDown]);
+  }, [handleDocumentKeyDown]);
+
+  // Force blur any active element when the component mounts
+  // This ensures keyboard shortcuts work right from the start
+  useEffect(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, []);
   
-  // Reset command input visibility when location changes
+  // Reset command panel visibility when location changes
   useEffect(() => {
     setCommandInputVisible(false);
     setCommandValue('');
     
-    // Re-register the keydown event listener after navigation
-    const reRegisterKeyListener = () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.addEventListener('keydown', handleKeyDown);
-    };
-    
-    // Small delay to ensure the DOM has settled after navigation
-    const timerId = setTimeout(reRegisterKeyListener, 100);
-    
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [location.pathname, handleKeyDown]);
+    // Force blur active element after navigation
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, [location.pathname]);
   
   // We now have a visual component
   return (
